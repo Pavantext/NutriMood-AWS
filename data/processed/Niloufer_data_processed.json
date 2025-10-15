@@ -1,0 +1,2546 @@
+[
+  {
+    "id": "e754af8d-bb53-421a-ace5-c28ab216b4d2",
+    "name": "Jalapeno Cheese Poppers (6.Pcs)",
+    "description": "Jalapeno Cheese Poppers (6.Pcs)",
+    "category": "SNACKS",
+    "calories": 280,
+    "price": 380,
+    "macronutrients": {
+      "protein": 10.0,
+      "carbohydrates": 25.0,
+      "fat": 20.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "JALAPINO CHEESE POPPERS SEMI FINISHED 1 NO",
+      "GARLIC MAYO SEMI FINISHED 60 GRAM",
+      "OIL FRYING 50 GRAM",
+      "GARNISH SALAD SEMI FINISHED 30 GRAM"
+    ],
+    "dietary_info": [
+      "High-protein"
+    ],
+    "protein": 10.0,
+    "carbohydrates": 25.0,
+    "fat": 20.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Jalapeno Cheese Poppers (6.Pcs). Description: Jalapeno Cheese Poppers (6.Pcs). Category: SNACKS. Calories: 280, Protein: 10.0g. macronutrients: {'protein': 10.0, 'carbohydrates': 25.0, 'fat': 20.0, 'fiber': 2.0}. Ingredients: JALAPINO CHEESE POPPERS SEMI FINISHED 1 NO, GARLIC MAYO SEMI FINISHED 60 GRAM, OIL FRYING 50 GRAM, GARNISH SALAD SEMI FINISHED 30 GRAM. Dietary: High-protein"
+  },
+  {
+    "id": "9833a592-ddbe-4ad8-9b33-b692cc873c29",
+    "name": "French Fries",
+    "description": "French Fries",
+    "category": "SNACKS",
+    "calories": 280,
+    "price": 228,
+    "macronutrients": {
+      "protein": 5.0,
+      "carbohydrates": 45.0,
+      "fat": 20.0,
+      "fiber": 5.0
+    },
+    "ingredients": [
+      "FRENCH FRIES 6MM 320 GRAM",
+      "OIL FRYING 60 GRAM",
+      "SAUCE CHIPOTLE 60 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 5.0,
+    "carbohydrates": 45.0,
+    "fat": 20.0,
+    "fiber": 5.0,
+    "embedding_text": "Food: French Fries. Description: French Fries. Category: SNACKS. Calories: 280, Protein: 5.0g. macronutrients: {'protein': 5.0, 'carbohydrates': 45.0, 'fat': 20.0, 'fiber': 5.0}. Ingredients: FRENCH FRIES 6MM 320 GRAM, OIL FRYING 60 GRAM, SAUCE CHIPOTLE 60 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "3cdbe580-2b85-4958-8222-ada4d5949fa8",
+    "name": "Strawberry",
+    "description": "Strawberry",
+    "category": "MILKSHAKES",
+    "calories": 240,
+    "price": 219,
+    "macronutrients": {
+      "protein": 3.0,
+      "carbohydrates": 40.0,
+      "fat": 12.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "STRAWBERRY PUREE 30 ML",
+      "VANILLA ICECREAM 2 SCOOPS",
+      "MILK 150 ML",
+      "VANILLA POWDER 30 GM",
+      "STRAWBERRY CRUSH 20 GM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 3.0,
+    "carbohydrates": 40.0,
+    "fat": 12.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Strawberry. Description: Strawberry. Category: MILKSHAKES. Calories: 240, Protein: 3.0g. macronutrients: {'protein': 3.0, 'carbohydrates': 40.0, 'fat': 12.0, 'fiber': 1.0}. Ingredients: STRAWBERRY PUREE 30 ML, VANILLA ICECREAM 2 SCOOPS, MILK 150 ML, VANILLA POWDER 30 GM, STRAWBERRY CRUSH 20 GM. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "727ae44a-3df9-4f4f-93c1-94e8eea2fbf8",
+    "name": "Masala Tea",
+    "description": "Masala Tea",
+    "category": "TEA HOUSE",
+    "calories": 90,
+    "price": 171,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 16.0,
+      "fat": 4.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "Black tea leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black pepper"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 16.0,
+    "fat": 4.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Masala Tea. Description: Masala Tea. Category: TEA HOUSE. Calories: 90, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 16.0, 'fat': 4.0, 'fiber': 1.0}. Ingredients: Black tea leaves, Milk, Sugar, Ginger, Cardamom, Cinnamon, Cloves, Black pepper. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "65de7c13-6159-4e3b-846d-b634d9873546",
+    "name": "Jaggery Tea",
+    "description": "Jaggery Tea",
+    "category": "TEA HOUSE",
+    "calories": 90,
+    "price": 171,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 16.0,
+      "fat": 4.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "BLACK TEA LEAVES 10GRAMS",
+      "MILK 100ML",
+      "SUGAR 20GRAMS",
+      "JAGGARY 10GRAMS"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 16.0,
+    "fat": 4.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Jaggery Tea. Description: Jaggery Tea. Category: TEA HOUSE. Calories: 90, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 16.0, 'fat': 4.0, 'fiber': 1.0}. Ingredients: BLACK TEA LEAVES 10GRAMS, MILK 100ML, SUGAR 20GRAMS, JAGGARY 10GRAMS. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "96d6963f-5276-4137-9ee0-a68b2da0b253",
+    "name": "Pina Colada",
+    "description": "Pina Colada",
+    "category": "MOCKTAILS",
+    "calories": 120,
+    "price": 209,
+    "macronutrients": {
+      "protein": 1.0,
+      "carbohydrates": 20.0,
+      "fat": 8.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "PINEAPPLE JUICE 150 ML",
+      "PINACOLADA SYRUP 30 ML",
+      "FRESH CREAM 30 ML",
+      "SCOOPS VANILLA 2 SCOOPS"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 1.0,
+    "carbohydrates": 20.0,
+    "fat": 8.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Pina Colada. Description: Pina Colada. Category: MOCKTAILS. Calories: 120, Protein: 1.0g. macronutrients: {'protein': 1.0, 'carbohydrates': 20.0, 'fat': 8.0, 'fiber': 0.0}. Ingredients: PINEAPPLE JUICE 150 ML, PINACOLADA SYRUP 30 ML, FRESH CREAM 30 ML, SCOOPS VANILLA 2 SCOOPS. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "1b6bedc8-f674-467a-ac87-ccc7ef489e77",
+    "name": "Banana",
+    "description": "Banana",
+    "category": "MILKSHAKES",
+    "calories": 240,
+    "price": 219,
+    "macronutrients": {
+      "protein": 3.0,
+      "carbohydrates": 28.0,
+      "fat": 6.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "BANANA PUREE 30ML",
+      "VANILLA ICECREAM 2 Scoops",
+      "MILK 150MLL",
+      "VANILLA POWDER 30 GRAM",
+      "BANANA 2 Pcs"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 3.0,
+    "carbohydrates": 28.0,
+    "fat": 6.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Banana. Description: Banana. Category: MILKSHAKES. Calories: 240, Protein: 3.0g. macronutrients: {'protein': 3.0, 'carbohydrates': 28.0, 'fat': 6.0, 'fiber': 2.0}. Ingredients: BANANA PUREE 30ML, VANILLA ICECREAM 2 Scoops, MILK 150MLL, VANILLA POWDER 30 GRAM, BANANA 2 Pcs. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "a7fabb3d-6d16-4c2d-9de4-618364469551",
+    "name": "Onion Samosettes (4 Pcs)",
+    "description": "Onion Samosettes (4 Pcs)",
+    "category": "SNACKS",
+    "calories": 250,
+    "price": 114,
+    "macronutrients": {
+      "protein": 3.0,
+      "carbohydrates": 25.0,
+      "fat": 10.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "ONION SAMOSA SEMI FINISHED 30 GRAM",
+      "SAMOSA PATTI (SWITZ) 20 GRAM",
+      "OIL FRYING 60 GRAM",
+      "MINT CHUTNEY SEMI FINISHED 60 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "protein": 3.0,
+    "carbohydrates": 25.0,
+    "fat": 10.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Onion Samosettes (4 Pcs). Description: Onion Samosettes (4 Pcs). Category: SNACKS. Calories: 250, Protein: 3.0g. macronutrients: {'protein': 3.0, 'carbohydrates': 25.0, 'fat': 10.0, 'fiber': 1.0}. Ingredients: ONION SAMOSA SEMI FINISHED 30 GRAM, SAMOSA PATTI (SWITZ) 20 GRAM, OIL FRYING 60 GRAM, MINT CHUTNEY SEMI FINISHED 60 GRAM. Dietary: Vegetarian, Vegan"
+  },
+  {
+    "id": "7de7c8b4-2291-44d6-96df-ef0956730604",
+    "name": "WaterMelon",
+    "description": "WaterMelon",
+    "category": "FRESH JUICES",
+    "calories": 90,
+    "price": 171,
+    "macronutrients": {
+      "protein": 0.0,
+      "carbohydrates": 12.0,
+      "fat": 0.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "PURE WATER MELON JUICE 200ML"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 0.0,
+    "carbohydrates": 12.0,
+    "fat": 0.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: WaterMelon. Description: WaterMelon. Category: FRESH JUICES. Calories: 90, Protein: 0.0g. macronutrients: {'protein': 0.0, 'carbohydrates': 12.0, 'fat': 0.0, 'fiber': 0.0}. Ingredients: PURE WATER MELON JUICE 200ML. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "825fad9f-fec1-41c9-9722-6f084faac651",
+    "name": "Masala Quinoa",
+    "description": "Masala Quinoa",
+    "category": "BREAKFAST",
+    "calories": 250,
+    "price": 276,
+    "macronutrients": {
+      "protein": 20.0,
+      "carbohydrates": 70.0,
+      "fat": 35.0,
+      "fiber": 10.0
+    },
+    "ingredients": [
+      "VIRGIN OLIVE OIL 5LTR 30 GRAM",
+      "MUSTARD SEEDS BIG 2 GRAM",
+      "CURRY LEAVES 3 GRAM",
+      "GREEN CHILLI 20 GRAM",
+      "GINGER 10 GRAM",
+      "GINGER 200 GRAM",
+      "SWEET CORN 40 GRAM",
+      "GREEN PEAS 30 GRAM",
+      "TURMERIC POWDER 2 GRAM",
+      "TATA SALT 10 GRAM",
+      "QUOINA SEEDS 100 GRAM",
+      "RED CAPSICUM 50 GRAM",
+      "YELLOW CAPSICUM 50 GRAM",
+      "GREEN CAPSICUM 60 GRAM",
+      "YELLOW ZUCCHINI 50 GRAM",
+      "GREEN ZUCCHINI 50 GRAM",
+      "SAUCE MAGGI SEASONNING 1 GRAM",
+      "CARROT 40 GRAM",
+      "SEASONING AROMATIC POWDER 2 GRAM",
+      "CORIANDER 20 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free",
+      "High-protein"
+    ],
+    "protein": 20.0,
+    "carbohydrates": 70.0,
+    "fat": 35.0,
+    "fiber": 10.0,
+    "embedding_text": "Food: Masala Quinoa. Description: Masala Quinoa. Category: BREAKFAST. Calories: 250, Protein: 20.0g. macronutrients: {'protein': 20.0, 'carbohydrates': 70.0, 'fat': 35.0, 'fiber': 10.0}. Ingredients: VIRGIN OLIVE OIL 5LTR 30 GRAM, MUSTARD SEEDS BIG 2 GRAM, CURRY LEAVES 3 GRAM, GREEN CHILLI 20 GRAM, GINGER 10 GRAM, GINGER 200 GRAM, SWEET CORN 40 GRAM, GREEN PEAS 30 GRAM, TURMERIC POWDER 2 GRAM, TATA SALT 10 GRAM, QUOINA SEEDS 100 GRAM, RED CAPSICUM 50 GRAM, YELLOW CAPSICUM 50 GRAM, GREEN CAPSICUM 60 GRAM, YELLOW ZUCCHINI 50 GRAM, GREEN ZUCCHINI 50 GRAM, SAUCE MAGGI SEASONNING 1 GRAM, CARROT 40 GRAM, SEASONING AROMATIC POWDER 2 GRAM, CORIANDER 20 GRAM. Dietary: Vegetarian, Gluten-free, High-protein"
+  },
+  {
+    "id": "230a9ccf-8334-4443-bf88-d22e13ba3406",
+    "name": "Tarri Poha",
+    "description": "Tarri Poha",
+    "category": "BREAKFAST",
+    "calories": 220,
+    "price": 209,
+    "macronutrients": {
+      "protein": 12.0,
+      "carbohydrates": 70.0,
+      "fat": 42.0,
+      "fiber": 10.0
+    },
+    "ingredients": [
+      "GHEE 40 GRAM",
+      "CUMIN SEEDS 2 GRAM",
+      "MUSTARD SEEDS BIG 1 GRAM",
+      "CURRY LEAVES 2 GRAM",
+      "ONION 250 GRAM",
+      "POTATO 120 GRAM",
+      "GREEN CHILLI 20 GRAM",
+      "TURMERIC POWDER 2 GRAM",
+      "PEANUTS PLAIN 20 GRAM",
+      "POHA 130 GRAM",
+      "TATA SALT 10 GRAM",
+      "CORIANDER 20 GRAM",
+      "GREEN PEAS 60 GRAM",
+      "TOMATO CHUTNEY 60 GRAM",
+      "HALDIRAAMS BHUJIYA SEV 1KG 30 GRAM",
+      "TARI POHA CURRY SEMI FINISHED 60 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 12.0,
+    "carbohydrates": 70.0,
+    "fat": 42.0,
+    "fiber": 10.0,
+    "embedding_text": "Food: Tarri Poha. Description: Tarri Poha. Category: BREAKFAST. Calories: 220, Protein: 12.0g. macronutrients: {'protein': 12.0, 'carbohydrates': 70.0, 'fat': 42.0, 'fiber': 10.0}. Ingredients: GHEE 40 GRAM, CUMIN SEEDS 2 GRAM, MUSTARD SEEDS BIG 1 GRAM, CURRY LEAVES 2 GRAM, ONION 250 GRAM, POTATO 120 GRAM, GREEN CHILLI 20 GRAM, TURMERIC POWDER 2 GRAM, PEANUTS PLAIN 20 GRAM, POHA 130 GRAM, TATA SALT 10 GRAM, CORIANDER 20 GRAM, GREEN PEAS 60 GRAM, TOMATO CHUTNEY 60 GRAM, HALDIRAAMS BHUJIYA SEV 1KG 30 GRAM, TARI POHA CURRY SEMI FINISHED 60 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "b0fcd408-309b-4484-a9e5-e4822ab59da0",
+    "name": "Ragi Upma",
+    "description": "Ragi Upma",
+    "category": "BREAKFAST",
+    "calories": 220,
+    "price": 247,
+    "macronutrients": {
+      "protein": 15.0,
+      "carbohydrates": 50.0,
+      "fat": 45.0,
+      "fiber": 8.0
+    },
+    "ingredients": [
+      "GHEE 60 GRAM",
+      "CUMIN SEEDS 3 GRAM",
+      "MUSTARD SEEDS BIG 2 GRAM",
+      "CURRY LEAVES 3 GRAM",
+      "GREEN CHILLI 20 GRAM",
+      "CHILLI WHOLE RED 3 GRAM",
+      "URAD DAL 10 GRAM",
+      "ONION 200 GRAM",
+      "TATA SALT 10 GRAM",
+      "RAGI RAWA 100 GRAM",
+      "CORIANDER 20 GRAM",
+      "DRY FRUIT CASHEW 10 GRAM",
+      "PEANUTS PLAIN 10 GRAM",
+      "RAITHA SEMI FINISHED 60 GRAM",
+      "SAMBAR SEMI FINISHED 120 GRAM",
+      "GINGER CHUTNEY SEMI FINISHED 60 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "protein": 15.0,
+    "carbohydrates": 50.0,
+    "fat": 45.0,
+    "fiber": 8.0,
+    "embedding_text": "Food: Ragi Upma. Description: Ragi Upma. Category: BREAKFAST. Calories: 220, Protein: 15.0g. macronutrients: {'protein': 15.0, 'carbohydrates': 50.0, 'fat': 45.0, 'fiber': 8.0}. Ingredients: GHEE 60 GRAM, CUMIN SEEDS 3 GRAM, MUSTARD SEEDS BIG 2 GRAM, CURRY LEAVES 3 GRAM, GREEN CHILLI 20 GRAM, CHILLI WHOLE RED 3 GRAM, URAD DAL 10 GRAM, ONION 200 GRAM, TATA SALT 10 GRAM, RAGI RAWA 100 GRAM, CORIANDER 20 GRAM, DRY FRUIT CASHEW 10 GRAM, PEANUTS PLAIN 10 GRAM, RAITHA SEMI FINISHED 60 GRAM, SAMBAR SEMI FINISHED 120 GRAM, GINGER CHUTNEY SEMI FINISHED 60 GRAM. Dietary: Vegetarian, Vegan"
+  },
+  {
+    "id": "24a521be-a097-4b84-8343-adf30a1475d9",
+    "name": "Onion Rings",
+    "description": "Onion Rings",
+    "category": "SNACKS",
+    "calories": 280,
+    "price": 257,
+    "macronutrients": {
+      "protein": 6.0,
+      "carbohydrates": 60.0,
+      "fat": 20.0,
+      "fiber": 6.0
+    },
+    "ingredients": [
+      "ONION RINGS SEMI FINISHED 150 GRAM",
+      "SAUCE CHIPOTLE 60 GRAM",
+      "PIRI PIRI MASALA KEYA 15 GRAM",
+      "TATA SALT 5 GRAM",
+      "FRYING OIL 60 GRAM",
+      "GARNISH SALAD SEMI FINISHED 30 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "protein": 6.0,
+    "carbohydrates": 60.0,
+    "fat": 20.0,
+    "fiber": 6.0,
+    "embedding_text": "Food: Onion Rings. Description: Onion Rings. Category: SNACKS. Calories: 280, Protein: 6.0g. macronutrients: {'protein': 6.0, 'carbohydrates': 60.0, 'fat': 20.0, 'fiber': 6.0}. Ingredients: ONION RINGS SEMI FINISHED 150 GRAM, SAUCE CHIPOTLE 60 GRAM, PIRI PIRI MASALA KEYA 15 GRAM, TATA SALT 5 GRAM, FRYING OIL 60 GRAM, GARNISH SALAD SEMI FINISHED 30 GRAM. Dietary: Vegetarian, Vegan"
+  },
+  {
+    "id": "91718566-4ee5-45df-b136-7a6c539b6613",
+    "name": "Corn Samosettes (4 Pcs)",
+    "description": "Corn Samosettes (4 Pcs)",
+    "category": "SNACKS",
+    "calories": 250,
+    "price": 114,
+    "macronutrients": {
+      "protein": 4.0,
+      "carbohydrates": 45.0,
+      "fat": 15.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "CORN SAMOSA SEMI FINISHED 90 GRAM",
+      "SAMOSA PATTI (SWITZ) 60 GRAM",
+      "OIL FRYING 60 GRAM",
+      "TOMATO KETCHUP 60 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "protein": 4.0,
+    "carbohydrates": 45.0,
+    "fat": 15.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Corn Samosettes (4 Pcs). Description: Corn Samosettes (4 Pcs). Category: SNACKS. Calories: 250, Protein: 4.0g. macronutrients: {'protein': 4.0, 'carbohydrates': 45.0, 'fat': 15.0, 'fiber': 2.0}. Ingredients: CORN SAMOSA SEMI FINISHED 90 GRAM, SAMOSA PATTI (SWITZ) 60 GRAM, OIL FRYING 60 GRAM, TOMATO KETCHUP 60 GRAM. Dietary: Vegetarian, Vegan"
+  },
+  {
+    "id": "b202603f-d44e-4b35-ad74-053ea57406da",
+    "name": "Kesar Tea",
+    "description": "Kesar Tea",
+    "category": "TEA HOUSE",
+    "calories": 90,
+    "price": 171,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 16.0,
+      "fat": 4.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "Black tea leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black pepper"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 16.0,
+    "fat": 4.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Kesar Tea. Description: Kesar Tea. Category: TEA HOUSE. Calories: 90, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 16.0, 'fat': 4.0, 'fiber': 1.0}. Ingredients: Black tea leaves, Milk, Sugar, Ginger, Cardamom, Cinnamon, Cloves, Black pepper. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "9655be1a-7a0c-482c-b9b4-122d0c15f17d",
+    "name": "Chole Kulcha (1 Pc)",
+    "description": "Chole Kulcha (1 Pc)",
+    "category": "BREAKFAST",
+    "calories": 280,
+    "price": 143,
+    "macronutrients": {
+      "protein": 10.0,
+      "carbohydrates": 50.0,
+      "fat": 12.0,
+      "fiber": 5.0
+    },
+    "ingredients": [
+      "CHOLE CURRY SEMI FINISHED 300 GRAM",
+      "PLAIN KULCHA SEMI FINISHED 1 NO",
+      "BUTTER SALTED AMUL 10 GRAM",
+      "ONION 100 GRAM",
+      "GREEN CHILLI 20 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 10.0,
+    "carbohydrates": 50.0,
+    "fat": 12.0,
+    "fiber": 5.0,
+    "embedding_text": "Food: Chole Kulcha (1 Pc). Description: Chole Kulcha (1 Pc). Category: BREAKFAST. Calories: 280, Protein: 10.0g. macronutrients: {'protein': 10.0, 'carbohydrates': 50.0, 'fat': 12.0, 'fiber': 5.0}. Ingredients: CHOLE CURRY SEMI FINISHED 300 GRAM, PLAIN KULCHA SEMI FINISHED 1 NO, BUTTER SALTED AMUL 10 GRAM, ONION 100 GRAM, GREEN CHILLI 20 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "eb8de9ed-4039-4256-872a-367cda4a14a8",
+    "name": "Aloo Samosa (1 Pc)",
+    "description": "Aloo Samosa (1 Pc)",
+    "category": "SNACKS",
+    "calories": 120,
+    "price": 48,
+    "macronutrients": {
+      "protein": 8.0,
+      "carbohydrates": 50.0,
+      "fat": 25.0,
+      "fiber": 3.0
+    },
+    "ingredients": [
+      "ALLO SAMOSA FILLING SEMI FINISHED 80 GRAM",
+      "ALLO SAMOSA SHEET SEMI FINISHED 60 GRAM",
+      "FRYING OIL 50 GRAM",
+      "SWEET CHUTNEY SEMI FINISHED 60 GRAM",
+      "GREEN CHILLI 5 GRAM",
+      "TATA SALT 2 GRAM",
+      "CHAT MASALA 500 GMS 2 GRAM",
+      "PEPPER BLACK WHOLE 1KG 2 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "protein": 8.0,
+    "carbohydrates": 50.0,
+    "fat": 25.0,
+    "fiber": 3.0,
+    "embedding_text": "Food: Aloo Samosa (1 Pc). Description: Aloo Samosa (1 Pc). Category: SNACKS. Calories: 120, Protein: 8.0g. macronutrients: {'protein': 8.0, 'carbohydrates': 50.0, 'fat': 25.0, 'fiber': 3.0}. Ingredients: ALLO SAMOSA FILLING SEMI FINISHED 80 GRAM, ALLO SAMOSA SHEET SEMI FINISHED 60 GRAM, FRYING OIL 50 GRAM, SWEET CHUTNEY SEMI FINISHED 60 GRAM, GREEN CHILLI 5 GRAM, TATA SALT 2 GRAM, CHAT MASALA 500 GMS 2 GRAM, PEPPER BLACK WHOLE 1KG 2 GRAM. Dietary: Vegetarian, Vegan"
+  },
+  {
+    "id": "9e4a05e7-42a7-4d38-aa67-b626de1e87e1",
+    "name": "Veg Grill",
+    "description": "Veg Grill",
+    "category": "GRILLED SANDWICHES",
+    "calories": 320,
+    "price": 266,
+    "macronutrients": {
+      "protein": 10.0,
+      "carbohydrates": 60.0,
+      "fat": 25.0,
+      "fiber": 5.0
+    },
+    "ingredients": [
+      "WHITE JUMBO BREAD SEMI FINISHED 2 PIECE",
+      "MAYONNAISE 20 GRAM",
+      "BUTTER SALTED AMUL 10 GRAM",
+      "ICEBERG LETTUCE 30 GRAM",
+      "VEG GRILL SANDWICH MIXER SEMI FINISHED 120 GRAM",
+      "FRENCH FRIES 6MM 200 GRAM",
+      "GARNISH SALAD SEMI FINISHED 20 GRAM",
+      "SAUCE CHIPOTLE 40 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 10.0,
+    "carbohydrates": 60.0,
+    "fat": 25.0,
+    "fiber": 5.0,
+    "embedding_text": "Food: Veg Grill. Description: Veg Grill. Category: GRILLED SANDWICHES. Calories: 320, Protein: 10.0g. macronutrients: {'protein': 10.0, 'carbohydrates': 60.0, 'fat': 25.0, 'fiber': 5.0}. Ingredients: WHITE JUMBO BREAD SEMI FINISHED 2 PIECE, MAYONNAISE 20 GRAM, BUTTER SALTED AMUL 10 GRAM, ICEBERG LETTUCE 30 GRAM, VEG GRILL SANDWICH MIXER SEMI FINISHED 120 GRAM, FRENCH FRIES 6MM 200 GRAM, GARNISH SALAD SEMI FINISHED 20 GRAM, SAUCE CHIPOTLE 40 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "0a559acb-1bbd-4eeb-9ac8-197fbefd178e",
+    "name": "Croquettes (6.Pcs)",
+    "description": "Croquettes (6.Pcs)",
+    "category": "SNACKS",
+    "calories": 250,
+    "price": 304,
+    "macronutrients": {
+      "protein": 6.0,
+      "carbohydrates": 28.0,
+      "fat": 10.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "CROQUETTES SEMI FINISHED 1 NO",
+      " GARNISH SALAD SEMI FINISHED 20 GRAM",
+      "SAUCE CHIPOTLE 60 GRAM",
+      "OIL FRYING 30 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 6.0,
+    "carbohydrates": 28.0,
+    "fat": 10.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Croquettes (6.Pcs). Description: Croquettes (6.Pcs). Category: SNACKS. Calories: 250, Protein: 6.0g. macronutrients: {'protein': 6.0, 'carbohydrates': 28.0, 'fat': 10.0, 'fiber': 2.0}. Ingredients: CROQUETTES SEMI FINISHED 1 NO,  GARNISH SALAD SEMI FINISHED 20 GRAM, SAUCE CHIPOTLE 60 GRAM, OIL FRYING 30 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "48db080d-d530-4f33-aa8c-a8a6e1c9e02b",
+    "name": "Piri Piri Fries",
+    "description": "Piri Piri Fries",
+    "category": "SNACKS",
+    "calories": 280,
+    "price": 257,
+    "macronutrients": {
+      "protein": 6.0,
+      "carbohydrates": 80.0,
+      "fat": 40.0,
+      "fiber": 6.0
+    },
+    "ingredients": [
+      "FRENCH FRIES 6MM 320 GRAM",
+      "PIRI PIRI MASALA KEYA 20 GRAM",
+      "OIL FRYING 60 GRAM",
+      "SAUCE CHIPOTLE 60 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 6.0,
+    "carbohydrates": 80.0,
+    "fat": 40.0,
+    "fiber": 6.0,
+    "embedding_text": "Food: Piri Piri Fries. Description: Piri Piri Fries. Category: SNACKS. Calories: 280, Protein: 6.0g. macronutrients: {'protein': 6.0, 'carbohydrates': 80.0, 'fat': 40.0, 'fiber': 6.0}. Ingredients: FRENCH FRIES 6MM 320 GRAM, PIRI PIRI MASALA KEYA 20 GRAM, OIL FRYING 60 GRAM, SAUCE CHIPOTLE 60 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "d29d8a44-7740-469b-9259-1aaaf2cfc9be",
+    "name": "Anar Chatpata",
+    "description": "Anar Chatpata",
+    "category": "MOCKTAILS",
+    "calories": 140,
+    "price": 219,
+    "macronutrients": {
+      "protein": 0.0,
+      "carbohydrates": 10.0,
+      "fat": 0.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "Fresh fruit juice",
+      "Soda water",
+      "Black salt",
+      "Mint leaves",
+      "Lemon juice"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 0.0,
+    "carbohydrates": 10.0,
+    "fat": 0.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Anar Chatpata. Description: Anar Chatpata. Category: MOCKTAILS. Calories: 140, Protein: 0.0g. macronutrients: {'protein': 0.0, 'carbohydrates': 10.0, 'fat': 0.0, 'fiber': 1.0}. Ingredients: Fresh fruit juice, Soda water, Black salt, Mint leaves, Lemon juice. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "dfce6662-03f5-444e-a052-8961c2127e20",
+    "name": "Rich Almond Croissant",
+    "description": "Rich Almond Croissant",
+    "category": "CROISSANTS",
+    "calories": 295,
+    "price": 114,
+    "macronutrients": {
+      "protein": 10.0,
+      "carbohydrates": 60.0,
+      "fat": 20.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "All-purpose flour",
+      "Butter",
+      "Milk",
+      "Sugar",
+      "Yeast",
+      "Salt",
+      "Eggs",
+      "Almond paste",
+      "Sliced almonds"
+    ],
+    "dietary_info": [
+      "Regular"
+    ],
+    "protein": 10.0,
+    "carbohydrates": 60.0,
+    "fat": 20.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Rich Almond Croissant. Description: Rich Almond Croissant. Category: CROISSANTS. Calories: 295, Protein: 10.0g. macronutrients: {'protein': 10.0, 'carbohydrates': 60.0, 'fat': 20.0, 'fiber': 2.0}. Ingredients: All-purpose flour, Butter, Milk, Sugar, Yeast, Salt, Eggs, Almond paste, Sliced almonds. Dietary: Regular"
+  },
+  {
+    "id": "e2c39b00-e3e1-4394-9431-f7dc5ae3a4b5",
+    "name": "Mumbai Poha",
+    "description": "Mumbai Poha",
+    "category": "BREAKFAST",
+    "calories": 220,
+    "price": 190,
+    "macronutrients": {
+      "protein": 12.0,
+      "carbohydrates": 65.0,
+      "fat": 40.0,
+      "fiber": 10.0
+    },
+    "ingredients": [
+      "GHEE 40 GRAM",
+      "CUMIN SEEDS 2 GRAM",
+      "MUSTARD SEEDS BIG 1 GRAM",
+      "CURRY LEAVES 2 GRAM",
+      "ONION 250 GRAM",
+      "POTATO 120 GRAM",
+      "GREEN CHILLI 20 GRAM",
+      "TURMERIC POWDER 2 GRAM",
+      "PEANUTS PLAIN 20 GRAM",
+      "POHA 130 GRAM",
+      "TATA SALT 10 GRAM",
+      "CORIANDER 20 GRAM",
+      "GREEN PEAS 60 GRAM",
+      "TOMATO CHUTNEY 60 GRAM",
+      "HALDIRAAMS BHUJIYA SEV 1KG 30 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 12.0,
+    "carbohydrates": 65.0,
+    "fat": 40.0,
+    "fiber": 10.0,
+    "embedding_text": "Food: Mumbai Poha. Description: Mumbai Poha. Category: BREAKFAST. Calories: 220, Protein: 12.0g. macronutrients: {'protein': 12.0, 'carbohydrates': 65.0, 'fat': 40.0, 'fiber': 10.0}. Ingredients: GHEE 40 GRAM, CUMIN SEEDS 2 GRAM, MUSTARD SEEDS BIG 1 GRAM, CURRY LEAVES 2 GRAM, ONION 250 GRAM, POTATO 120 GRAM, GREEN CHILLI 20 GRAM, TURMERIC POWDER 2 GRAM, PEANUTS PLAIN 20 GRAM, POHA 130 GRAM, TATA SALT 10 GRAM, CORIANDER 20 GRAM, GREEN PEAS 60 GRAM, TOMATO CHUTNEY 60 GRAM, HALDIRAAMS BHUJIYA SEV 1KG 30 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "1d53faff-7a34-437d-8f03-e2077a21fcd9",
+    "name": "Chilli Guava",
+    "description": "Chilli Guava",
+    "category": "MOCKTAILS",
+    "calories": 140,
+    "price": 219,
+    "macronutrients": {
+      "protein": 0.0,
+      "carbohydrates": 50.0,
+      "fat": 0.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "CHILI GUAVA 200ML",
+      "NIMBU PANI 50ML"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 0.0,
+    "carbohydrates": 50.0,
+    "fat": 0.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Chilli Guava. Description: Chilli Guava. Category: MOCKTAILS. Calories: 140, Protein: 0.0g. macronutrients: {'protein': 0.0, 'carbohydrates': 50.0, 'fat': 0.0, 'fiber': 0.0}. Ingredients: CHILI GUAVA 200ML, NIMBU PANI 50ML. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "ae23dde7-f650-4688-8e09-ed197ab217f0",
+    "name": "Orange Chatpata",
+    "description": "Orange Chatpata",
+    "category": "MOCKTAILS",
+    "calories": 140,
+    "price": 219,
+    "macronutrients": {
+      "protein": 1.0,
+      "carbohydrates": 12.0,
+      "fat": 0.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "Fresh Orange Juice 150ML",
+      "Simple Syrup 15ML",
+      "Mint leaves 13Pcs",
+      "Ice cubes 2Pcs"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 1.0,
+    "carbohydrates": 12.0,
+    "fat": 0.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Orange Chatpata. Description: Orange Chatpata. Category: MOCKTAILS. Calories: 140, Protein: 1.0g. macronutrients: {'protein': 1.0, 'carbohydrates': 12.0, 'fat': 0.0, 'fiber': 2.0}. Ingredients: Fresh Orange Juice 150ML, Simple Syrup 15ML, Mint leaves 13Pcs, Ice cubes 2Pcs. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "0d0d9f81-1569-4e6c-bf85-8d127793f803",
+    "name": "Veg Supreme",
+    "description": "Veg Supreme",
+    "category": "BURGER HOUSE",
+    "calories": 380,
+    "price": 247,
+    "macronutrients": {
+      "protein": 12.0,
+      "carbohydrates": 40.0,
+      "fat": 14.0,
+      "fiber": 3.0
+    },
+    "ingredients": [
+      "PIZZALETTE DOUGH SEMI FINISHED 1 NO",
+      "PIZZA SAUCE SEMI FINISHED 60 GRAM",
+      "CHEESE MOZZARELLA 100 GRAM",
+      "PIZZA SUPREM VEGETABLE SEMI FINISHED 140 GRAM",
+      "HERB AND CHILLI OIL SEMI FINISHED  5 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 12.0,
+    "carbohydrates": 40.0,
+    "fat": 14.0,
+    "fiber": 3.0,
+    "embedding_text": "Food: Veg Supreme. Description: Veg Supreme. Category: BURGER HOUSE. Calories: 380, Protein: 12.0g. macronutrients: {'protein': 12.0, 'carbohydrates': 40.0, 'fat': 14.0, 'fiber': 3.0}. Ingredients: PIZZALETTE DOUGH SEMI FINISHED 1 NO, PIZZA SAUCE SEMI FINISHED 60 GRAM, CHEESE MOZZARELLA 100 GRAM, PIZZA SUPREM VEGETABLE SEMI FINISHED 140 GRAM, HERB AND CHILLI OIL SEMI FINISHED  5 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "f5defc92-e027-4052-a2f9-8f858823ab39",
+    "name": "Khara Bun",
+    "description": "Khara Bun",
+    "category": "SNACKS",
+    "calories": 190,
+    "price": 95,
+    "macronutrients": {
+      "protein": 12.0,
+      "carbohydrates": 40.0,
+      "fat": 20.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "BUTTER SALTED AMUL 15 GRAM",
+      "KHARA BUN SEMIFINISHED 1 NO",
+      "CHEESE PROCESSED AMUL 40 GRAM",
+      "CHEESE MOZZARELLA 40 GRAM",
+      "SEASONING KEYA ITALIAN 5 GRAM",
+      "CHILLY FLAKES 1KG 5 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 12.0,
+    "carbohydrates": 40.0,
+    "fat": 20.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Khara Bun. Description: Khara Bun. Category: SNACKS. Calories: 190, Protein: 12.0g. macronutrients: {'protein': 12.0, 'carbohydrates': 40.0, 'fat': 20.0, 'fiber': 2.0}. Ingredients: BUTTER SALTED AMUL 15 GRAM, KHARA BUN SEMIFINISHED 1 NO, CHEESE PROCESSED AMUL 40 GRAM, CHEESE MOZZARELLA 40 GRAM, SEASONING KEYA ITALIAN 5 GRAM, CHILLY FLAKES 1KG 5 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "387277e7-dc72-4d76-9905-b3d09641d945",
+    "name": "Freshly Cut Fruits",
+    "description": "Freshly Cut Fruits",
+    "category": "BREAKFAST",
+    "calories": 120,
+    "price": 238,
+    "macronutrients": {
+      "protein": 4.0,
+      "carbohydrates": 170.0,
+      "fat": 0.0,
+      "fiber": 20.0
+    },
+    "ingredients": [
+      "WATER MELON FRUIT 360 GRAM",
+      "PINEAPPLE FRUIT 180 GRAM",
+      "APPLE 50 GRAM",
+      "KIWI FRUIT 40 GRAM",
+      "PAPAYA FRUIT 130 GRAM",
+      "GRAPES FRUIT 60 GRAM",
+      "DRAGON FRUIT 60 GRAM",
+      "POMOGRANATE FRUIT 20 GRAM",
+      "MUSK MELON FRUIT 135 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free",
+      "Low-calorie"
+    ],
+    "protein": 4.0,
+    "carbohydrates": 170.0,
+    "fat": 0.0,
+    "fiber": 20.0,
+    "embedding_text": "Food: Freshly Cut Fruits. Description: Freshly Cut Fruits. Category: BREAKFAST. Calories: 120, Protein: 4.0g. macronutrients: {'protein': 4.0, 'carbohydrates': 170.0, 'fat': 0.0, 'fiber': 20.0}. Ingredients: WATER MELON FRUIT 360 GRAM, PINEAPPLE FRUIT 180 GRAM, APPLE 50 GRAM, KIWI FRUIT 40 GRAM, PAPAYA FRUIT 130 GRAM, GRAPES FRUIT 60 GRAM, DRAGON FRUIT 60 GRAM, POMOGRANATE FRUIT 20 GRAM, MUSK MELON FRUIT 135 GRAM. Dietary: Vegetarian, Vegan, Gluten-free, Low-calorie"
+  },
+  {
+    "id": "2418b1a5-d4a8-4bc4-b948-63397fbf11e2",
+    "name": "Paneer Hyderabadi",
+    "description": "Paneer Hyderabadi",
+    "category": "GRILLED SANDWICHES",
+    "calories": 340,
+    "price": 304,
+    "macronutrients": {
+      "protein": 20.0,
+      "carbohydrates": 90.0,
+      "fat": 36.0,
+      "fiber": 8.0
+    },
+    "ingredients": [
+      "WHITE JUMBO BREAD SEMI FINISHED 2 PIECE",
+      "PANNER HYDRABADI SANDWICH MIX SEMI FINISHED 150 GRAM",
+      "MINT CHUTNEY SEMI FINISHED 20 GRAM",
+      "TOMATO MAYO HOME -MADE SEMI FINISHED 20 GRAM",
+      "BUTTER SALTED AMUL 20 GRAM",
+      "FRYING OIL 80 GRAM",
+      "FRENCH FRIES 6MM 200 GRAM",
+      "SAUCE CHIPOTLE 40 GRAM",
+      "GARNISH SALAD SEMI FINISHED 20 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free",
+      "High-protein"
+    ],
+    "protein": 20.0,
+    "carbohydrates": 90.0,
+    "fat": 36.0,
+    "fiber": 8.0,
+    "embedding_text": "Food: Paneer Hyderabadi. Description: Paneer Hyderabadi. Category: GRILLED SANDWICHES. Calories: 340, Protein: 20.0g. macronutrients: {'protein': 20.0, 'carbohydrates': 90.0, 'fat': 36.0, 'fiber': 8.0}. Ingredients: WHITE JUMBO BREAD SEMI FINISHED 2 PIECE, PANNER HYDRABADI SANDWICH MIX SEMI FINISHED 150 GRAM, MINT CHUTNEY SEMI FINISHED 20 GRAM, TOMATO MAYO HOME -MADE SEMI FINISHED 20 GRAM, BUTTER SALTED AMUL 20 GRAM, FRYING OIL 80 GRAM, FRENCH FRIES 6MM 200 GRAM, SAUCE CHIPOTLE 40 GRAM, GARNISH SALAD SEMI FINISHED 20 GRAM. Dietary: Vegetarian, Gluten-free, High-protein"
+  },
+  {
+    "id": "2988f098-bc18-4c04-99ab-b04b54a2d4c8",
+    "name": "ABC",
+    "description": "ABC",
+    "category": "FRESH JUICES",
+    "calories": 85,
+    "price": 219,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 40.0,
+      "fat": 0.0,
+      "fiber": 4.0
+    },
+    "ingredients": [
+      "APPLE 1pcs",
+      "BEETROOT 150GRAMS",
+      "CARROT 2Pcs"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 40.0,
+    "fat": 0.0,
+    "fiber": 4.0,
+    "embedding_text": "Food: ABC. Description: ABC. Category: FRESH JUICES. Calories: 85, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 40.0, 'fat': 0.0, 'fiber': 4.0}. Ingredients: APPLE 1pcs, BEETROOT 150GRAMS, CARROT 2Pcs. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "3b448e90-1ff9-4347-94a6-4a15020123ea",
+    "name": "Spring Rolls  (6.Pcs)",
+    "description": "Spring Rolls  (6.Pcs)",
+    "category": "SNACKS",
+    "calories": 120,
+    "price": 304,
+    "macronutrients": {
+      "protein": 20.0,
+      "carbohydrates": 150.0,
+      "fat": 70.0,
+      "fiber": 12.0
+    },
+    "ingredients": [
+      "SPRING ROLL SHEETS 3 NO",
+      "SPRING ROLLS SEMI FINISHED 300 GRAM",
+      "SAUCE CHIPOTLE 60 GRAM",
+      "GARNISH SALAD SEMI FINISHED 30 GRAM",
+      "OIL FRYING 50 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 20.0,
+    "carbohydrates": 150.0,
+    "fat": 70.0,
+    "fiber": 12.0,
+    "embedding_text": "Food: Spring Rolls  (6.Pcs). Description: Spring Rolls  (6.Pcs). Category: SNACKS. Calories: 120, Protein: 20.0g. macronutrients: {'protein': 20.0, 'carbohydrates': 150.0, 'fat': 70.0, 'fiber': 12.0}. Ingredients: SPRING ROLL SHEETS 3 NO, SPRING ROLLS SEMI FINISHED 300 GRAM, SAUCE CHIPOTLE 60 GRAM, GARNISH SALAD SEMI FINISHED 30 GRAM, OIL FRYING 50 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "efa4a33a-5513-4b29-b591-7ff355d4a7e1",
+    "name": "Corn and Cheese",
+    "description": "Corn and Cheese",
+    "category": "GRILLED SANDWICHES",
+    "calories": 320,
+    "price": 266,
+    "macronutrients": {
+      "protein": 15.0,
+      "carbohydrates": 100.0,
+      "fat": 50.0,
+      "fiber": 5.0
+    },
+    "ingredients": [
+      "WHITE JUMBO BREAD SEMI FINISHED 2 PIECE",
+      "CORN AND CHEESE FILLING SEMI FINISHED 120 GRAM",
+      "ICEBERG LETTUCE 30 GRAM",
+      "MAYONNAISE 20 GRAM",
+      "BUTTER SALTED AMUL 20 GRAM",
+      "FRENCH FRIES 6MM 200 GRAM",
+      "GARNISH SALAD SEMI FINISHED 20 GRAM",
+      "OIL FRYING 80 GRAM",
+      "SAUCE CHIPOTLE 40 GRAM",
+      "FRENCH FRIES 6MM 200 GRAM"
+    ],
+    "dietary_info": [
+      "High-protein"
+    ],
+    "protein": 15.0,
+    "carbohydrates": 100.0,
+    "fat": 50.0,
+    "fiber": 5.0,
+    "embedding_text": "Food: Corn and Cheese. Description: Corn and Cheese. Category: GRILLED SANDWICHES. Calories: 320, Protein: 15.0g. macronutrients: {'protein': 15.0, 'carbohydrates': 100.0, 'fat': 50.0, 'fiber': 5.0}. Ingredients: WHITE JUMBO BREAD SEMI FINISHED 2 PIECE, CORN AND CHEESE FILLING SEMI FINISHED 120 GRAM, ICEBERG LETTUCE 30 GRAM, MAYONNAISE 20 GRAM, BUTTER SALTED AMUL 20 GRAM, FRENCH FRIES 6MM 200 GRAM, GARNISH SALAD SEMI FINISHED 20 GRAM, OIL FRYING 80 GRAM, SAUCE CHIPOTLE 40 GRAM, FRENCH FRIES 6MM 200 GRAM. Dietary: High-protein"
+  },
+  {
+    "id": "13656e53-6894-48d0-8288-ad14b0647ce4",
+    "name": "Cracked Wheat Upma",
+    "description": "Cracked Wheat Upma",
+    "category": "BREAKFAST",
+    "calories": 220,
+    "price": 209,
+    "macronutrients": {
+      "protein": 10.0,
+      "carbohydrates": 50.0,
+      "fat": 36.0,
+      "fiber": 8.0
+    },
+    "ingredients": [
+      "GHEE 40 GRAM",
+      "MUSTARD SEEDS BIG 2 GRAM",
+      "CURRY LEAVES 3 GRAM",
+      "GREEN CHILLI 20 GRAM",
+      "CHILLI WHOLE RED 2 GRAM",
+      "CUMIN SEEDS 3 GRAMS",
+      "DAL CHANNA 10 GRAMS",
+      "DRY FRUIT CASHEW 20 GRAMS",
+      "ONION 250 GRAMS",
+      "SWEET CORN 60 GRAMS",
+      "GREEN PEAS  40 GRAM",
+      "CARROT  40 GRAM",
+      "PEANUTS PLAIN 10 GRAM",
+      "TURMERIC POWDER 2 GRAMS",
+      "RED CHILLI POWDER 2 GRAM",
+      "TATA SALT  12 GRAMS",
+      "WHEAT RAWA 70 GRAM",
+      "CORIANDER 20 GRAMS"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "protein": 10.0,
+    "carbohydrates": 50.0,
+    "fat": 36.0,
+    "fiber": 8.0,
+    "embedding_text": "Food: Cracked Wheat Upma. Description: Cracked Wheat Upma. Category: BREAKFAST. Calories: 220, Protein: 10.0g. macronutrients: {'protein': 10.0, 'carbohydrates': 50.0, 'fat': 36.0, 'fiber': 8.0}. Ingredients: GHEE 40 GRAM, MUSTARD SEEDS BIG 2 GRAM, CURRY LEAVES 3 GRAM, GREEN CHILLI 20 GRAM, CHILLI WHOLE RED 2 GRAM, CUMIN SEEDS 3 GRAMS, DAL CHANNA 10 GRAMS, DRY FRUIT CASHEW 20 GRAMS, ONION 250 GRAMS, SWEET CORN 60 GRAMS, GREEN PEAS  40 GRAM, CARROT  40 GRAM, PEANUTS PLAIN 10 GRAM, TURMERIC POWDER 2 GRAMS, RED CHILLI POWDER 2 GRAM, TATA SALT  12 GRAMS, WHEAT RAWA 70 GRAM, CORIANDER 20 GRAMS. Dietary: Vegetarian, Vegan"
+  },
+  {
+    "id": "8442c179-537a-43b4-85a4-cbd9f4b66053",
+    "name": "Beetroot Nuggets (6.Pcs)",
+    "description": "Beetroot Nuggets (6.Pcs)",
+    "category": "SNACKS",
+    "calories": 280,
+    "price": 304,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 20.0,
+      "fat": 6.0,
+      "fiber": 3.0
+    },
+    "ingredients": [
+      "BEETROOT NUGGETS SEMI FINISHED 1 NO",
+      "GARNISH SALAD SEMI FINISHED 30 GRAM",
+      "SAUCE CHIPOTLE 60 GRAM",
+      "OIL FRYING 30 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 20.0,
+    "fat": 6.0,
+    "fiber": 3.0,
+    "embedding_text": "Food: Beetroot Nuggets (6.Pcs). Description: Beetroot Nuggets (6.Pcs). Category: SNACKS. Calories: 280, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 20.0, 'fat': 6.0, 'fiber': 3.0}. Ingredients: BEETROOT NUGGETS SEMI FINISHED 1 NO, GARNISH SALAD SEMI FINISHED 30 GRAM, SAUCE CHIPOTLE 60 GRAM, OIL FRYING 30 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "2ca2f5a2-f68d-49ef-aaa7-4bbbe9e8b932",
+    "name": "Pista Baklava Croissant",
+    "description": "Pista Baklava Croissant",
+    "category": "CROISSANTS",
+    "calories": 280,
+    "price": 114,
+    "macronutrients": {
+      "protein": 6.0,
+      "carbohydrates": 50.0,
+      "fat": 10.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "All-purpose flour",
+      "BUTTER 5GRAMS",
+      "MILK 150ML",
+      "SUGAR 15 GRAMS",
+      "YEAST 5GRAMS",
+      "SALT 10GRAMS"
+    ],
+    "dietary_info": [
+      "Regular"
+    ],
+    "protein": 6.0,
+    "carbohydrates": 50.0,
+    "fat": 10.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Pista Baklava Croissant. Description: Pista Baklava Croissant. Category: CROISSANTS. Calories: 280, Protein: 6.0g. macronutrients: {'protein': 6.0, 'carbohydrates': 50.0, 'fat': 10.0, 'fiber': 2.0}. Ingredients: All-purpose flour, BUTTER 5GRAMS, MILK 150ML, SUGAR 15 GRAMS, YEAST 5GRAMS, SALT 10GRAMS. Dietary: Regular"
+  },
+  {
+    "id": "adafd171-b5ab-47b9-84b3-e0efc76b88ca",
+    "name": "Cranberry Kiss",
+    "description": "Cranberry Kiss",
+    "category": "MOCKTAILS",
+    "calories": 140,
+    "price": 209,
+    "macronutrients": {
+      "protein": 0.0,
+      "carbohydrates": 27.0,
+      "fat": 0.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "Mint leaves",
+      "simple syrup",
+      "simple syrup",
+      "Ice cubes"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 0.0,
+    "carbohydrates": 27.0,
+    "fat": 0.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Cranberry Kiss. Description: Cranberry Kiss. Category: MOCKTAILS. Calories: 140, Protein: 0.0g. macronutrients: {'protein': 0.0, 'carbohydrates': 27.0, 'fat': 0.0, 'fiber': 0.0}. Ingredients: Mint leaves, simple syrup, simple syrup, Ice cubes. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "132c7775-46bf-4684-b3b5-24a6483535b9",
+    "name": "Paneer Poppers",
+    "description": "Paneer Poppers",
+    "category": "SNACKS",
+    "calories": 280,
+    "price": 304,
+    "macronutrients": {
+      "protein": 14.0,
+      "carbohydrates": 30.0,
+      "fat": 12.0,
+      "fiber": 3.0
+    },
+    "ingredients": [],
+    "dietary_info": [
+      "High-protein"
+    ],
+    "protein": 14.0,
+    "carbohydrates": 30.0,
+    "fat": 12.0,
+    "fiber": 3.0,
+    "embedding_text": "Food: Paneer Poppers. Description: Paneer Poppers. Category: SNACKS. Calories: 280, Protein: 14.0g. macronutrients: {'protein': 14.0, 'carbohydrates': 30.0, 'fat': 12.0, 'fiber': 3.0}. Dietary: High-protein"
+  },
+  {
+    "id": "552ff6b0-8812-4dd7-90bd-5ecbba9b8895",
+    "name": "Carrot",
+    "description": "Carrot",
+    "category": "FRESH JUICES",
+    "calories": 90,
+    "price": 190,
+    "macronutrients": {
+      "protein": 1.0,
+      "carbohydrates": 10.0,
+      "fat": 0.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "FRESH CARROTS 3Pcs",
+      "GINGER 10GRAMS",
+      "BLACK SALT 5GRAMS"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 1.0,
+    "carbohydrates": 10.0,
+    "fat": 0.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Carrot. Description: Carrot. Category: FRESH JUICES. Calories: 90, Protein: 1.0g. macronutrients: {'protein': 1.0, 'carbohydrates': 10.0, 'fat': 0.0, 'fiber': 1.0}. Ingredients: FRESH CARROTS 3Pcs, GINGER 10GRAMS, BLACK SALT 5GRAMS. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "678975c9-9b6f-4159-ade9-1c93441fd14d",
+    "name": "Classic Cold Coffee",
+    "description": "Classic Cold Coffee",
+    "category": "ICED TEAS & COLD COFFEE",
+    "calories": 160,
+    "price": 266,
+    "macronutrients": {
+      "protein": 8.0,
+      "carbohydrates": 40.0,
+      "fat": 20.0,
+      "fiber": 1.0
+    },
+    "ingredients": [],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 8.0,
+    "carbohydrates": 40.0,
+    "fat": 20.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Classic Cold Coffee. Description: Classic Cold Coffee. Category: ICED TEAS & COLD COFFEE. Calories: 160, Protein: 8.0g. macronutrients: {'protein': 8.0, 'carbohydrates': 40.0, 'fat': 20.0, 'fiber': 1.0}. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "bb180278-0c05-42fa-bd82-9dc4a2ee3f19",
+    "name": "Cheese Garlic Bread",
+    "description": "Cheese Garlic Bread",
+    "category": "SNACKS",
+    "calories": 250,
+    "price": 152,
+    "macronutrients": {
+      "protein": 12.0,
+      "carbohydrates": 55.0,
+      "fat": 35.0,
+      "fiber": 3.0
+    },
+    "ingredients": [
+      "WHITE JUMBO BREAD SEMI FINISHED 2 PIECE",
+      "SPICY MAYO HOME-MADE SEMI FINISHED 30 GRAM",
+      "CHEESE PROCESSED 50 GRAM",
+      "FRIED GARLIC SEMI FINISHED 20 GRAM",
+      "FRIED CHILLI SEMI FINISHED 20 GRAM"
+    ],
+    "dietary_info": [
+      "High-protein"
+    ],
+    "protein": 12.0,
+    "carbohydrates": 55.0,
+    "fat": 35.0,
+    "fiber": 3.0,
+    "embedding_text": "Food: Cheese Garlic Bread. Description: Cheese Garlic Bread. Category: SNACKS. Calories: 250, Protein: 12.0g. macronutrients: {'protein': 12.0, 'carbohydrates': 55.0, 'fat': 35.0, 'fiber': 3.0}. Ingredients: WHITE JUMBO BREAD SEMI FINISHED 2 PIECE, SPICY MAYO HOME-MADE SEMI FINISHED 30 GRAM, CHEESE PROCESSED 50 GRAM, FRIED GARLIC SEMI FINISHED 20 GRAM, FRIED CHILLI SEMI FINISHED 20 GRAM. Dietary: High-protein"
+  },
+  {
+    "id": "8644ed5d-adb1-4b1c-b22a-5f1c7414dae6",
+    "name": "Niloufer Special Tea",
+    "description": "Niloufer Special Tea",
+    "category": "TEA HOUSE",
+    "calories": 90,
+    "price": 171,
+    "macronutrients": {
+      "protein": 5.0,
+      "carbohydrates": 12.0,
+      "fat": 5.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "MILK 150ML",
+      "SUGAR 20GRAMS",
+      "TEA POWDER 10GRAMS"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 5.0,
+    "carbohydrates": 12.0,
+    "fat": 5.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Niloufer Special Tea. Description: Niloufer Special Tea. Category: TEA HOUSE. Calories: 90, Protein: 5.0g. macronutrients: {'protein': 5.0, 'carbohydrates': 12.0, 'fat': 5.0, 'fiber': 0.0}. Ingredients: MILK 150ML, SUGAR 20GRAMS, TEA POWDER 10GRAMS. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "b4d09783-a7a3-432a-92e1-5058ee8c9864",
+    "name": "Lemon Tea With Honey",
+    "description": "Lemon Tea With Honey",
+    "category": "TEA HOUSE",
+    "calories": 90,
+    "price": 162,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 16.0,
+      "fat": 4.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "Black tea leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black pepper"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 16.0,
+    "fat": 4.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Lemon Tea With Honey. Description: Lemon Tea With Honey. Category: TEA HOUSE. Calories: 90, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 16.0, 'fat': 4.0, 'fiber': 1.0}. Ingredients: Black tea leaves, Milk, Sugar, Ginger, Cardamom, Cinnamon, Cloves, Black pepper. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "beab663e-41cf-44f9-925b-8ea0ea031083",
+    "name": "Pineapple",
+    "description": "Pineapple",
+    "category": "FRESH JUICES",
+    "calories": 90,
+    "price": 171,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 25.0,
+      "fat": 10.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "PINEAPPLE JUICE 150 ML",
+      "PINACOLADA SYRUP 30 ML",
+      "FRESH CREAM 30 ML",
+      "SCOOPS VANILLA 2 SCOOPS"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 25.0,
+    "fat": 10.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Pineapple. Description: Pineapple. Category: FRESH JUICES. Calories: 90, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 25.0, 'fat': 10.0, 'fiber': 0.0}. Ingredients: PINEAPPLE JUICE 150 ML, PINACOLADA SYRUP 30 ML, FRESH CREAM 30 ML, SCOOPS VANILLA 2 SCOOPS. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "9d232dc1-8859-4047-9b79-b684cacad201",
+    "name": "Virgin Mojito",
+    "description": "Virgin Mojito",
+    "category": "MOCKTAILS",
+    "calories": 140,
+    "price": 219,
+    "macronutrients": {
+      "protein": 0.0,
+      "carbohydrates": 3.0,
+      "fat": 0.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "LEMON 1PCS",
+      "MOJITO SYRUP 30ML",
+      "MINT 0.01 GM",
+      "SODA 100ML",
+      "SPRITE 50ML",
+      "BROWN SUGAR SACHET 3GM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 0.0,
+    "carbohydrates": 3.0,
+    "fat": 0.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Virgin Mojito. Description: Virgin Mojito. Category: MOCKTAILS. Calories: 140, Protein: 0.0g. macronutrients: {'protein': 0.0, 'carbohydrates': 3.0, 'fat': 0.0, 'fiber': 1.0}. Ingredients: LEMON 1PCS, MOJITO SYRUP 30ML, MINT 0.01 GM, SODA 100ML, SPRITE 50ML, BROWN SUGAR SACHET 3GM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "47044c00-f214-4254-b0a8-731c194b88e5",
+    "name": "Vada Pav",
+    "description": "Vada Pav",
+    "category": "SNACKS",
+    "calories": 250,
+    "price": 95,
+    "macronutrients": {
+      "protein": 8.0,
+      "carbohydrates": 60.0,
+      "fat": 20.0,
+      "fiber": 4.0
+    },
+    "ingredients": [
+      "PAV SEMI FINISHED 0.04 NO",
+      "BUTTER SALTED AMUL 10 GRAM",
+      "SEMI FINISHED MINT CHUTNEY 15 GRAM",
+      "SEASONING VADA PAV CHUTNEYS 6 GRAM",
+      "SEMI FINISHED VADA PAV MIXER 50 GRAM",
+      "VADA PAV BATTER SEMI FINISHED 20 GRAM",
+      "GREEN CHILLI 22 GRAM",
+      "FRYING OIL 40 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 8.0,
+    "carbohydrates": 60.0,
+    "fat": 20.0,
+    "fiber": 4.0,
+    "embedding_text": "Food: Vada Pav. Description: Vada Pav. Category: SNACKS. Calories: 250, Protein: 8.0g. macronutrients: {'protein': 8.0, 'carbohydrates': 60.0, 'fat': 20.0, 'fiber': 4.0}. Ingredients: PAV SEMI FINISHED 0.04 NO, BUTTER SALTED AMUL 10 GRAM, SEMI FINISHED MINT CHUTNEY 15 GRAM, SEASONING VADA PAV CHUTNEYS 6 GRAM, SEMI FINISHED VADA PAV MIXER 50 GRAM, VADA PAV BATTER SEMI FINISHED 20 GRAM, GREEN CHILLI 22 GRAM, FRYING OIL 40 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "eb4a8ea1-e269-4d9f-85aa-a385d0594195",
+    "name": "Mango Chatpata",
+    "description": "Mango Chatpata",
+    "category": "MOCKTAILS",
+    "calories": 140,
+    "price": 219,
+    "macronutrients": {
+      "protein": 0.0,
+      "carbohydrates": 10.0,
+      "fat": 0.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "Fresh fruit juice",
+      "Soda water",
+      "Black salt",
+      "Mint leaves",
+      "Lemon juice"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 0.0,
+    "carbohydrates": 10.0,
+    "fat": 0.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Mango Chatpata. Description: Mango Chatpata. Category: MOCKTAILS. Calories: 140, Protein: 0.0g. macronutrients: {'protein': 0.0, 'carbohydrates': 10.0, 'fat': 0.0, 'fiber': 1.0}. Ingredients: Fresh fruit juice, Soda water, Black salt, Mint leaves, Lemon juice. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "e37a689f-7490-4ebe-b908-0956c66c5232",
+    "name": "Vegetable Puff (1 Pc)",
+    "description": "Vegetable Puff (1 Pc)",
+    "category": "SNACKS",
+    "calories": 120,
+    "price": 43,
+    "macronutrients": {
+      "protein": 1.0,
+      "carbohydrates": 2.0,
+      "fat": 0.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "MINI VEG PUFF SHEETS SEMIFINISHED 1NO",
+      "CORIANDER 12.5GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan"
+    ],
+    "protein": 1.0,
+    "carbohydrates": 2.0,
+    "fat": 0.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Vegetable Puff (1 Pc). Description: Vegetable Puff (1 Pc). Category: SNACKS. Calories: 120, Protein: 1.0g. macronutrients: {'protein': 1.0, 'carbohydrates': 2.0, 'fat': 0.0, 'fiber': 0.0}. Ingredients: MINI VEG PUFF SHEETS SEMIFINISHED 1NO, CORIANDER 12.5GRAM. Dietary: Vegetarian, Vegan"
+  },
+  {
+    "id": "d6a054d2-e0ea-4570-9a8a-bf7894191c49",
+    "name": "Paneer Roll",
+    "description": "Paneer Roll",
+    "category": "SNACKS",
+    "calories": 135,
+    "price": 190,
+    "macronutrients": {
+      "protein": 14.0,
+      "carbohydrates": 45.0,
+      "fat": 28.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "PANEER ROLL SEMI FINISHED 1 GRAM",
+      "BUTTER SALTED AMUL 20 GRAM",
+      "MAYONNAISE 20 GRAM",
+      "SEMI FINISHED PANNER ROLL MIXER 130 GRAM",
+      "ONION 30 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free",
+      "High-protein"
+    ],
+    "protein": 14.0,
+    "carbohydrates": 45.0,
+    "fat": 28.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Paneer Roll. Description: Paneer Roll. Category: SNACKS. Calories: 135, Protein: 14.0g. macronutrients: {'protein': 14.0, 'carbohydrates': 45.0, 'fat': 28.0, 'fiber': 2.0}. Ingredients: PANEER ROLL SEMI FINISHED 1 GRAM, BUTTER SALTED AMUL 20 GRAM, MAYONNAISE 20 GRAM, SEMI FINISHED PANNER ROLL MIXER 130 GRAM, ONION 30 GRAM. Dietary: Vegetarian, Gluten-free, High-protein"
+  },
+  {
+    "id": "011bca22-cd37-4cfb-809d-bea44db2c5dd",
+    "name": "Ginger Tea",
+    "description": "Ginger Tea",
+    "category": "TEA HOUSE",
+    "calories": 90,
+    "price": 171,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 16.0,
+      "fat": 4.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "BLACK TEA LEAVES 10GRAMS",
+      "MILK 100ML",
+      "SUGAR 20GRAMS",
+      "GINGERr 5GMS",
+      "CARDAMOM 1Pcs",
+      "CINNAMON 0.5GRAMS",
+      "CLOVES 1Pcs"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 16.0,
+    "fat": 4.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Ginger Tea. Description: Ginger Tea. Category: TEA HOUSE. Calories: 90, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 16.0, 'fat': 4.0, 'fiber': 1.0}. Ingredients: BLACK TEA LEAVES 10GRAMS, MILK 100ML, SUGAR 20GRAMS, GINGERr 5GMS, CARDAMOM 1Pcs, CINNAMON 0.5GRAMS, CLOVES 1Pcs. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "c6dec080-c1dc-4ddc-9cba-1c3b88d9e1b1",
+    "name": "Paneer Puff (1 Pc)",
+    "description": "Paneer Puff (1 Pc)",
+    "category": "SNACKS",
+    "calories": 135,
+    "price": 48,
+    "macronutrients": {
+      "protein": 5.0,
+      "carbohydrates": 20.0,
+      "fat": 12.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "MINI PUFF ROLL SHEET SEMIFINISHED 1NO",
+      "PANEER PUFF FILLING SEMIFINISHED 30GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "High-protein"
+    ],
+    "protein": 5.0,
+    "carbohydrates": 20.0,
+    "fat": 12.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Paneer Puff (1 Pc). Description: Paneer Puff (1 Pc). Category: SNACKS. Calories: 135, Protein: 5.0g. macronutrients: {'protein': 5.0, 'carbohydrates': 20.0, 'fat': 12.0, 'fiber': 1.0}. Ingredients: MINI PUFF ROLL SHEET SEMIFINISHED 1NO, PANEER PUFF FILLING SEMIFINISHED 30GRAM. Dietary: Vegetarian, High-protein"
+  },
+  {
+    "id": "9da3efb4-8d0b-408d-b6ff-fda72effb98f",
+    "name": "Oreo",
+    "description": "Oreo",
+    "category": "MILKSHAKES",
+    "calories": 270,
+    "price": 247,
+    "macronutrients": {
+      "protein": 5.0,
+      "carbohydrates": 20.0,
+      "fat": 12.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "MILK 150 ML",
+      "VANILLA ICECREAM 2 SCOOPS",
+      "ICE CUBES 0.1 KG",
+      "DARK CHOCOLATE 20 GM",
+      "CHOCOLATE MIX 20 GM",
+      "OREO BISCUIT 6 PIECE(1PC)"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 5.0,
+    "carbohydrates": 20.0,
+    "fat": 12.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Oreo. Description: Oreo. Category: MILKSHAKES. Calories: 270, Protein: 5.0g. macronutrients: {'protein': 5.0, 'carbohydrates': 20.0, 'fat': 12.0, 'fiber': 1.0}. Ingredients: MILK 150 ML, VANILLA ICECREAM 2 SCOOPS, ICE CUBES 0.1 KG, DARK CHOCOLATE 20 GM, CHOCOLATE MIX 20 GM, OREO BISCUIT 6 PIECE(1PC). Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "44feac6d-6e4e-41ce-8a31-6c113fb69053",
+    "name": "Crispy Corn Kernels",
+    "description": "Crispy Corn Kernels",
+    "category": "SNACKS",
+    "calories": 250,
+    "price": 304,
+    "macronutrients": {
+      "protein": 12.0,
+      "carbohydrates": 120.0,
+      "fat": 28.0,
+      "fiber": 10.0
+    },
+    "ingredients": [
+      "SWEET CORN 300 GRAM",
+      "MAIDA 60 GRAM",
+      "RAJA CORN FLOUR 60 GRAM",
+      "RED CHILLI POWDER 10 GRAM",
+      "SEASONING KEYA ONION POWDER 5 GRAM",
+      "SPICES GARLIC POWDER 5 GRAM",
+      "TATA SALT 5 GRAM",
+      "WHITE PEPPER POWDER 5 GRAM",
+      "KASHMIRI CHILLI POWDER 500GMS 10 GRAM",
+      "OIL FRYING 60 GRAM",
+      "BAKING POWDER 2 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 12.0,
+    "carbohydrates": 120.0,
+    "fat": 28.0,
+    "fiber": 10.0,
+    "embedding_text": "Food: Crispy Corn Kernels. Description: Crispy Corn Kernels. Category: SNACKS. Calories: 250, Protein: 12.0g. macronutrients: {'protein': 12.0, 'carbohydrates': 120.0, 'fat': 28.0, 'fiber': 10.0}. Ingredients: SWEET CORN 300 GRAM, MAIDA 60 GRAM, RAJA CORN FLOUR 60 GRAM, RED CHILLI POWDER 10 GRAM, SEASONING KEYA ONION POWDER 5 GRAM, SPICES GARLIC POWDER 5 GRAM, TATA SALT 5 GRAM, WHITE PEPPER POWDER 5 GRAM, KASHMIRI CHILLI POWDER 500GMS 10 GRAM, OIL FRYING 60 GRAM, BAKING POWDER 2 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "39216ed8-489e-4f81-96c6-8ec4178a2aa9",
+    "name": "Sabudana Kichidi",
+    "description": "Sabudana Kichidi",
+    "category": "BREAKFAST",
+    "calories": 200,
+    "price": 238,
+    "macronutrients": {
+      "protein": 18.0,
+      "carbohydrates": 80.0,
+      "fat": 50.0,
+      "fiber": 8.0
+    },
+    "ingredients": [
+      "FAT GHEE 40 GRAM",
+      "CUMIN SEEDS 3 GRAM",
+      "SEMI FINISHED PEANUT POWDER 80 GRAM",
+      "POTATO 120 GRAM",
+      "STANDY ROLLUP 3X6 100 GRAM",
+      "PINK SALT 10 GRAM",
+      "CORIANDER 20 GRAM",
+      "GREEN CHILLI 20 GRAM",
+      "PEANUT CHUTNEY SEMI FINISHED 60 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 18.0,
+    "carbohydrates": 80.0,
+    "fat": 50.0,
+    "fiber": 8.0,
+    "embedding_text": "Food: Sabudana Kichidi. Description: Sabudana Kichidi. Category: BREAKFAST. Calories: 200, Protein: 18.0g. macronutrients: {'protein': 18.0, 'carbohydrates': 80.0, 'fat': 50.0, 'fiber': 8.0}. Ingredients: FAT GHEE 40 GRAM, CUMIN SEEDS 3 GRAM, SEMI FINISHED PEANUT POWDER 80 GRAM, POTATO 120 GRAM, STANDY ROLLUP 3X6 100 GRAM, PINK SALT 10 GRAM, CORIANDER 20 GRAM, GREEN CHILLI 20 GRAM, PEANUT CHUTNEY SEMI FINISHED 60 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "3eb1e2d7-bcf2-4422-8f69-b957a8a7e1c0",
+    "name": "Niloufer Special Coffee",
+    "description": "Niloufer Special Coffee",
+    "category": " COFFEE HOUSE",
+    "calories": 95,
+    "price": 190,
+    "macronutrients": {
+      "protein": 6.0,
+      "carbohydrates": 15.0,
+      "fat": 8.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "COFFE BEANS 15GRAMS",
+      "MILK 150ML",
+      "SUGAR 15 GRAMS",
+      "WATER 10ML"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 6.0,
+    "carbohydrates": 15.0,
+    "fat": 8.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Niloufer Special Coffee. Description: Niloufer Special Coffee. Category:  COFFEE HOUSE. Calories: 95, Protein: 6.0g. macronutrients: {'protein': 6.0, 'carbohydrates': 15.0, 'fat': 8.0, 'fiber': 0.0}. Ingredients: COFFE BEANS 15GRAMS, MILK 150ML, SUGAR 15 GRAMS, WATER 10ML. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "f02a3b4e-a309-4d78-8c90-8676790d187a",
+    "name": "Spicy Paneer",
+    "description": "Spicy Paneer",
+    "category": "COLD SANDWICHES",
+    "calories": 340,
+    "price": 190,
+    "macronutrients": {
+      "protein": 12.0,
+      "carbohydrates": 45.0,
+      "fat": 25.0,
+      "fiber": 3.0
+    },
+    "ingredients": [
+      "WHITE JUMBO BREAD SEMI FINISHED 2 PIECE",
+      "SPICY MAYO HOME-MADE SEMI FINISHED 20 GRAM",
+      "SPICY PANEER SANDWICH SEMI FINISHED 100 GRAM",
+      "ONION 60 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free",
+      "High-protein"
+    ],
+    "protein": 12.0,
+    "carbohydrates": 45.0,
+    "fat": 25.0,
+    "fiber": 3.0,
+    "embedding_text": "Food: Spicy Paneer. Description: Spicy Paneer. Category: COLD SANDWICHES. Calories: 340, Protein: 12.0g. macronutrients: {'protein': 12.0, 'carbohydrates': 45.0, 'fat': 25.0, 'fiber': 3.0}. Ingredients: WHITE JUMBO BREAD SEMI FINISHED 2 PIECE, SPICY MAYO HOME-MADE SEMI FINISHED 20 GRAM, SPICY PANEER SANDWICH SEMI FINISHED 100 GRAM, ONION 60 GRAM. Dietary: Vegetarian, Gluten-free, High-protein"
+  },
+  {
+    "id": "f66310eb-2b3c-4247-a5e6-ab6f5dd29a9f",
+    "name": "Apple",
+    "description": "Apple",
+    "category": "FRESH JUICES",
+    "calories": 90,
+    "price": 190,
+    "macronutrients": {
+      "protein": 10.0,
+      "carbohydrates": 25.0,
+      "fat": 15.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "Fresh apples",
+      "Lemon juice"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 10.0,
+    "carbohydrates": 25.0,
+    "fat": 15.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Apple. Description: Apple. Category: FRESH JUICES. Calories: 90, Protein: 10.0g. macronutrients: {'protein': 10.0, 'carbohydrates': 25.0, 'fat': 15.0, 'fiber': 1.0}. Ingredients: Fresh apples, Lemon juice. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "100c7092-0503-4795-a315-3fa0a9654f6d",
+    "name": "Club Sandwich",
+    "description": "Club Sandwich",
+    "category": "GRILLED SANDWICHES",
+    "calories": 360,
+    "price": 304,
+    "macronutrients": {
+      "protein": 18.0,
+      "carbohydrates": 60.0,
+      "fat": 28.0,
+      "fiber": 6.0
+    },
+    "ingredients": [
+      "WHITE JUMBO BREAD SEMI FINISHED  3 PIECE",
+      "BUTTER SALTED 30 GRAM",
+      "MAYONNAISE 30 GRAM",
+      "CUCUMBER 80 GRAM",
+      "TOMATO BANGALORE 80 GRAM",
+      "ONION 100 GRAM",
+      "CLUB PANEER MARINATIOM SEMI FINISHED 150 GRAM",
+      "TATA SALT  1 GRAM",
+      "CHEESE SLICE AMUL  30 GRAM",
+      "PEPPER BLACK WHOLE 1 GRAM",
+      "VEG GRILL SANDWICH MIXER SEMI FINISHED  80 GRAM",
+      "FRENCH FRIES 6MM  200 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian"
+    ],
+    "protein": 18.0,
+    "carbohydrates": 60.0,
+    "fat": 28.0,
+    "fiber": 6.0,
+    "embedding_text": "Food: Club Sandwich. Description: Club Sandwich. Category: GRILLED SANDWICHES. Calories: 360, Protein: 18.0g. macronutrients: {'protein': 18.0, 'carbohydrates': 60.0, 'fat': 28.0, 'fiber': 6.0}. Ingredients: WHITE JUMBO BREAD SEMI FINISHED  3 PIECE, BUTTER SALTED 30 GRAM, MAYONNAISE 30 GRAM, CUCUMBER 80 GRAM, TOMATO BANGALORE 80 GRAM, ONION 100 GRAM, CLUB PANEER MARINATIOM SEMI FINISHED 150 GRAM, TATA SALT  1 GRAM, CHEESE SLICE AMUL  30 GRAM, PEPPER BLACK WHOLE 1 GRAM, VEG GRILL SANDWICH MIXER SEMI FINISHED  80 GRAM, FRENCH FRIES 6MM  200 GRAM. Dietary: Vegetarian"
+  },
+  {
+    "id": "36070e40-fb12-41fa-93f0-cb10861270ac",
+    "name": "Green Lemon Tea With Honey",
+    "description": "Green Lemon Tea With Honey",
+    "category": "TEA HOUSE",
+    "calories": 35,
+    "price": 162,
+    "macronutrients": {
+      "protein": 1.0,
+      "carbohydrates": 20.0,
+      "fat": 0.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "LEMON TEA POWDER 30GRAMS",
+      "TEA BAG (TAJMAHAL) 1Pcs",
+      "LEMON TEA SYRUP 40ML"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 1.0,
+    "carbohydrates": 20.0,
+    "fat": 0.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Green Lemon Tea With Honey. Description: Green Lemon Tea With Honey. Category: TEA HOUSE. Calories: 35, Protein: 1.0g. macronutrients: {'protein': 1.0, 'carbohydrates': 20.0, 'fat': 0.0, 'fiber': 0.0}. Ingredients: LEMON TEA POWDER 30GRAMS, TEA BAG (TAJMAHAL) 1Pcs, LEMON TEA SYRUP 40ML. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "740e1430-2a13-4c87-a253-d7186511a26e",
+    "name": "Peach Iced Tea",
+    "description": "Peach Iced Tea",
+    "category": "ICED TEAS & COLD COFFEE",
+    "calories": 120,
+    "price": 219,
+    "macronutrients": {
+      "protein": 0.0,
+      "carbohydrates": 10.0,
+      "fat": 0.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "PEACH PUREE 45ML",
+      "TEA BAG (TAJMAHAL) 2 NS"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 0.0,
+    "carbohydrates": 10.0,
+    "fat": 0.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Peach Iced Tea. Description: Peach Iced Tea. Category: ICED TEAS & COLD COFFEE. Calories: 120, Protein: 0.0g. macronutrients: {'protein': 0.0, 'carbohydrates': 10.0, 'fat': 0.0, 'fiber': 0.0}. Ingredients: PEACH PUREE 45ML, TEA BAG (TAJMAHAL) 2 NS. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "1d1e37f2-afc7-4647-979f-82babd9b859a",
+    "name": "Sauteed Vegetables",
+    "description": "Sauteed Vegetables",
+    "category": "BREAKFAST",
+    "calories": 200,
+    "price": 247,
+    "macronutrients": {
+      "protein": 8.0,
+      "carbohydrates": 72.0,
+      "fat": 32.0,
+      "fiber": 10.0
+    },
+    "ingredients": [
+      "VIRGIN OLIVE OIL 20 GRAM",
+      "BUTTER SALTED AMUL 10 GRAM",
+      "RED CAPSICUM 60 GRAM",
+      "YELLOW CAPSICUM 60 GRAM",
+      "GREEN CAPSICUM 80 GRAM",
+      "BEETROOT 100 GRAM",
+      "BEANS 60 GRAM",
+      "BROCCOLI 100 GRAM",
+      "CARROT 60 GRAM",
+      "SWEET CORN 60 GRAM",
+      "FRESH MUSHROOMS 60 GRAM",
+      "YELLOW ZUCCHINI 60 GRAM",
+      "GREEN ZUCCHINI 60 GRAM",
+      "TATA SALT 10 GRAM",
+      "PEPPER BLACK WHOLE 2 GRAM",
+      "CHILLY FLAKES 2 GRAM",
+      "BASIL FRESH 15 GRAM",
+      "BABY CORN PEELED 60 GRAM",
+      "GARLIC PEELED 10 GRAM",
+      "OGLIO OLIO SEMI FINISHED 20 GRAM",
+      "SEASONING AROMATIC POWDER 10 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 8.0,
+    "carbohydrates": 72.0,
+    "fat": 32.0,
+    "fiber": 10.0,
+    "embedding_text": "Food: Sauteed Vegetables. Description: Sauteed Vegetables. Category: BREAKFAST. Calories: 200, Protein: 8.0g. macronutrients: {'protein': 8.0, 'carbohydrates': 72.0, 'fat': 32.0, 'fiber': 10.0}. Ingredients: VIRGIN OLIVE OIL 20 GRAM, BUTTER SALTED AMUL 10 GRAM, RED CAPSICUM 60 GRAM, YELLOW CAPSICUM 60 GRAM, GREEN CAPSICUM 80 GRAM, BEETROOT 100 GRAM, BEANS 60 GRAM, BROCCOLI 100 GRAM, CARROT 60 GRAM, SWEET CORN 60 GRAM, FRESH MUSHROOMS 60 GRAM, YELLOW ZUCCHINI 60 GRAM, GREEN ZUCCHINI 60 GRAM, TATA SALT 10 GRAM, PEPPER BLACK WHOLE 2 GRAM, CHILLY FLAKES 2 GRAM, BASIL FRESH 15 GRAM, BABY CORN PEELED 60 GRAM, GARLIC PEELED 10 GRAM, OGLIO OLIO SEMI FINISHED 20 GRAM, SEASONING AROMATIC POWDER 10 GRAM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "5e6f26ab-dd32-4a71-8fc3-6390fba04c61",
+    "name": "Green Tea",
+    "description": "Green Tea",
+    "category": "TEA HOUSE",
+    "calories": 35,
+    "price": 162,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 16.0,
+      "fat": 4.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "BLACK TEA LEAVES 10GRAMS",
+      "MILK 100ML",
+      "SUGAR 20GRAMS",
+      "GINGER 5GMS",
+      "CARDAMOM 1Pcs",
+      "CINNAMON 0.5GRAMS",
+      "CLOVES 1Pcs"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free",
+      "Low-calorie"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 16.0,
+    "fat": 4.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Green Tea. Description: Green Tea. Category: TEA HOUSE. Calories: 35, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 16.0, 'fat': 4.0, 'fiber': 1.0}. Ingredients: BLACK TEA LEAVES 10GRAMS, MILK 100ML, SUGAR 20GRAMS, GINGER 5GMS, CARDAMOM 1Pcs, CINNAMON 0.5GRAMS, CLOVES 1Pcs. Dietary: Vegetarian, Gluten-free, Low-calorie"
+  },
+  {
+    "id": "d68aac85-e6ec-4d2d-9dbf-9160e040bda0",
+    "name": "Passion Fruit Iced Tea",
+    "description": "Passion Fruit Iced Tea",
+    "category": "ICED TEAS & COLD COFFEE",
+    "calories": 120,
+    "price": 219,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 16.0,
+      "fat": 4.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "Black tea leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black pepper"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 16.0,
+    "fat": 4.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Passion Fruit Iced Tea. Description: Passion Fruit Iced Tea. Category: ICED TEAS & COLD COFFEE. Calories: 120, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 16.0, 'fat': 4.0, 'fiber': 1.0}. Ingredients: Black tea leaves, Milk, Sugar, Ginger, Cardamom, Cinnamon, Cloves, Black pepper. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "7382ba9b-1964-43ac-a01d-b50bdf3e4fcb",
+    "name": "Niloufer Tea",
+    "description": "Niloufer Tea",
+    "category": "TEA HOUSE",
+    "calories": 90,
+    "price": 143,
+    "macronutrients": {
+      "protein": 5.0,
+      "carbohydrates": 12.0,
+      "fat": 5.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "MILK 150ML",
+      "SUGAR 20GRAMS",
+      "TEA POWDER 10GRAMS"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 5.0,
+    "carbohydrates": 12.0,
+    "fat": 5.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Niloufer Tea. Description: Niloufer Tea. Category: TEA HOUSE. Calories: 90, Protein: 5.0g. macronutrients: {'protein': 5.0, 'carbohydrates': 12.0, 'fat': 5.0, 'fiber': 0.0}. Ingredients: MILK 150ML, SUGAR 20GRAMS, TEA POWDER 10GRAMS. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "a4b8b90d-c650-4144-a65d-6a307d10d760",
+    "name": "Kahwa Tea",
+    "description": "Kahwa Tea",
+    "category": "TEA HOUSE",
+    "calories": 90,
+    "price": 162,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 16.0,
+      "fat": 4.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "Black tea leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black pepper"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 16.0,
+    "fat": 4.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Kahwa Tea. Description: Kahwa Tea. Category: TEA HOUSE. Calories: 90, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 16.0, 'fat': 4.0, 'fiber': 1.0}. Ingredients: Black tea leaves, Milk, Sugar, Ginger, Cardamom, Cinnamon, Cloves, Black pepper. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "8d5f07b9-e9ea-46f2-9ed3-ca75db2bafdf",
+    "name": "Green Tea With Honey",
+    "description": "Green Tea With Honey",
+    "category": "TEA HOUSE",
+    "calories": 35,
+    "price": 171,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 16.0,
+      "fat": 4.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "BLACK TEA LEAVES 10GRAMS",
+      "MILK 100ML",
+      "SUGAR 20GRAMS",
+      "GINGER 5GMS",
+      "CARDAMOM 1Pcs",
+      "CINNAMON 0.5GRAMS",
+      "CLOVES 1Pcs"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free",
+      "Low-calorie"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 16.0,
+    "fat": 4.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Green Tea With Honey. Description: Green Tea With Honey. Category: TEA HOUSE. Calories: 35, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 16.0, 'fat': 4.0, 'fiber': 1.0}. Ingredients: BLACK TEA LEAVES 10GRAMS, MILK 100ML, SUGAR 20GRAMS, GINGER 5GMS, CARDAMOM 1Pcs, CINNAMON 0.5GRAMS, CLOVES 1Pcs. Dietary: Vegetarian, Gluten-free, Low-calorie"
+  },
+  {
+    "id": "21e7c247-90bd-40a4-a053-73993611f3bc",
+    "name": "Maska Bun",
+    "description": "Maska Bun",
+    "category": "SNACKS",
+    "calories": 190,
+    "price": 95,
+    "macronutrients": {
+      "protein": 4.0,
+      "carbohydrates": 20.0,
+      "fat": 10.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "MASKA BUN SEMI FINISHED 1 NO",
+      "BUTTER SALTED AMUL 25 GRAM",
+      "SUGAR CASTOR 6 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian"
+    ],
+    "protein": 4.0,
+    "carbohydrates": 20.0,
+    "fat": 10.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Maska Bun. Description: Maska Bun. Category: SNACKS. Calories: 190, Protein: 4.0g. macronutrients: {'protein': 4.0, 'carbohydrates': 20.0, 'fat': 10.0, 'fiber': 1.0}. Ingredients: MASKA BUN SEMI FINISHED 1 NO, BUTTER SALTED AMUL 25 GRAM, SUGAR CASTOR 6 GRAM. Dietary: Vegetarian"
+  },
+  {
+    "id": "9289a66b-7ae2-40cb-baf8-0e7f0f40e472",
+    "name": "Fresh Lime Soda",
+    "description": "Fresh Lime Soda",
+    "category": "MOCKTAILS",
+    "calories": 140,
+    "price": 143,
+    "macronutrients": {
+      "protein": 0.0,
+      "carbohydrates": 10.0,
+      "fat": 0.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "SODA 50 ML",
+      "LEMON 2PCS",
+      "SUGAR SYRUP 30ML"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 0.0,
+    "carbohydrates": 10.0,
+    "fat": 0.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Fresh Lime Soda. Description: Fresh Lime Soda. Category: MOCKTAILS. Calories: 140, Protein: 0.0g. macronutrients: {'protein': 0.0, 'carbohydrates': 10.0, 'fat': 0.0, 'fiber': 0.0}. Ingredients: SODA 50 ML, LEMON 2PCS, SUGAR SYRUP 30ML. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "9a30cad5-8576-48b1-8f25-d6eb1e0a6b1d",
+    "name": "Belgian Chocolate Croissant",
+    "description": "Belgian Chocolate Croissant",
+    "category": "CROISSANTS",
+    "calories": 300,
+    "price": 114,
+    "macronutrients": {
+      "protein": 6.0,
+      "carbohydrates": 70.0,
+      "fat": 18.0,
+      "fiber": 3.0
+    },
+    "ingredients": [
+      "WAFFE BATEER SEMI FINISHED 200 GRAM",
+      "BUTTER SALTED AMUL 10 GRAM",
+      "CHOCO CHIPS 30 GRAM",
+      "CHOCOLATE SYRUP-HERSHEYS 80 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 6.0,
+    "carbohydrates": 70.0,
+    "fat": 18.0,
+    "fiber": 3.0,
+    "embedding_text": "Food: Belgian Chocolate Croissant. Description: Belgian Chocolate Croissant. Category: CROISSANTS. Calories: 300, Protein: 6.0g. macronutrients: {'protein': 6.0, 'carbohydrates': 70.0, 'fat': 18.0, 'fiber': 3.0}. Ingredients: WAFFE BATEER SEMI FINISHED 200 GRAM, BUTTER SALTED AMUL 10 GRAM, CHOCO CHIPS 30 GRAM, CHOCOLATE SYRUP-HERSHEYS 80 GRAM. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "5b02a157-2708-4dfd-8a32-f5778ab0759b",
+    "name": "Malai Paneer Roll (6.Pcs)",
+    "description": "Malai Paneer Roll (6.Pcs)",
+    "category": "SNACKS",
+    "calories": 135,
+    "price": 304,
+    "macronutrients": {
+      "protein": 15.0,
+      "carbohydrates": 60.0,
+      "fat": 35.0,
+      "fiber": 4.0
+    },
+    "ingredients": [
+      "PANEER ROLL SEMI FINISHED 1 GRAM",
+      "BUTTER SALTED AMUL 20 GRAM",
+      "MAYONNAISE 20 GRAM",
+      "SEMI FINISHED PANNER ROLL MIXER 130 GRAM",
+      "ONION 30 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free",
+      "High-protein"
+    ],
+    "protein": 15.0,
+    "carbohydrates": 60.0,
+    "fat": 35.0,
+    "fiber": 4.0,
+    "embedding_text": "Food: Malai Paneer Roll (6.Pcs). Description: Malai Paneer Roll (6.Pcs). Category: SNACKS. Calories: 135, Protein: 15.0g. macronutrients: {'protein': 15.0, 'carbohydrates': 60.0, 'fat': 35.0, 'fiber': 4.0}. Ingredients: PANEER ROLL SEMI FINISHED 1 GRAM, BUTTER SALTED AMUL 20 GRAM, MAYONNAISE 20 GRAM, SEMI FINISHED PANNER ROLL MIXER 130 GRAM, ONION 30 GRAM. Dietary: Vegetarian, Gluten-free, High-protein"
+  },
+  {
+    "id": "3f53bacd-8899-440c-b3e1-829cebb89ad4",
+    "name": "Corn & Cheese Ball (6.Pcs)",
+    "description": "Corn & Cheese Ball (6.Pcs)",
+    "category": "SNACKS",
+    "calories": 250,
+    "price": 304,
+    "macronutrients": {
+      "protein": 12.0,
+      "carbohydrates": 120.0,
+      "fat": 28.0,
+      "fiber": 10.0
+    },
+    "ingredients": [
+      "SWEET CORN 300 GRAM",
+      "MAIDA 60 GRAM",
+      "RAJA CORN FLOUR 60 GRAM",
+      "RED CHILLI POWDER 10 GRAM",
+      "SEASONING KEYA ONION POWDER 5 GRAM",
+      "SPICES GARLIC POWDER 5 GRAM",
+      "TATA SALT 5 GRAM",
+      "WHITE PEPPER POWDER 5 GRAM",
+      "KASHMIRI CHILLI POWDER 500GMS 10 GRAM",
+      "OIL FRYING 60 GRAM",
+      "BAKING POWDER 2 GRAM"
+    ],
+    "dietary_info": [
+      "High-protein"
+    ],
+    "protein": 12.0,
+    "carbohydrates": 120.0,
+    "fat": 28.0,
+    "fiber": 10.0,
+    "embedding_text": "Food: Corn & Cheese Ball (6.Pcs). Description: Corn & Cheese Ball (6.Pcs). Category: SNACKS. Calories: 250, Protein: 12.0g. macronutrients: {'protein': 12.0, 'carbohydrates': 120.0, 'fat': 28.0, 'fiber': 10.0}. Ingredients: SWEET CORN 300 GRAM, MAIDA 60 GRAM, RAJA CORN FLOUR 60 GRAM, RED CHILLI POWDER 10 GRAM, SEASONING KEYA ONION POWDER 5 GRAM, SPICES GARLIC POWDER 5 GRAM, TATA SALT 5 GRAM, WHITE PEPPER POWDER 5 GRAM, KASHMIRI CHILLI POWDER 500GMS 10 GRAM, OIL FRYING 60 GRAM, BAKING POWDER 2 GRAM. Dietary: High-protein"
+  },
+  {
+    "id": "49d54b3c-0bd0-4901-83f2-9e1a200c4450",
+    "name": "Spinach & Corn Puff (1 Pc)",
+    "description": "Spinach & Corn Puff (1 Pc)",
+    "category": "SNACKS",
+    "calories": 120,
+    "price": 48,
+    "macronutrients": {
+      "protein": 5.0,
+      "carbohydrates": 30.0,
+      "fat": 12.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "MINI PUFF ROLL SHEET SEMIFINISHED 1Pcs",
+      "SPINACH CORN PUFF MIXER SEMI FINISHED 30GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 5.0,
+    "carbohydrates": 30.0,
+    "fat": 12.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Spinach & Corn Puff (1 Pc). Description: Spinach & Corn Puff (1 Pc). Category: SNACKS. Calories: 120, Protein: 5.0g. macronutrients: {'protein': 5.0, 'carbohydrates': 30.0, 'fat': 12.0, 'fiber': 2.0}. Ingredients: MINI PUFF ROLL SHEET SEMIFINISHED 1Pcs, SPINACH CORN PUFF MIXER SEMI FINISHED 30GRAM. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "4a7736d9-f423-4955-8087-5c8ef8c6444f",
+    "name": "Masala Oats",
+    "description": "Masala Oats",
+    "category": "BREAKFAST",
+    "calories": 220,
+    "price": 190,
+    "macronutrients": {
+      "protein": 6.0,
+      "carbohydrates": 40.0,
+      "fat": 10.0,
+      "fiber": 5.0
+    },
+    "ingredients": [
+      "BUTTER SALTED AMUL 10 GRAM",
+      "INNOFRESH AEROSOL DISPENSER 100 GRAM",
+      "CARROT 60 GRAM",
+      "GREEN PEAS 60 GRAM",
+      "CURRY LEAVES 2 GRAM",
+      "BEANS 60 GRAM",
+      "RED CHILLI POWDER 2 GRAM",
+      "TURMERIC POWDER 2 GRAM",
+      "CORIANDER 20 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 6.0,
+    "carbohydrates": 40.0,
+    "fat": 10.0,
+    "fiber": 5.0,
+    "embedding_text": "Food: Masala Oats. Description: Masala Oats. Category: BREAKFAST. Calories: 220, Protein: 6.0g. macronutrients: {'protein': 6.0, 'carbohydrates': 40.0, 'fat': 10.0, 'fiber': 5.0}. Ingredients: BUTTER SALTED AMUL 10 GRAM, INNOFRESH AEROSOL DISPENSER 100 GRAM, CARROT 60 GRAM, GREEN PEAS 60 GRAM, CURRY LEAVES 2 GRAM, BEANS 60 GRAM, RED CHILLI POWDER 2 GRAM, TURMERIC POWDER 2 GRAM, CORIANDER 20 GRAM. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "e01157ba-af18-4d83-b302-e7e760f2fdf6",
+    "name": "Lemon Tea",
+    "description": "Lemon Tea",
+    "category": "TEA HOUSE",
+    "calories": 90,
+    "price": 143,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 16.0,
+      "fat": 4.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "Black tea leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black pepper"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 16.0,
+    "fat": 4.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Lemon Tea. Description: Lemon Tea. Category: TEA HOUSE. Calories: 90, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 16.0, 'fat': 4.0, 'fiber': 1.0}. Ingredients: Black tea leaves, Milk, Sugar, Ginger, Cardamom, Cinnamon, Cloves, Black pepper. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "344f3b86-74b4-4c4e-9ccf-2333284440f1",
+    "name": "Chocolate",
+    "description": "Chocolate",
+    "category": "MILKSHAKES",
+    "calories": 260,
+    "price": 219,
+    "macronutrients": {
+      "protein": 5.0,
+      "carbohydrates": 90.0,
+      "fat": 18.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "WAFFE BATEER SEMI FINISHED 200 GRAM",
+      "BUTTER SALTED AMUL 10 GRAM",
+      "CHOCO CHIPS 30 GRAM",
+      "CHOCOLATE SYRUP-HERSHEYS 80 GRAM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 5.0,
+    "carbohydrates": 90.0,
+    "fat": 18.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Chocolate. Description: Chocolate. Category: MILKSHAKES. Calories: 260, Protein: 5.0g. macronutrients: {'protein': 5.0, 'carbohydrates': 90.0, 'fat': 18.0, 'fiber': 2.0}. Ingredients: WAFFE BATEER SEMI FINISHED 200 GRAM, BUTTER SALTED AMUL 10 GRAM, CHOCO CHIPS 30 GRAM, CHOCOLATE SYRUP-HERSHEYS 80 GRAM. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "4efd13b8-0e0b-4ced-b261-30a6891d7665",
+    "name": "Blue Lagoon",
+    "description": "Blue Lagoon",
+    "category": "MOCKTAILS",
+    "calories": 140,
+    "price": 209,
+    "macronutrients": {
+      "protein": 0.0,
+      "carbohydrates": 60.0,
+      "fat": 0.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "BLUE CURRACAO SYRUP 30ML",
+      "SODA 200ML",
+      "SPRITE 50ML"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 0.0,
+    "carbohydrates": 60.0,
+    "fat": 0.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Blue Lagoon. Description: Blue Lagoon. Category: MOCKTAILS. Calories: 140, Protein: 0.0g. macronutrients: {'protein': 0.0, 'carbohydrates': 60.0, 'fat': 0.0, 'fiber': 0.0}. Ingredients: BLUE CURRACAO SYRUP 30ML, SODA 200ML, SPRITE 50ML. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "4e029ee0-5ca8-4f4d-a7e4-3cbe5e2c0606",
+    "name": "Veg Cheese Puff (1 Pc)",
+    "description": "Veg Cheese Puff (1 Pc)",
+    "category": "SNACKS",
+    "calories": 135,
+    "price": 48,
+    "macronutrients": {
+      "protein": 4.0,
+      "carbohydrates": 30.0,
+      "fat": 10.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "MINI PUFF ROLL SHEET SEMIFINISHED 1 NO",
+      "VEG AND CHEESE PUFF SEMI FINISHED 30GRAM"
+    ],
+    "dietary_info": [
+      "High-protein"
+    ],
+    "protein": 4.0,
+    "carbohydrates": 30.0,
+    "fat": 10.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Veg Cheese Puff (1 Pc). Description: Veg Cheese Puff (1 Pc). Category: SNACKS. Calories: 135, Protein: 4.0g. macronutrients: {'protein': 4.0, 'carbohydrates': 30.0, 'fat': 10.0, 'fiber': 2.0}. Ingredients: MINI PUFF ROLL SHEET SEMIFINISHED 1 NO, VEG AND CHEESE PUFF SEMI FINISHED 30GRAM. Dietary: High-protein"
+  },
+  {
+    "id": "428b0cbc-0ebb-4e9c-821f-bdff4bcdde46",
+    "name": "Masala Cola",
+    "description": "Masala Cola",
+    "category": "MOCKTAILS",
+    "calories": 120,
+    "price": 171,
+    "macronutrients": {
+      "protein": 0.0,
+      "carbohydrates": 20.0,
+      "fat": 0.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "THUMSUP 150 ML",
+      "NIMBU PANI 50 GM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 0.0,
+    "carbohydrates": 20.0,
+    "fat": 0.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Masala Cola. Description: Masala Cola. Category: MOCKTAILS. Calories: 120, Protein: 0.0g. macronutrients: {'protein': 0.0, 'carbohydrates': 20.0, 'fat': 0.0, 'fiber': 0.0}. Ingredients: THUMSUP 150 ML, NIMBU PANI 50 GM. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "4c44d150-f314-48ed-8132-41255e84b292",
+    "name": "Nutella",
+    "description": "Nutella",
+    "category": "MILKSHAKES",
+    "calories": 260,
+    "price": 247,
+    "macronutrients": {
+      "protein": 10.0,
+      "carbohydrates": 50.0,
+      "fat": 12.0,
+      "fiber": 2.0
+    },
+    "ingredients": [
+      "MILK 150 ML",
+      "VANILLA ICECREAM 2 SCOOPS",
+      "MILK CHOCOLATE 20 GM",
+      "CHOCOLATE SYRUP 20 ML",
+      "NUTELLA 20 GM"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-free"
+    ],
+    "protein": 10.0,
+    "carbohydrates": 50.0,
+    "fat": 12.0,
+    "fiber": 2.0,
+    "embedding_text": "Food: Nutella. Description: Nutella. Category: MILKSHAKES. Calories: 260, Protein: 10.0g. macronutrients: {'protein': 10.0, 'carbohydrates': 50.0, 'fat': 12.0, 'fiber': 2.0}. Ingredients: MILK 150 ML, VANILLA ICECREAM 2 SCOOPS, MILK CHOCOLATE 20 GM, CHOCOLATE SYRUP 20 ML, NUTELLA 20 GM. Dietary: Vegetarian, Vegan, Gluten-free"
+  },
+  {
+    "id": "3bbbaa3c-7880-436f-8d8d-436da7cb780b",
+    "name": "Strawberry Iced Tea",
+    "description": "Strawberry Iced Tea",
+    "category": "ICED TEAS & COLD COFFEE",
+    "calories": 120,
+    "price": 219,
+    "macronutrients": {
+      "protein": 0.0,
+      "carbohydrates": 0.0,
+      "fat": 0.0,
+      "fiber": 0.0
+    },
+    "ingredients": [
+      "HOT WATER 150ML",
+      "STRAWBERRY PUREE 45ML",
+      "LEMON 1Pcs"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 0.0,
+    "carbohydrates": 0.0,
+    "fat": 0.0,
+    "fiber": 0.0,
+    "embedding_text": "Food: Strawberry Iced Tea. Description: Strawberry Iced Tea. Category: ICED TEAS & COLD COFFEE. Calories: 120, Protein: 0.0g. macronutrients: {'protein': 0.0, 'carbohydrates': 0.0, 'fat': 0.0, 'fiber': 0.0}. Ingredients: HOT WATER 150ML, STRAWBERRY PUREE 45ML, LEMON 1Pcs. Dietary: Vegetarian, Gluten-free"
+  },
+  {
+    "id": "2e5eb112-1262-48c5-8e14-de3309e10a3b",
+    "name": "Cheese Garlic",
+    "description": "Cheese Garlic",
+    "category": "COLD SANDWICHES",
+    "calories": 320,
+    "price": 143,
+    "macronutrients": {
+      "protein": 14.0,
+      "carbohydrates": 48.0,
+      "fat": 40.0,
+      "fiber": 5.0
+    },
+    "ingredients": [
+      "WHITE JUMBO BREAD SEMI FINISHED 2 PIECE",
+      "SPICY MAYO HOME-MADE SEMI FINISHED 30 GRAM",
+      "CHEESE PROCESSED 50 GRAM",
+      "FRIED GARLIC SEMI FINISHED 20 GRAM",
+      "FRIED CHILLI SEMI FINISHED 20 GRAM"
+    ],
+    "dietary_info": [
+      "High-protein"
+    ],
+    "protein": 14.0,
+    "carbohydrates": 48.0,
+    "fat": 40.0,
+    "fiber": 5.0,
+    "embedding_text": "Food: Cheese Garlic. Description: Cheese Garlic. Category: COLD SANDWICHES. Calories: 320, Protein: 14.0g. macronutrients: {'protein': 14.0, 'carbohydrates': 48.0, 'fat': 40.0, 'fiber': 5.0}. Ingredients: WHITE JUMBO BREAD SEMI FINISHED 2 PIECE, SPICY MAYO HOME-MADE SEMI FINISHED 30 GRAM, CHEESE PROCESSED 50 GRAM, FRIED GARLIC SEMI FINISHED 20 GRAM, FRIED CHILLI SEMI FINISHED 20 GRAM. Dietary: High-protein"
+  },
+  {
+    "id": "c9a1095d-47cb-44e5-87ef-e0601c84e0c3",
+    "name": "Green Lemon Tea",
+    "description": "Green Lemon Tea",
+    "category": "TEA HOUSE",
+    "calories": 35,
+    "price": 162,
+    "macronutrients": {
+      "protein": 2.0,
+      "carbohydrates": 16.0,
+      "fat": 4.0,
+      "fiber": 1.0
+    },
+    "ingredients": [
+      "Black tea leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black pepper"
+    ],
+    "dietary_info": [
+      "Vegetarian",
+      "Gluten-free"
+    ],
+    "protein": 2.0,
+    "carbohydrates": 16.0,
+    "fat": 4.0,
+    "fiber": 1.0,
+    "embedding_text": "Food: Green Lemon Tea. Description: Green Lemon Tea. Category: TEA HOUSE. Calories: 35, Protein: 2.0g. macronutrients: {'protein': 2.0, 'carbohydrates': 16.0, 'fat': 4.0, 'fiber': 1.0}. Ingredients: Black tea leaves, Milk, Sugar, Ginger, Cardamom, Cinnamon, Cloves, Black pepper. Dietary: Vegetarian, Gluten-free"
+  }
+]

@@ -1,0 +1,4 @@
+pathlib
+json
+dotenv
+psycopg2-binary
