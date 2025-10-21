@@ -16,11 +16,11 @@ class NutrimoodClient:
     
     def chat(self, message: str, stream: bool = True) -> dict:
         """
-        Send a chat message and get response
+        Send a chat message and get streaming response
         
         Args:
             message: The user's message
-            stream: Whether to stream the response
+            stream: Whether to display streaming text (always streams from server)
         
         Returns:
             Response dictionary with message and metadata
@@ -36,44 +36,50 @@ class NutrimoodClient:
             response = requests.post(
                 f"{self.base_url}/chat",
                 json=payload,
-                stream=stream
+                stream=True  # Always stream from server
             )
             response.raise_for_status()
             
+            # Handle streaming response
+            full_response = ""
+            final_json = None
+            
             if stream:
-                # Handle streaming response
-                full_response = ""
-                final_json = None
-                
                 print("NutriMood: ", end="", flush=True)
-                
-                for chunk in response.iter_content(chunk_size=None, decode_unicode=True):
-                    if chunk:
-                        chunk_str = chunk.decode('utf-8') if isinstance(chunk, bytes) else chunk
+            
+            for chunk in response.iter_content(chunk_size=None, decode_unicode=True):
+                if chunk:
+                    chunk_str = chunk.decode('utf-8') if isinstance(chunk, bytes) else chunk
+                    
+                    # Check for final JSON response
+                    if "__RESPONSE__:" in chunk_str:
+                        # Extract the response part before __RESPONSE__
+                        parts = chunk_str.split("__RESPONSE__:")
+                        if parts[0] and stream:
+                            print(parts[0], end="", flush=True)
+                            full_response += parts[0]
                         
-                        # Check for final JSON
-                        if "__FINAL_JSON__:" in chunk_str:
-                            json_part = chunk_str.split("__FINAL_JSON__:")[1]
-                            final_json = json.loads(json_part)
-                            break
-                        else:
+                        # Parse the JSON
+                        json_part = parts[1]
+                        final_json = json.loads(json_part)
+                        break
+                    else:
+                        if stream:
                             print(chunk_str, end="", flush=True)
-                            full_response += chunk_str
-                
+                        full_response += chunk_str
+            
+            if stream:
                 print("\n")  # New line after response
-                
-                if final_json:
-                    self.session_id = final_json.get("session_id")
-                    return final_json
-                else:
-                    return {
-                        "message": full_response,
-                        "session_id": self.session_id,
-                        "food_recommendation_id": ""
-                    }
+            
+            if final_json:
+                self.session_id = final_json.get("session_id")
+                return final_json
             else:
-                # Non-streaming response
-                return response.json()
+                return {
+                    "message": full_response,
+                    "session_id": self.session_id,
+                    "food_recommendation_id": ""
+                }
         
         except requests.exceptions.RequestException as e:
             print(f"Error: {e}")

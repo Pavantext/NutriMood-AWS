@@ -14,10 +14,12 @@ NutriMood is an intelligent chatbot that provides personalized food recommendati
 ### Key Features
 
 ✅ **AWS Bedrock Integration** - Uses Claude 3 Sonnet for natural, context-aware conversations  
+✅ **Pinecone Vector Search** - Semantic search using embeddings for intelligent food matching  
+✅ **AWS Titan Embeddings** - 1024-dimensional vectors using Titan Text V2 model  
 ✅ **MCP Protocol Support** - Structured access to food database via Model Context Protocol  
 ✅ **Streaming Responses** - Real-time streaming of chat responses for better UX  
 ✅ **Session Management** - Maintains conversation history and user preferences  
-✅ **Smart Food Matching** - Keyword-based relevance scoring for accurate recommendations  
+✅ **Smart Fallback** - Automatic fallback to keyword matching if vector search unavailable  
 ✅ **RESTful API** - Comprehensive FastAPI-based REST endpoints  
 ✅ **Multi-format Data** - Handles rich food data with nutrition, ingredients, and dietary info
 

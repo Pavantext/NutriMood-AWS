@@ -9,6 +9,12 @@ pydantic
 boto3
 botocore
 
+# Vector Search
+pinecone
+
+# Database
+psycopg2-binary
+
 # Data Processing
 numpy
 pandas

@@ -1,18 +1,46 @@
 """
 Food Service - Handles food data management, matching, and recommendation logic
+Uses Pinecone for semantic vector search
 """
 
 import json
 from typing import List, Dict, Tuple, Optional
 import re
 from pathlib import Path
+from services.pinecone_service import PineconeService
+from services.embedding_service import EmbeddingService
 
 
 class FoodService:
     def __init__(self):
-        """Initialize food service"""
+        """Initialize food service with Pinecone and embedding support"""
         self.food_items = []
         self.food_index = {}  # id -> food item mapping
+        
+        # Initialize Pinecone service first
+        self.pinecone_service = PineconeService()
+        
+        # Get Pinecone dimension if available
+        pinecone_dim = None
+        if self.pinecone_service.index:
+            stats = self.pinecone_service.get_index_stats()
+            pinecone_dim = stats.get('dimension')
+            if pinecone_dim:
+                print(f"ℹ️  Pinecone index dimension: {pinecone_dim}")
+        
+        # Initialize embedding service with Pinecone dimension
+        self.embedding_service = EmbeddingService(pinecone_dimension=pinecone_dim)
+        
+        # Check if vector search is available
+        self.use_vector_search = (
+            self.pinecone_service.index is not None and 
+            self.embedding_service.client is not None
+        )
+        
+        if self.use_vector_search:
+            print("✅ Vector search enabled (Pinecone + AWS Titan)")
+        else:
+            print("⚠️  Vector search not available, using keyword matching fallback")
         
     def load_food_data(self, file_path: str):
         """
@@ -48,7 +76,7 @@ class FoodService:
         filters: Optional[Dict] = None
     ) -> List[Tuple[Dict, float]]:
         """
-        Find food items matching the query using keyword-based matching
+        Find food items matching the query using vector search (Pinecone) or keyword matching
         
         Args:
             query: User's search query
@@ -59,11 +87,140 @@ class FoodService:
         Returns:
             List of (food_item, relevance_score) tuples
         """
+        # Build enhanced query from conversation context
+        enhanced_query = self._build_contextual_query(query, conversation_history)
+        
+        # Use vector search if available
+        if self.use_vector_search:
+            return self._find_with_vector_search(enhanced_query, top_k, filters)
+        else:
+            # Fallback to keyword matching
+            return self._find_with_keyword_matching(enhanced_query, top_k, filters)
+    
+    def _build_contextual_query(self, query: str, conversation_history: List[Dict]) -> str:
+        """
+        Build enhanced query from conversation context
+        
+        Args:
+            query: Current user query
+            conversation_history: Previous messages
+        
+        Returns:
+            Enhanced query string
+        """
+        # For simple queries, just use the query as-is
+        query_lower = query.lower().strip()
+        
+        # If it's just a greeting, return as-is
+        if query_lower in ['hi', 'hello', 'hey']:
+            return query
+        
+        # If asking for specials/popular, enhance query to find Niloufer specials
+        if any(word in query_lower for word in ['special', 'popular', 'signature', 'famous', 'must try', 'must-try']):
+            # Enhance query to find Niloufer special items
+            return "Niloufer special signature items " + query
+        
+        # Add context from recent conversation (last 2 messages)
+        context_parts = [query]
+        
+        for msg in conversation_history[-2:]:
+            if msg.get('role') == 'user':
+                content = msg.get('content', '').strip()
+                if content and content.lower() not in ['hi', 'hello', 'hey']:
+                    context_parts.append(content)
+        
+        # Combine with spaces
+        return ' '.join(context_parts)
+    
+    def _find_with_vector_search(
+        self,
+        query: str,
+        top_k: int,
+        filters: Optional[Dict]
+    ) -> List[Tuple[Dict, float]]:
+        """
+        Find foods using Pinecone vector search
+        
+        Args:
+            query: Search query
+            top_k: Number of results
+            filters: Optional filters
+        
+        Returns:
+            List of (food_item, score) tuples
+        """
+        # Generate embedding for the query
+        query_embedding = self.embedding_service.generate_embedding(query)
+        
+        if not query_embedding:
+            print("⚠️  Failed to generate embedding, falling back to keyword matching")
+            return self._find_with_keyword_matching(query, top_k, filters)
+        
+        # Enhance filters for special/popular queries
+        enhanced_filters = filters.copy() if filters else {}
+        
+        # If query mentions special/popular, try to get popular items
+        query_lower = query.lower()
+        if any(word in query_lower for word in ['special', 'popular', 'signature', 'famous', 'niloufer special']):
+            # First try with popular filter
+            popular_matches = self.pinecone_service.search_foods(
+                query_embedding=query_embedding,
+                top_k=top_k,
+                filters={**enhanced_filters, 'popular': True}
+            )
+            
+            # If we got results, return them
+            if popular_matches:
+                return popular_matches
+            
+            # Otherwise, search without popular filter but query enhanced
+        
+        # Search Pinecone
+        matches = self.pinecone_service.search_foods(
+            query_embedding=query_embedding,
+            top_k=top_k,
+            filters=enhanced_filters if enhanced_filters else None
+        )
+        
+        # Post-process: Boost items with "Niloufer" in name for special queries
+        if 'special' in query_lower or 'niloufer' in query_lower:
+            boosted_matches = []
+            for food, score in matches:
+                name = food.get('ProductName', '').lower()
+                if 'niloufer' in name or 'special' in name:
+                    # Boost score for Niloufer special items
+                    boosted_matches.append((food, score + 0.1))
+                else:
+                    boosted_matches.append((food, score))
+            
+            # Re-sort by boosted scores
+            boosted_matches.sort(key=lambda x: x[1], reverse=True)
+            return boosted_matches
+        
+        return matches
+    
+    def _find_with_keyword_matching(
+        self,
+        query: str,
+        top_k: int,
+        filters: Optional[Dict]
+    ) -> List[Tuple[Dict, float]]:
+        """
+        Fallback keyword-based matching when vector search unavailable
+        
+        Args:
+            query: Search query
+            top_k: Number of results
+            filters: Optional filters
+        
+        Returns:
+            List of (food_item, score) tuples
+        """
         if not self.food_items:
             return []
         
-        # Extract keywords from query and conversation
-        keywords = self._extract_keywords(query, conversation_history)
+        # Extract keywords from query
+        keywords = query.lower().split()
         
         # Score each food item
         scored_foods = []
@@ -314,7 +471,22 @@ class FoodService:
         return mentioned_ids
     
     def get_food_by_id(self, food_id: str) -> Optional[Dict]:
-        """Get food item by ID"""
+        """
+        Get food item by ID from Pinecone or local cache
+        
+        Args:
+            food_id: Food item ID
+        
+        Returns:
+            Food item dictionary or None
+        """
+        # Try Pinecone first if available
+        if self.use_vector_search:
+            food = self.pinecone_service.get_food_by_id(food_id)
+            if food:
+                return food
+        
+        # Fallback to local index
         return self.food_index.get(food_id)
     
     def get_all_foods(

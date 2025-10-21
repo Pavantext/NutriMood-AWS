@@ -5,6 +5,7 @@ A food recommendation chatbot using AWS Bedrock and MCP
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List, Dict
 import uvicorn
@@ -22,14 +23,25 @@ from services.bedrock_service import BedrockService
 from services.food_service import FoodService
 from services.session_service import SessionService
 from services.mcp_server import MCPServer
+from services.database_service import DatabaseService
 from utils.response_formatter import ResponseFormatter
 
 app = FastAPI(title="Nutrimood Chatbot API", version="1.0.0")
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, replace with specific origins like ["http://localhost:3000", "https://yourdomain.com"]
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods (GET, POST, OPTIONS, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
 
 # Initialize services
 bedrock_service = BedrockService()
 food_service = FoodService()
 session_service = SessionService()
+database_service = DatabaseService()  # AWS RDS PostgreSQL
 response_formatter = ResponseFormatter()
 mcp_server = None  # Will be initialized after food data is loaded
 
@@ -39,6 +51,7 @@ class ChatRequest(BaseModel):
     session_id: Optional[str] = None
     user_preferences: Optional[Dict] = None
     user_name: Optional[str] = None  # User's name for personalized responses
+    user_id: Optional[str] = None  # User ID for database tracking
 
 class ChatResponse(BaseModel):
     message: str
@@ -91,92 +104,34 @@ async def root():
     return {
         "status": "healthy",
         "service": "Nutrimood Chatbot",
-        "version": "1.0.0",
+        "version": "3.25.0",
         "timestamp": datetime.now().isoformat()
     }
 
-@app.post("/chat", response_model=ChatResponse)
+@app.post("/chat")
 async def chat(request: ChatRequest):
     """
-    Main chat endpoint - processes user queries and returns recommendations
+    Main chat endpoint - streams response with final JSON structure
     """
     try:
         # Get or create session
         session_id = request.session_id or str(uuid.uuid4())
         session = session_service.get_or_create_session(session_id)
         
-        # Update user name and preferences if provided
-        if request.user_name:
+        # Update user name, ID, and preferences if provided
+        if request.user_name or request.user_id or request.user_preferences:
             current_prefs = session.get("preferences", {})
-            current_prefs["name"] = request.user_name
+            
+            if request.user_name:
+                current_prefs["name"] = request.user_name
+            
+            if request.user_id:
+                current_prefs["user_id"] = request.user_id
+            
+            if request.user_preferences:
+                current_prefs.update(request.user_preferences)
+            
             session_service.update_preferences(session_id, current_prefs)
-        
-        if request.user_preferences:
-            session_service.update_preferences(session_id, request.user_preferences)
-        
-        # Add user message to history
-        session_service.add_message(session_id, "user", request.message)
-        
-        # Get conversation context
-        conversation_history = session_service.get_conversation_history(session_id)
-        
-        # Get food recommendations based on query
-        food_matches = food_service.find_matching_foods(
-            request.message,
-            conversation_history
-        )
-        
-        # Build context for LLM
-        food_context = food_service.build_food_context(food_matches)
-        
-        # Generate response from Bedrock (non-streaming)
-        full_response = ""
-        async for chunk in bedrock_service.generate_streaming_response(
-            user_query=request.message,
-            conversation_history=conversation_history,
-            food_context=food_context,
-            session_preferences=session.get("preferences", {})
-        ):
-            full_response += chunk
-        
-        # Extract recommended food IDs from the response
-        recommended_ids = food_service.extract_food_ids_from_response(
-            full_response,
-            food_matches
-        )
-        
-        # Save assistant response to session
-        session_service.add_message(session_id, "assistant", full_response)
-        session_service.add_recommendations(session_id, recommended_ids)
-        
-        # Return clean JSON response
-        return {
-            "message": full_response,
-            "session_id": session_id,
-            "food_recommendation_id": ",".join(recommended_ids) if recommended_ids else ""
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing chat: {str(e)}")
-
-@app.post("/chat/stream")
-async def chat_stream(request: ChatRequest):
-    """
-    Streaming chat endpoint - returns response as text stream for real-time display
-    """
-    try:
-        # Get or create session
-        session_id = request.session_id or str(uuid.uuid4())
-        session = session_service.get_or_create_session(session_id)
-        
-        # Update user name and preferences if provided
-        if request.user_name:
-            current_prefs = session.get("preferences", {})
-            current_prefs["name"] = request.user_name
-            session_service.update_preferences(session_id, current_prefs)
-        
-        if request.user_preferences:
-            session_service.update_preferences(session_id, request.user_preferences)
         
         # Add user message to history
         session_service.add_message(session_id, "user", request.message)
@@ -206,7 +161,7 @@ async def chat_stream(request: ChatRequest):
                 session_preferences=session.get("preferences", {})
             ):
                 full_response += chunk
-                yield chunk
+                yield chunk  # Stream the text as it comes
             
             # Extract recommended food IDs from the response
             recommended_ids = food_service.extract_food_ids_from_response(
@@ -218,13 +173,39 @@ async def chat_stream(request: ChatRequest):
             session_service.add_message(session_id, "assistant", full_response)
             session_service.add_recommendations(session_id, recommended_ids)
             
-            # Send final JSON metadata
-            final_metadata = {
+            # Save to database if enabled
+            if database_service.enabled:
+                user_id = session.get("preferences", {}).get("user_id")
+                database_service.save_conversation(
+                    session_id=session_id,
+                    user_id=user_id,
+                    user_message=request.message,
+                    bot_response=full_response,
+                    recommendations=recommended_ids,
+                    query_intent=None,  # Can add intent detection later
+                    response_time_ms=None  # Can add timing later
+                )
+                
+                # Update session analytics
+                messages = session.get("messages", [])
+                recommendations = session.get("recommendations", [])
+                database_service.update_session_analytics(
+                    session_id=session_id,
+                    user_id=user_id,
+                    total_messages=len(messages),
+                    total_recommendations=len(recommendations),
+                    first_message_at=datetime.fromisoformat(session.get("created_at")) if session.get("created_at") else None,
+                    last_message_at=datetime.now()
+                )
+            
+            # Send final JSON response
+            final_response = {
+                "message": full_response,
                 "session_id": session_id,
                 "food_recommendation_id": ",".join(recommended_ids) if recommended_ids else ""
             }
             
-            yield f"\n\n__METADATA__:{json.dumps(final_metadata)}"
+            yield f"\n\n__RESPONSE__:{json.dumps(final_response)}"
         
         return StreamingResponse(
             generate_stream(),
@@ -414,6 +395,66 @@ async def mcp_list_prompts():
     return {
         "prompts": mcp_server.list_prompts()
     }
+
+# Database Analytics Endpoints
+@app.get("/analytics/session/{session_id}")
+async def get_session_analytics_endpoint(session_id: str):
+    """
+    Get analytics for a specific session
+    """
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    analytics = database_service.get_session_analytics(session_id)
+    
+    if not analytics:
+        raise HTTPException(status_code=404, detail="Session analytics not found")
+    
+    return analytics
+
+@app.get("/analytics/conversations/{session_id}")
+async def get_session_conversations_db(session_id: str, limit: int = 50):
+    """
+    Get conversation history from database for a session
+    """
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    conversations = database_service.get_conversation_history(session_id, limit)
+    
+    return {
+        "session_id": session_id,
+        "count": len(conversations),
+        "conversations": conversations
+    }
+
+@app.get("/analytics/user/{user_id}/conversations")
+async def get_user_conversations_endpoint(user_id: str, limit: int = 100):
+    """
+    Get all conversations for a specific user
+    """
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    conversations = database_service.get_user_conversations(user_id, limit)
+    
+    return {
+        "user_id": user_id,
+        "count": len(conversations),
+        "conversations": conversations
+    }
+
+@app.get("/analytics/feedback/stats")
+async def get_feedback_statistics(user_id: Optional[str] = None):
+    """
+    Get feedback statistics (overall or for specific user)
+    """
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    stats = database_service.get_feedback_stats(user_id)
+    
+    return stats
 
 if __name__ == "__main__":
     uvicorn.run(
