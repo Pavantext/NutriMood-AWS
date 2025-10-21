@@ -263,7 +263,12 @@ async def chat(request: ChatRequest):
         
         return StreamingResponse(
             generate_stream(),
-            media_type="text/plain"
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",  # Critical for nginx/proxies like Vercel
+            }
         )
         
     except Exception as e:
