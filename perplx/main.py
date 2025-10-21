@@ -8,6 +8,7 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List, Dict
+from contextlib import asynccontextmanager
 import uvicorn
 import json
 from datetime import datetime
@@ -26,7 +27,49 @@ from services.mcp_server import MCPServer
 from services.database_service import DatabaseService
 from utils.response_formatter import ResponseFormatter
 
-app = FastAPI(title="Nutrimood Chatbot API", version="1.0.0")
+# Lifespan event handler
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Startup and shutdown events"""
+    # Startup
+    print("🚀 Starting Nutrimood Chatbot...")
+    
+    # Get food data path from environment or use default
+    food_data_path = os.getenv("FOOD_DATA_PATH", "../data/raw/Niloufer_data.json")
+    
+    # Try multiple possible paths
+    possible_paths = [
+        food_data_path,
+        "data/Niloufer_data.json",
+        "../data/raw/Niloufer_data.json",
+        "data/food_items.json"
+    ]
+    
+    loaded = False
+    for path in possible_paths:
+        try:
+            food_service.load_food_data(path)
+            if food_service.food_items:
+                print(f"✅ Loaded {len(food_service.food_items)} food items from {path}")
+                loaded = True
+                break
+        except FileNotFoundError:
+            continue
+    
+    if not loaded:
+        print("⚠️  Warning: Could not load food data. Please check the data path.")
+    
+    # Initialize MCP server after food data is loaded
+    global mcp_server
+    mcp_server = MCPServer(food_service)
+    print("✅ MCP Server initialized")
+    
+    yield
+    
+    # Shutdown (if needed)
+    print("👋 Shutting down Nutrimood Chatbot...")
+
+app = FastAPI(title="Nutrimood Chatbot API", version="1.0.0", lifespan=lifespan)
 
 # Add CORS middleware
 app.add_middleware(
@@ -62,41 +105,6 @@ class RecommendRequest(BaseModel):
     query: str
     top_k: int = 5
     filters: Optional[Dict] = None
-
-@app.on_event("startup")
-async def startup_event():
-    """Initialize services on startup"""
-    print("🚀 Starting Nutrimood Chatbot...")
-    
-    # Get food data path from environment or use default
-    food_data_path = os.getenv("FOOD_DATA_PATH", "../data/raw/Niloufer_data.json")
-    
-    # Try multiple possible paths
-    possible_paths = [
-        food_data_path,
-        "data/Niloufer_data.json",
-        "../data/raw/Niloufer_data.json",
-        "data/food_items.json"
-    ]
-    
-    loaded = False
-    for path in possible_paths:
-        try:
-            food_service.load_food_data(path)
-            if food_service.food_items:
-                print(f"✅ Loaded {len(food_service.food_items)} food items from {path}")
-                loaded = True
-                break
-        except FileNotFoundError:
-            continue
-    
-    if not loaded:
-        print("⚠️  Warning: Could not load food data. Please check the data path.")
-    
-    # Initialize MCP server after food data is loaded
-    global mcp_server
-    mcp_server = MCPServer(food_service)
-    print("✅ MCP Server initialized")
 
 @app.get("/")
 async def root():

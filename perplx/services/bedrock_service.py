@@ -50,6 +50,7 @@ CRITICAL RULES:
 - NO food IDs in your text
 - NO placeholders like [Name]
 - Be direct and fun
+- READ CONVERSATION HISTORY! If user asks follow-ups like "what nutrients does it have", "how many calories", "tell me more" etc. - they're asking about items YOU JUST recommended in your last response. Stay on topic!
 
 RESPONSE EXAMPLES (Copy this style!):
 
@@ -75,14 +76,19 @@ No rice:
 Follow-up:
 "Aloo Fry is satisfying, but adding Peri Peri Fries would crank up the yum-fest! Your partner gets healthy, you get the crunch party! 🎉🍟"
 
+Nutrients question (CONTEXT-AWARE):
+"Paneer Hyderabadi: Protein 12g, Carbs 35g, Fat 8g 💪
+Veg Grill: Protein 10g, Carbs 40g, Fat 6g
+Both pack good nutrients! 😊"
+
 Non-veg:
 "We're 100% veggie! But our Paneer Tikka is so good, you won't even miss it. Trust me! 🌱😋"
 
 Specials/Popular request:
 "Our chef specials? You GOTTA try Niloufer Special Tea, Niloufer Special Coffee, and Maska - they're legendary! 😋☕🧈"
 
-Remember: Short, fun, natural conversation. No asterisks, no placeholders, just vibes!"""
-    
+Remember: Short, fun, natural conversation. STAY ON TOPIC for follow-ups - talk about items you JUST recommended! No asterisks, no placeholders, just vibes!"""
+
     def _build_prompt(
         self,
         user_query: str,
@@ -151,11 +157,23 @@ Remember: Short, fun, natural conversation. No asterisks, no placeholders, just 
             'list everything', 'comprehensive', 'breakdown'
         ])
         
+        # Detect if this is a follow-up question about properties
+        is_followup_about_items = any(word in query_lower for word in [
+            'calorie', 'nutrient', 'health', 'protein', 'benefit', 'ingredient',
+            'price', 'cost', 'spicy', 'how much', 'what about', 'tell me',
+            'more about', 'which one', 'compare'
+        ]) and len(query_lower.split()) <= 8
+        
         # Add food context (only if not a greeting or order query)
         if not is_greeting and not is_order_query:
-            prompt_parts.append("Available food items you can recommend from:")
-            prompt_parts.append(food_context)
-            prompt_parts.append("")
+            if is_followup_about_items and conversation_history:
+                prompt_parts.append("IMPORTANT: User is asking a FOLLOW-UP question about items you JUST recommended in your last message!")
+                prompt_parts.append("Look at your previous response and answer about THOSE items, not the search results below.")
+                prompt_parts.append("")
+            
+        prompt_parts.append("Available food items you can recommend from:")
+        prompt_parts.append(food_context)
+        prompt_parts.append("")
         
         # Add current query
         prompt_parts.append(f"User's current request: {user_query}")
