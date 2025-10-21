@@ -444,6 +444,7 @@ class FoodService:
     ) -> List[str]:
         """
         Extract food IDs that were recommended in the LLM response
+        Uses multiple matching strategies for reliability
         
         Args:
             response: LLM's response text
@@ -452,21 +453,68 @@ class FoodService:
         Returns:
             List of food IDs mentioned in the response
         """
+        if not food_matches:
+            return []
+        
         mentioned_ids = []
         response_lower = response.lower()
         
+        # Clean response for better matching
+        response_clean = response_lower.replace('!', ' ').replace('?', ' ').replace('.', ' ').replace(',', ' ')
+        
         for food, _ in food_matches:
             food_id = food.get('Id')
-            food_name = food.get('ProductName', '').lower()
+            food_name = food.get('ProductName', '')
             
-            # Check if food name is mentioned in response
-            if food_name in response_lower:
-                mentioned_ids.append(food_id)
+            if not food_name or not food_id:
+                continue
             
-            # Check if ID is explicitly mentioned
-            if food_id in response:
+            food_name_lower = food_name.lower()
+            
+            # Method 1: Exact full name match
+            if food_name_lower in response_lower:
                 if food_id not in mentioned_ids:
                     mentioned_ids.append(food_id)
+                    print(f"   ✓ Matched '{food_name}' (exact)")
+                continue
+            
+            # Method 2: Remove parentheses and special chars, then match
+            # E.g., "Jalapeno Cheese Poppers (6.Pcs)" → "Jalapeno Cheese Poppers"
+            clean_name = food_name_lower.split('(')[0].strip()
+            if clean_name and clean_name in response_lower:
+                if food_id not in mentioned_ids:
+                    mentioned_ids.append(food_id)
+                    print(f"   ✓ Matched '{food_name}' (cleaned)")
+                continue
+            
+            # Method 3: Check significant word combinations
+            # For names like "Peri Peri Fries", check if "peri" AND "fries" appear
+            name_words = [w.strip() for w in clean_name.split() if len(w) > 3]
+            
+            if len(name_words) >= 2:
+                # Check if multiple words appear
+                words_found = [w for w in name_words if w in response_clean]
+                if len(words_found) >= 2:
+                    if food_id not in mentioned_ids:
+                        mentioned_ids.append(food_id)
+                        print(f"   ✓ Matched '{food_name}' (multi-word)")
+                    continue
+            
+            # Method 4: Check for unique/distinctive words
+            # For single distinctive words in the name
+            if len(name_words) >= 1:
+                # Check for the most distinctive word (usually the first or longest)
+                distinctive_word = max(name_words, key=len) if name_words else None
+                if distinctive_word and len(distinctive_word) > 4:
+                    if distinctive_word in response_clean:
+                        if food_id not in mentioned_ids:
+                            mentioned_ids.append(food_id)
+                            print(f"   ✓ Matched '{food_name}' (keyword: {distinctive_word})")
+        
+        if not mentioned_ids:
+            print(f"   ⚠️  No food IDs extracted from response")
+        else:
+            print(f"   ✓ Extracted {len(mentioned_ids)} food ID(s)")
         
         return mentioned_ids
     

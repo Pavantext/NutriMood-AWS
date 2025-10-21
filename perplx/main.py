@@ -78,6 +78,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods (GET, POST, OPTIONS, etc.)
     allow_headers=["*"],  # Allows all headers
+    expose_headers=["*"],
 )
 
 # Initialize services
@@ -105,6 +106,27 @@ class RecommendRequest(BaseModel):
     query: str
     top_k: int = 5
     filters: Optional[Dict] = None
+
+def _is_followup_question(query: str, conversation_history: List[Dict]) -> bool:
+    """Check if query is a follow-up about previous recommendations"""
+    if not conversation_history:
+        return False
+    
+    query_lower = query.lower().strip()
+    
+    # Follow-up keywords
+    followup_keywords = [
+        'calorie', 'nutrient', 'health', 'protein', 'benefit', 'ingredient',
+        'price', 'cost', 'how much', 'what about', 'tell me',
+        'more about', 'which one', 'compare', 'it', 'these', 'those', 'them',
+        'that', 'this'
+    ]
+    
+    # Check if query has follow-up keywords AND is short
+    has_followup_word = any(keyword in query_lower for keyword in followup_keywords)
+    is_short = len(query_lower.split()) <= 8
+    
+    return has_followup_word and is_short
 
 @app.get("/")
 async def root():
@@ -152,11 +174,35 @@ async def chat(request: ChatRequest):
             full_response = ""
             recommended_ids = []
             
-            # Get food recommendations based on query
-            food_matches = food_service.find_matching_foods(
-                request.message,
-                conversation_history
-            )
+            # Check if this is a follow-up question about previous recommendations
+            is_followup = _is_followup_question(request.message, conversation_history)
+            
+            if is_followup:
+                # For follow-ups, get the last recommended food IDs from session
+                last_recommendations = session.get("recommendations", [])
+                if last_recommendations:
+                    # Get the most recent recommendation
+                    last_rec = last_recommendations[-1]
+                    previous_food_ids = last_rec.get("food_ids", [])
+                    
+                    # Fetch these specific foods
+                    food_matches = []
+                    for food_id in previous_food_ids[:5]:
+                        food_item = food_service.get_food_by_id(food_id)
+                        if food_item:
+                            food_matches.append((food_item, 1.0))
+                else:
+                    # No previous recommendations, do normal search
+                    food_matches = food_service.find_matching_foods(
+                        request.message,
+                        conversation_history
+                    )
+            else:
+                # Normal query - search for new items
+                food_matches = food_service.find_matching_foods(
+                    request.message,
+                    conversation_history
+                )
             
             # Build context for LLM
             food_context = food_service.build_food_context(food_matches)

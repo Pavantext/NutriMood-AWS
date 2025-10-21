@@ -49,8 +49,14 @@ CRITICAL RULES:
 - NO stage directions in asterisks
 - NO food IDs in your text
 - NO placeholders like [Name]
+- When recommending food items, ALWAYS use their FULL EXACT NAMES from the available menu
 - Be direct and fun
-- READ CONVERSATION HISTORY! If user asks follow-ups like "what nutrients does it have", "how many calories", "tell me more" etc. - they're asking about items YOU JUST recommended in your last response. Stay on topic!
+
+CONTEXT AWARENESS (SUPER IMPORTANT!):
+- ALWAYS read the conversation history before responding
+- If user says "these", "those", "them", "it" - they mean items YOU already recommended
+- Follow-up questions (calories, nutrients, ordering "these") = Talk about PREVIOUS items, DON'T recommend new ones
+- Example: User asks "can you order these?" → Guide to cart for items you JUST recommended, don't suggest new items!
 
 RESPONSE EXAMPLES (Copy this style!):
 
@@ -81,13 +87,19 @@ Nutrients question (CONTEXT-AWARE):
 Veg Grill: Protein 10g, Carbs 40g, Fat 6g
 Both pack good nutrients! 😊"
 
+Ordering follow-up (CONTEXT-AWARE - DON'T recommend new items!):
+User: "Try Masala Oats and Masala Quinoa!"
+User: "can you order these for me?"
+Response: "Click the cart icon on those items to add them! 🛒 Masala Oats and Masala Quinoa - both solid choices! 😊"
+(Note: DON'T suggest new items like Veg Puff - they asked about THOSE items!)
+
 Non-veg:
 "We're 100% veggie! But our Paneer Tikka is so good, you won't even miss it. Trust me! 🌱😋"
 
 Specials/Popular request:
 "Our chef specials? You GOTTA try Niloufer Special Tea, Niloufer Special Coffee, and Maska - they're legendary! 😋☕🧈"
 
-Remember: Short, fun, natural conversation. STAY ON TOPIC for follow-ups - talk about items you JUST recommended! No asterisks, no placeholders, just vibes!"""
+Remember: Short, fun, natural conversation. CONTEXT IS KEY - if they say "these/those/it", talk about items you JUST recommended! No asterisks, no placeholders, just vibes!"""
 
     def _build_prompt(
         self,
@@ -140,6 +152,11 @@ Remember: Short, fun, natural conversation. STAY ON TOPIC for follow-ups - talk 
             else:
                 is_greeting = True
         
+        # Check if query has contextual references (follow-up about previous items)
+        has_contextual_ref = any(word in query_lower for word in [
+            'these', 'those', 'them', 'it', 'that', 'this'
+        ])
+        
         # Check if it's a non-veg request
         is_nonveg_query = any(word in query_lower for word in [
             'chicken', 'fish', 'meat', 'mutton', 'beef', 'pork', 'egg', 
@@ -147,9 +164,11 @@ Remember: Short, fun, natural conversation. STAY ON TOPIC for follow-ups - talk 
         ])
         
         # Check if it's an ordering query
-        is_order_query = any(word in query_lower for word in [
+        # BUT if it has "these/those/it" - it's a follow-up, not a general ordering query
+        order_keywords = any(word in query_lower for word in [
             'order', 'checkout', 'cart', 'buy', 'purchase', 'payment', 'pay'
         ])
+        is_order_query = order_keywords and not has_contextual_ref
         
         # Check if needs detailed response
         needs_detail = any(word in query_lower for word in [
@@ -157,12 +176,15 @@ Remember: Short, fun, natural conversation. STAY ON TOPIC for follow-ups - talk 
             'list everything', 'comprehensive', 'breakdown'
         ])
         
-        # Detect if this is a follow-up question about properties
-        is_followup_about_items = any(word in query_lower for word in [
-            'calorie', 'nutrient', 'health', 'protein', 'benefit', 'ingredient',
-            'price', 'cost', 'spicy', 'how much', 'what about', 'tell me',
-            'more about', 'which one', 'compare'
-        ]) and len(query_lower.split()) <= 8
+        # Detect if this is a follow-up question about properties or previous items
+        is_followup_about_items = (
+            has_contextual_ref or  # Has "these", "those", "it", etc.
+            (any(word in query_lower for word in [
+                'calorie', 'nutrient', 'health', 'protein', 'benefit', 'ingredient',
+                'price', 'cost', 'spicy', 'how much', 'what about', 'tell me',
+                'more about', 'which one', 'compare'
+            ]) and len(query_lower.split()) <= 8)
+        )
         
         # Add food context (only if not a greeting or order query)
         if not is_greeting and not is_order_query:
@@ -191,6 +213,9 @@ Remember: Short, fun, natural conversation. STAY ON TOPIC for follow-ups - talk 
         
         elif is_order_query:
             prompt_parts.append("ORDER: Say 'Click the cart icon to add items!' Keep it simple. 30-40 words.")
+        
+        elif is_followup_about_items and has_contextual_ref:
+            prompt_parts.append("FOLLOW-UP: They're asking about items you ALREADY recommended! Talk about THOSE items. If asking to order, mention the cart icon for THOSE items. 40-50 words. DON'T recommend new items!")
         
         elif needs_detail:
             if user_name:
