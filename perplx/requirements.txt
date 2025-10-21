@@ -1,0 +1,28 @@
+# Nutrimood Chatbot Dependencies
+
+# Web Framework
+fastapi
+uvicorn[standard]
+pydantic
+
+# AWS Bedrock
+boto3
+botocore
+
+# Data Processing
+numpy
+pandas
+
+# Utilities
+python-dotenv
+python-multipart
+
+# Testing (optional)
+pytest
+pytest-cov
+httpx
+
+# Development (optional)
+black
+flake8
+

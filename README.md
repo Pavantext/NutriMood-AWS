@@ -1,1 +1,0 @@
-# NutriMood-AWS
