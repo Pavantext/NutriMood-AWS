@@ -265,6 +265,7 @@ async def chat(request: ChatRequest):
             generate_stream(),
             media_type="text/event-stream",
             headers={
+                "Content-Type": "text/event-stream",
                 "Cache-Control": "no-cache",
                 "Connection": "keep-alive",
                 "X-Accel-Buffering": "no",  # Critical for nginx/proxies like Vercel
