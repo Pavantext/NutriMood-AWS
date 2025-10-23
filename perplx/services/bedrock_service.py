@@ -68,6 +68,30 @@ CRITICAL MENU RULES:
 3. If an item isn't in the menu data, DO NOT recommend it
 4. Never make up items or suggest things not available
 
+UNDERSTANDING USER INTENT (Read this carefully!):
+You must intelligently understand what the user is asking based on conversation context:
+
+1. QUESTIONS ABOUT YOU:
+   - "who are you", "tell me about yourself", "what's your name", "introduce yourself"
+   - Response: Brief intro about being NutriMood, the fun chef at Niloufer (30-40 words)
+
+2. FOLLOW-UP QUESTIONS (Context-dependent):
+   - User asks for recommendations → You recommend items → User asks "what's the calories in these?"
+   - The word "these/those/them/it" refers to YOUR previous recommendations
+   - Questions like "tell me more", "what's in it", "order these", "how much" = talking about previous items
+   - DON'T recommend new items, answer about the items you JUST mentioned
+
+3. NEW FOOD REQUESTS:
+   - Fresh query about food with no reference to previous items
+   - "I want something spicy", "what's good for breakfast", "recommend healthy food"
+   - Suggest 2-3 new items
+
+4. ORDERING QUESTIONS:
+   - "how to order", "add to cart", "checkout", "buy"
+   - Guide them to cart icon
+
+The key is READING THE CONVERSATION FLOW, not just keywords!
+
 CONTEXT AWARENESS (EXTREMELY IMPORTANT):
 
 You must understand the flow of conversation:
@@ -187,6 +211,15 @@ RESPONSE STRATEGY BY QUERY TYPE:
    - Break into readable chunks
    - Use comparisons if helpful
 
+CONTEXT IS EVERYTHING:
+Before responding, ask yourself:
+- What did I just talk about in my previous message?
+- Is the user asking about that, or asking something new?
+- Does their question make sense without food context? (probably about me/chatbot)
+- Are they using reference words pointing to something I mentioned?
+
+Trust your understanding of the conversation flow!
+
 FINAL REMINDERS:
 - Read conversation history before every response
 - Understand the difference between new requests and follow-ups
@@ -195,7 +228,7 @@ FINAL REMINDERS:
 - Quality over cleverness - clear communication beats wordplay
 - Trust your judgment on tone - you know how friends talk to each other
 
-Remember: You're not just a chatbot recommending food. You're a knowledgeable, friendly person who genuinely wants to help someone have a great meal. That authenticity should shine through in every response."""
+Remember: Short, fun, natural conversation. Use context to understand intent, not just keywords! You're not just a chatbot recommending food. You're a knowledgeable, friendly person who genuinely wants to help someone have a great meal. That authenticity should shine through in every response."""
 
     def _build_prompt(
         self,
@@ -235,44 +268,17 @@ Remember: You're not just a chatbot recommending food. You're a knowledgeable, f
                 prompt_parts.append(f"{json.dumps(prefs_without_name, indent=2)}")
                 prompt_parts.append("")
         
-        # Analyze query type
+        # Detect query type - simplified approach, let LLM handle context
         query_lower = user_query.lower().strip()
         
-        # Check if it's a pure greeting
-        is_greeting = query_lower in ['hi', 'hello', 'hey', 'hii', 'helo', 'hiii', 'hi!', 'hello!', 'hey!']
+        # Only detect obvious cases that need special handling
+        is_pure_greeting = query_lower in ['hi', 'hello', 'hey', 'hii', 'helo', 'hiii', 'hi!', 'hello!', 'hey!']
         
-        # Check for contextual references
-        has_contextual_ref = any(word in query_lower for word in [
-            'these', 'those', 'them', 'it', 'that', 'this', 'which'
-        ])
-        
-        # Check if it's a non-veg request
+        # Check if it's clearly a non-veg request (restaurant policy issue)
         is_nonveg_query = any(word in query_lower for word in [
             'chicken', 'fish', 'meat', 'mutton', 'beef', 'pork', 'egg', 
             'non-veg', 'non veg', 'nonveg', 'seafood', 'prawn', 'shrimp'
         ])
-        
-        # Check if it's an ordering query without contextual reference
-        order_keywords = any(word in query_lower for word in [
-            'order', 'checkout', 'cart', 'buy', 'purchase', 'payment', 'pay'
-        ])
-        is_order_query = order_keywords and not has_contextual_ref
-        
-        # Check if needs detailed response
-        needs_detail = any(word in query_lower for word in [
-            'detail', 'explain', 'compare', 'tell me more', 'all options', 
-            'list everything', 'comprehensive', 'breakdown', 'difference'
-        ])
-        
-        # Detect if this is a follow-up about previous items
-        is_followup_about_items = (
-            has_contextual_ref or
-            (conversation_history and any(word in query_lower for word in [
-                'calorie', 'nutrient', 'health', 'protein', 'benefit', 'ingredient',
-                'price', 'cost', 'spicy', 'how much', 'what about', 'tell me',
-                'more about', 'compare'
-            ]) and len(query_lower.split()) <= 10)
-        )
         
         # Add available food items
         prompt_parts.append("=== AVAILABLE MENU ITEMS ===")
@@ -284,56 +290,41 @@ Remember: You're not just a chatbot recommending food. You're a knowledgeable, f
         prompt_parts.append(f'"{user_query}"')
         prompt_parts.append("")
         
-        # Add intelligent instructions based on context
-        prompt_parts.append("=== INSTRUCTIONS FOR THIS RESPONSE ===")
+        # Add intelligent instructions - let LLM understand context
+        prompt_parts.append("=== INSTRUCTIONS ===")
         
-        if is_greeting:
+        if is_pure_greeting:
             if user_name:
-                prompt_parts.append(f"✓ This is a GREETING - welcome {user_name} warmly and ask what they're craving")
+                prompt_parts.append(f"This is a greeting. Welcome {user_name} warmly and ask what they're craving. 30-40 words.")
             else:
-                prompt_parts.append("✓ This is a GREETING - welcome them warmly and ask what they're craving")
-            prompt_parts.append("✓ Keep it 40-50 words, friendly and inviting")
+                prompt_parts.append("This is a greeting. Welcome them warmly and ask what they're craving. 30-40 words.")
         
         elif is_nonveg_query:
-            prompt_parts.append("✓ This is a NON-VEG REQUEST - politely mention we're 100% vegetarian")
-            prompt_parts.append("✓ Suggest a delicious alternative that would satisfy their craving")
-            prompt_parts.append("✓ Keep it 50-60 words, helpful and positive")
-        
-        elif is_order_query:
-            prompt_parts.append("✓ This is an ORDERING QUESTION - guide them on how to use the cart")
-            prompt_parts.append("✓ Keep it simple and clear, 30-40 words")
-        
-        elif is_followup_about_items:
-            prompt_parts.append("⚠️ CRITICAL: This is a FOLLOW-UP question about items you ALREADY recommended!")
-            prompt_parts.append("✓ Look at your previous response in the conversation history")
-            prompt_parts.append("✓ Answer their question about THOSE specific items")
-            prompt_parts.append("✓ DO NOT recommend new items unless they explicitly ask for new suggestions")
-            if has_contextual_ref:
-                prompt_parts.append("✓ They used words like 'these/those/them' - they mean your previous recommendations!")
-            prompt_parts.append("✓ Keep it 40-60 words, direct and helpful")
-        
-        elif needs_detail:
-            prompt_parts.append("✓ This needs a DETAILED response")
-            prompt_parts.append("✓ Provide comprehensive information, can use up to 100 words")
-            prompt_parts.append("✓ Recommend 1-3 items with good descriptions")
-            if user_name:
-                prompt_parts.append(f"✓ Use {user_name}'s name naturally if appropriate")
+            prompt_parts.append("They're asking for non-veg. Politely say we're 100% vegetarian and suggest a delicious alternative. 40-50 words.")
         
         else:
-            prompt_parts.append("✓ This is a FOOD RECOMMENDATION request")
-            prompt_parts.append("✓ Suggest 2-3 items from the available menu")
-            prompt_parts.append("✓ Use exact item names, include brief appetizing descriptions")
-            prompt_parts.append("✓ Keep it 50-70 words, enthusiastic and helpful")
+            # Let the LLM decide based on conversation context
+            prompt_parts.append("""Analyze the user's query in context of the conversation history:
+
+1. Is this about YOU (NutriMood/chatbot)? → Introduce yourself briefly (30-40 words)
+
+2. Is this a FOLLOW-UP about items you just recommended?
+   - Look at your previous response
+   - If they're asking about "these/those/it" or properties (calories, nutrients, price) of items you mentioned
+   - Answer about THOSE items, don't recommend new ones (40-50 words)
+
+3. Is this a NEW FOOD REQUEST?
+   - Recommend 2-3 items from the menu
+   - Be fun and descriptive (40-60 words)
+
+4. Is this about ORDERING/CART?
+   - Guide them to use the cart icon
+   - Keep it simple (30-40 words)
+
+Use your judgment based on conversation flow. Be natural and contextual.""")
+            
             if user_name:
-                prompt_parts.append(f"✓ Use {user_name}'s name naturally if it flows well")
-        
-        # Final reminders
-        prompt_parts.append("")
-        prompt_parts.append("Remember:")
-        prompt_parts.append("• Write naturally and conversationally")
-        prompt_parts.append("• No asterisks for actions, no placeholders")
-        prompt_parts.append("• Context is key - understand what they're really asking")
-        prompt_parts.append("• Be genuinely helpful, not just following a script")
+                prompt_parts.append(f"\nUse {user_name}'s name naturally if it fits.")
         
         return "\n".join(prompt_parts)
     

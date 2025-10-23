@@ -72,9 +72,12 @@ class PineconeService:
             
             # Extract matches
             matches = []
-            for match in results.get('matches', []):
-                metadata = match.get('metadata', {})
-                score = match.get('score', 0.0)
+            # Handle Pinecone QueryResponse object properly
+            matches_list = results.matches if hasattr(results, 'matches') else []
+            
+            for match in matches_list:
+                metadata = match.metadata if hasattr(match, 'metadata') else {}
+                score = match.score if hasattr(match, 'score') else 0.0
                 
                 # Convert Pinecone metadata to food item format
                 food_item = self._convert_metadata_to_food(metadata)
@@ -203,9 +206,12 @@ class PineconeService:
         try:
             result = self.index.fetch(ids=[food_id])
             
-            if food_id in result.get('vectors', {}):
-                vector_data = result['vectors'][food_id]
-                metadata = vector_data.get('metadata', {})
+            # Handle Pinecone FetchResponse object properly
+            vectors = result.vectors if hasattr(result, 'vectors') else {}
+            
+            if food_id in vectors:
+                vector_data = vectors[food_id]
+                metadata = vector_data.metadata if hasattr(vector_data, 'metadata') else {}
                 return self._convert_metadata_to_food(metadata)
             
             return None

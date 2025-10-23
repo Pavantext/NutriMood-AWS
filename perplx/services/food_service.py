@@ -92,7 +92,7 @@ class FoodService:
         
         # Use vector search if available
         if self.use_vector_search:
-            return self._find_with_vector_search(enhanced_query, top_k, filters)
+            return self._find_with_vector_search(enhanced_query, top_k, filters, original_query=query)
         else:
             # Fallback to keyword matching
             return self._find_with_keyword_matching(enhanced_query, top_k, filters)
@@ -136,7 +136,8 @@ class FoodService:
         self,
         query: str,
         top_k: int,
-        filters: Optional[Dict]
+        filters: Optional[Dict],
+        original_query: str = None
     ) -> List[Tuple[Dict, float]]:
         """
         Find foods using Pinecone vector search
@@ -159,9 +160,10 @@ class FoodService:
         # Enhance filters for special/popular queries
         enhanced_filters = filters.copy() if filters else {}
         
-        # If query mentions special/popular, try to get popular items
-        query_lower = query.lower()
-        if any(word in query_lower for word in ['special', 'popular', 'signature', 'famous', 'niloufer special']):
+        # If query mentions special/popular, ensure signature items are included
+        # Use original query for detection, not enhanced query
+        detection_query = original_query.lower() if original_query else query.lower()
+        if any(word in detection_query for word in ['special', 'popular', 'signature', 'famous', 'niloufer special']):
             # First try with popular filter
             popular_matches = self.pinecone_service.search_foods(
                 query_embedding=query_embedding,
@@ -169,9 +171,36 @@ class FoodService:
                 filters={**enhanced_filters, 'popular': True}
             )
             
-            # If we got results, return them
+            # If we got results, ensure signature items are included
             if popular_matches:
-                return popular_matches
+                # Add signature items if not already present
+                signature_items = self._get_signature_items()
+                existing_ids = {food.get('Id') for food, _ in popular_matches}
+                
+                for sig_item in signature_items:
+                    sig_id = sig_item.get('Id')
+                    if sig_id not in existing_ids:
+                        popular_matches.append((sig_item, 1.0))  # High score for signature items
+                
+                # Ensure we don't exceed top_k but prioritize signature items
+                # Sort by score (signature items have score 1.0, so they'll be at the top)
+                popular_matches.sort(key=lambda x: x[1], reverse=True)
+                
+                # Take top_k results, but ensure signature items are included
+                final_matches = popular_matches[:top_k]
+                
+                # Double-check that all signature items are in the final results
+                final_ids = {food.get('Id') for food, _ in final_matches}
+                for sig_item in signature_items:
+                    sig_id = sig_item.get('Id')
+                    if sig_id not in final_ids:
+                        # Replace the lowest-scoring item with this signature item
+                        if len(final_matches) >= top_k:
+                            final_matches[-1] = (sig_item, 1.0)
+                        else:
+                            final_matches.append((sig_item, 1.0))
+                
+                return final_matches
             
             # Otherwise, search without popular filter but query enhanced
         
@@ -183,7 +212,7 @@ class FoodService:
         )
         
         # Post-process: Boost items with "Niloufer" in name for special queries
-        if 'special' in query_lower or 'niloufer' in query_lower:
+        if 'special' in detection_query or 'niloufer' in detection_query:
             boosted_matches = []
             for food, score in matches:
                 name = food.get('ProductName', '').lower()
@@ -198,6 +227,48 @@ class FoodService:
             return boosted_matches
         
         return matches
+    
+    def _get_signature_items(self) -> List[Dict]:
+        """
+        Get Niloufer signature items (hardcoded for reliability)
+        These are the items that define Niloufer's identity
+        """
+        signature_names = [
+            "Niloufer Special Tea",
+            "Niloufer Special Coffee", 
+            "Maska Bun",
+            "Khara Bun"
+        ]
+        
+        signature_items = []
+        
+        for name in signature_names:
+            found = False
+            # Try to find by name in local index first
+            for food in self.food_items:
+                if food.get('ProductName', '').lower() == name.lower():
+                    signature_items.append(food)
+                    found = True
+                    break
+            
+            # If not found locally and Pinecone is available, try Pinecone
+            if not found:
+                if self.use_vector_search:
+                    # Search Pinecone for this specific item
+                    try:
+                        # Generate embedding for the specific item name
+                        embedding = self.embedding_service.generate_embedding(name)
+                        if embedding:
+                            matches = self.pinecone_service.search_foods(
+                                query_embedding=embedding,
+                                top_k=1
+                            )
+                            if matches:
+                                signature_items.append(matches[0][0])
+                    except Exception as e:
+                        print(f"⚠️  Error finding signature item {name}: {e}")
+        
+        return signature_items
     
     def _find_with_keyword_matching(
         self,

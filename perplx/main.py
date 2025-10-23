@@ -108,25 +108,25 @@ class RecommendRequest(BaseModel):
     filters: Optional[Dict] = None
 
 def _is_followup_question(query: str, conversation_history: List[Dict]) -> bool:
-    """Check if query is a follow-up about previous recommendations"""
+    """
+    Simplified follow-up detection - let LLM handle most context understanding
+    Only detect obvious cases that need special handling
+    """
     if not conversation_history:
         return False
     
     query_lower = query.lower().strip()
     
-    # Follow-up keywords
-    followup_keywords = [
-        'calorie', 'nutrient', 'health', 'protein', 'benefit', 'ingredient',
-        'price', 'cost', 'how much', 'what about', 'tell me',
-        'more about', 'which one', 'compare', 'it', 'these', 'those', 'them',
-        'that', 'this'
-    ]
+    # Only detect obvious contextual references
+    contextual_refs = ['these', 'those', 'them', 'it', 'that', 'this', 'which']
+    has_contextual_ref = any(ref in query_lower for ref in contextual_refs)
     
-    # Check if query has follow-up keywords AND is short
-    has_followup_word = any(keyword in query_lower for keyword in followup_keywords)
-    is_short = len(query_lower.split()) <= 8
+    # Only detect obvious food property questions
+    food_property_words = ['calorie', 'nutrient', 'price', 'cost', 'how much']
+    has_food_property = any(word in query_lower for word in food_property_words)
     
-    return has_followup_word and is_short
+    # Simple detection: contextual reference OR food property question
+    return has_contextual_ref or has_food_property
 
 @app.get("/")
 async def root():
