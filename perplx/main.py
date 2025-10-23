@@ -3,14 +3,16 @@ Nutrimood Chatbot - Main Application
 A food recommendation chatbot using AWS Bedrock and MCP
 """
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
 from pydantic import BaseModel
 from typing import Optional, List, Dict
 from contextlib import asynccontextmanager
 import uvicorn
 import json
+import asyncio
 from datetime import datetime
 import uuid
 import os
@@ -18,6 +20,24 @@ from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
+
+# Custom middleware to force streaming headers
+class StreamingMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        
+        # Force streaming headers for chat endpoint
+        if request.url.path == "/chat" and isinstance(response, StreamingResponse):
+            response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, private"
+            response.headers["Pragma"] = "no-cache"
+            response.headers["Expires"] = "0"
+            response.headers["X-Accel-Buffering"] = "no"
+            response.headers["X-Render-Buffering"] = "no"
+            response.headers["X-Proxy-Buffering"] = "no"
+            response.headers["Connection"] = "keep-alive"
+            response.headers["Transfer-Encoding"] = "chunked"
+            
+        return response
 
 # Import custom modules
 from services.bedrock_service import BedrockService
@@ -70,6 +90,9 @@ async def lifespan(app: FastAPI):
     print("👋 Shutting down Nutrimood Chatbot...")
 
 app = FastAPI(title="Nutrimood Chatbot API", version="1.0.0", lifespan=lifespan)
+
+# Add streaming middleware first
+app.add_middleware(StreamingMiddleware)
 
 # Add CORS middleware
 app.add_middleware(
@@ -207,7 +230,7 @@ async def chat(request: ChatRequest):
             # Build context for LLM
             food_context = food_service.build_food_context(food_matches)
             
-            # Stream response from Bedrock
+            # Stream response from Bedrock with explicit flushing
             async for chunk in bedrock_service.generate_streaming_response(
                 user_query=request.message,
                 conversation_history=conversation_history,
@@ -215,7 +238,10 @@ async def chat(request: ChatRequest):
                 session_preferences=session.get("preferences", {})
             ):
                 full_response += chunk
-                yield chunk  # Stream the text as it comes
+                # Yield each character individually to force streaming
+                for char in chunk:
+                    yield char
+                    await asyncio.sleep(0.01)  # Small delay to force transmission
             
             # Extract recommended food IDs from the response
             recommended_ids = food_service.extract_food_ids_from_response(
