@@ -268,6 +268,7 @@ async def chat(request: ChatRequest):
                 "Content-Type": "text/event-stream",
                 "Cache-Control": "no-cache",
                 "Connection": "keep-alive",
+                "Transfer-Encoding": "chunked",  # Critical for Render proxy streaming
                 "X-Accel-Buffering": "no",  # Critical for nginx/proxies like Vercel
             }
         )
