@@ -80,6 +80,7 @@ CRITICAL MENU RULES:
 2. Use EXACT full names as they appear in the menu
 3. If an item isn't in the menu data, DO NOT recommend it
 4. Never make up items or suggest things not available
+5. IMPORTANT RULE: You must only recommend food items that exist in the provided menu list. If an item is not in the menu, do not create or mention it. Always choose from the menu items given in context.
 
 UNDERSTANDING USER INTENT (Read this carefully!):
 You must intelligently understand what the user is asking based on conversation context:
@@ -274,8 +275,9 @@ Shorter + Funnier + Helpful = Perfect NutriMood!"""
         ])
         
         # Add available food items
-        prompt_parts.append("=== AVAILABLE MENU ITEMS ===")
+        prompt_parts.append("Below is the ONLY menu you are allowed to recommend from. If a food item is not listed here, do NOT invent or suggest it. You must pick from this list ONLY:\n")
         prompt_parts.append(food_context)
+        prompt_parts.append("\nIf the user asks for something not listed, suggest the most similar item from this list.")
         prompt_parts.append("")
         
         # Add current query

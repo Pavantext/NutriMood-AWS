@@ -3,10 +3,13 @@ Nutrimood Chatbot - Main Application
 A food recommendation chatbot using AWS Bedrock and MCP
 """
 
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import StreamingResponse
+from fastapi import FastAPI, HTTPException, Request, Form, status
+from fastapi.responses import StreamingResponse, RedirectResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from pydantic import BaseModel
 from typing import Optional, List, Dict
 from contextlib import asynccontextmanager
@@ -17,6 +20,7 @@ from datetime import datetime
 import uuid
 import os
 from dotenv import load_dotenv
+import secrets
 
 # Load environment variables
 load_dotenv()
@@ -91,7 +95,22 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Nutrimood Chatbot API", version="1.0.0", lifespan=lifespan)
 
-# Add streaming middleware first
+# Add session middleware for admin login
+app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY", secrets.token_urlsafe(32)))
+
+# Configure Jinja2 templates
+template_dir = os.path.join(os.path.dirname(__file__), "frontend", "templates")
+templates = Jinja2Templates(directory=template_dir)
+
+# Mount static files (if they exist)
+static_path = os.path.join(os.path.dirname(__file__), "frontend")
+if os.path.exists(static_path):
+    try:
+        app.mount("/static", StaticFiles(directory=static_path), name="static")
+    except Exception as e:
+        print(f"⚠️  Could not mount static files: {e}")
+
+# Add streaming middleware
 app.add_middleware(StreamingMiddleware)
 
 # Add CORS middleware
@@ -248,6 +267,11 @@ async def chat(request: ChatRequest):
                 full_response,
                 food_matches
             )
+
+            # Fallback if LLM invents something
+            if not recommended_ids:
+                print("⚠️ No valid food matches found in LLM response, falling back to top matches.")
+                recommended_ids = [food[0].get("Id") for food in food_matches[:2]]
             
             # Save assistant response to session
             session_service.add_message(session_id, "assistant", full_response)
@@ -549,6 +573,113 @@ async def get_feedback_statistics(user_id: Optional[str] = None):
     stats = database_service.get_feedback_stats(user_id)
     
     return stats
+
+# Admin Endpoints
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
+
+def check_admin_session(request: Request) -> bool:
+    """Check if user is logged in as admin"""
+    return request.session.get("admin_logged_in", False)
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_root(request: Request):
+    """Redirect to login or dashboard"""
+    if check_admin_session(request):
+        return RedirectResponse(url="/admin/dashboard", status_code=status.HTTP_302_FOUND)
+    return RedirectResponse(url="/admin/login", status_code=status.HTTP_302_FOUND)
+
+@app.get("/admin/login", response_class=HTMLResponse)
+async def admin_login_page(request: Request):
+    """Show admin login page"""
+    if check_admin_session(request):
+        return RedirectResponse(url="/admin/dashboard", status_code=status.HTTP_302_FOUND)
+    
+    return templates.TemplateResponse("admin_login.html", {
+        "request": request,
+        "error": None
+    })
+
+@app.post("/admin/login", response_class=HTMLResponse)
+async def admin_login(request: Request, username: str = Form(...), password: str = Form(...)):
+    """Handle admin login"""
+    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        request.session["admin_logged_in"] = True
+        request.session["admin_username"] = username
+        return RedirectResponse(url="/admin/dashboard", status_code=status.HTTP_302_FOUND)
+    else:
+        return templates.TemplateResponse("admin_login.html", {
+            "request": request,
+            "error": "Invalid username or password"
+        })
+
+@app.get("/admin/logout")
+async def admin_logout(request: Request):
+    """Handle admin logout"""
+    request.session.clear()
+    return RedirectResponse(url="/admin/login", status_code=status.HTTP_302_FOUND)
+
+@app.get("/admin/dashboard", response_class=HTMLResponse)
+async def admin_dashboard(request: Request):
+    """Show admin dashboard with all users"""
+    if not check_admin_session(request):
+        return RedirectResponse(url="/admin/login", status_code=status.HTTP_302_FOUND)
+    
+    if not database_service.enabled:
+        return templates.TemplateResponse("admin_dashboard.html", {
+            "request": request,
+            "users": {},
+            "error": "Database not configured"
+        })
+    
+    users = database_service.get_all_users()
+    
+    return templates.TemplateResponse("admin_dashboard.html", {
+        "request": request,
+        "users": users
+    })
+
+@app.get("/admin/user/{session_id}", response_class=HTMLResponse)
+async def admin_user_details(request: Request, session_id: str):
+    """Show detailed session information"""
+    if not check_admin_session(request):
+        return RedirectResponse(url="/admin/login", status_code=status.HTTP_302_FOUND)
+    
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    user_data = database_service.get_user_details(session_id)
+    
+    if not user_data:
+        raise HTTPException(status_code=404, detail=f"Session '{session_id}' not found")
+    
+    # Populate food details for recommendations
+    for conversation in user_data['conversations']:
+        food_details = []
+        for food_id in conversation.get('recommended_food_ids', []):
+            # Handle both string IDs and dict objects
+            if isinstance(food_id, dict):
+                # Already a food object, use it directly
+                food_item = food_id
+            else:
+                # It's an ID string, fetch the food item
+                food_item = food_service.get_food_by_id(food_id)
+            
+            if food_item:
+                food_details.append({
+                    'id': food_item.get('Id') or food_item.get('id'),
+                    'name': food_item.get('Name') or food_item.get('ProductName', 'Unknown'),
+                    'description': food_item.get('Description', ''),
+                    'image_url': food_item.get('Image') or food_item.get('ImageUrl') or food_item.get('image_url') or '/static/default-food.jpg'
+                })
+        conversation['recommended_foods'] = food_details
+    
+    return templates.TemplateResponse("admin_user_details.html", {
+        "request": request,
+        "username": user_data.get('display_name', session_id),
+        "session_id": session_id,
+        "user_data": user_data
+    })
 
 if __name__ == "__main__":
     uvicorn.run(
