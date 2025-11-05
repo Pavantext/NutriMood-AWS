@@ -32,4 +32,5 @@ httpx
 # Development (optional)
 black
 flake8
+itsdangerous
 
