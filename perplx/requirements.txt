@@ -22,6 +22,7 @@ pandas
 # Utilities
 python-dotenv
 python-multipart
+jinja2
 
 # Testing (optional)
 pytest
