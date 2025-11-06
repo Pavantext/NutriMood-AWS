@@ -44,13 +44,16 @@ class DatabaseService:
             print(f"⚠️  Database connection failed: {e}")
             self.enabled = False
     
-    def _get_connection(self):
+    def _get_connection(self, autocommit=False):
         """Get database connection"""
         if not self.enabled:
             return None
         
         try:
-            return psycopg2.connect(**self.connection_params)
+            conn = psycopg2.connect(**self.connection_params)
+            if autocommit:
+                conn.autocommit = True
+            return conn
         except Exception as e:
             print(f"❌ Database connection error: {e}")
             return None
@@ -500,4 +503,242 @@ class DatabaseService:
             if conn:
                 conn.close()
             return []
+    
+    def get_all_users(self) -> Dict[str, Dict]:
+        """
+        Get all sessions with their aggregated data for admin dashboard (OPTIMIZED)
+        Uses a single efficient query with JOINs instead of N+1 queries
+        
+        Returns:
+            Dictionary mapping session_id to session data with conversations, analytics, etc.
+        """
+        if not self.enabled:
+            return {}
+        
+        # Use autocommit mode to avoid transaction issues
+        conn = self._get_connection(autocommit=True)
+        if not conn:
+            return {}
+        
+        sessions_data = {}
+        
+        try:
+            cursor = conn.cursor(cursor_factory=RealDictCursor)
+            
+            # Single optimized query to get all session data at once
+            cursor.execute("""
+                WITH session_stats AS (
+                    SELECT 
+                        c.session_id,
+                        MIN(c.user_id) as user_id,
+                        COUNT(*) as conversation_count,
+                        MIN(c.created_at) as first_message_at,
+                        MAX(c.created_at) as last_message_at,
+                        -- Get all recommendations as an array for processing
+                        ARRAY_AGG(c.recommendations) FILTER (WHERE c.recommendations IS NOT NULL) as all_recommendations
+                    FROM conversations c
+                    GROUP BY c.session_id
+                )
+                SELECT 
+                    ss.session_id,
+                    ss.user_id,
+                    ss.conversation_count,
+                    ss.first_message_at,
+                    ss.last_message_at,
+                    ss.all_recommendations,
+                    up.name as user_name,
+                    up.email as user_email,
+                    sa.total_messages,
+                    sa.total_recommendations
+                FROM session_stats ss
+                LEFT JOIN user_profiles up ON ss.user_id = up.user_id
+                LEFT JOIN session_analytics sa ON ss.session_id = sa.session_id
+                ORDER BY ss.last_message_at DESC
+            """)
+            
+            rows = cursor.fetchall()
+            cursor.close()
+            
+            # Process results
+            for row in rows:
+                session_id = row['session_id']
+                user_id = row['user_id']
+                
+                # Count total recommendations from the array
+                total_recs = 0
+                if row.get('all_recommendations'):
+                    for rec in row['all_recommendations']:
+                        if rec:
+                            try:
+                                if isinstance(rec, str):
+                                    if rec and rec != '' and rec != '[]':
+                                        rec_list = json.loads(rec)
+                                        if isinstance(rec_list, list):
+                                            total_recs += len(rec_list)
+                                        else:
+                                            total_recs += 1
+                                elif isinstance(rec, list):
+                                    total_recs += len(rec)
+                                else:
+                                    total_recs += 1
+                            except (json.JSONDecodeError, TypeError):
+                                if rec and rec != '' and rec != '[]':
+                                    total_recs += 1
+                
+                # Use analytics total if available, otherwise use our count
+                if row.get('total_recommendations') is not None:
+                    total_recs = row['total_recommendations']
+                
+                # Format first login time
+                first_login = 'N/A'
+                if row.get('first_message_at'):
+                    first_login = row['first_message_at'].strftime('%Y-%m-%d %H:%M:%S')
+                
+                # Determine display name
+                display_name = session_id
+                if row.get('user_name'):
+                    display_name = f"{row['user_name']} ({session_id[:8]}...)"
+                elif row.get('user_email'):
+                    display_name = f"{row['user_email']} ({session_id[:8]}...)"
+                elif user_id:
+                    display_name = f"User {user_id[:8]}... ({session_id[:8]}...)"
+                
+                # Build session data
+                sessions_data[session_id] = {
+                    'session_id': session_id,
+                    'user_id': user_id,
+                    'display_name': display_name,
+                    'login_time': first_login,
+                    'conversation_count': row.get('conversation_count', 0),
+                    'total_recommendations': total_recs
+                }
+            
+            conn.close()
+            return sessions_data
+            
+        except Exception as e:
+            print(f"❌ Error getting all sessions: {e}")
+            if conn:
+                try:
+                    conn.rollback()
+                    conn.close()
+                except:
+                    pass
+            return {}
+    
+    def get_user_details(self, session_id: str) -> Optional[Dict]:
+        """
+        Get detailed information about a specific session
+        
+        Args:
+            session_id: Session identifier
+            
+        Returns:
+            Dictionary with session details including all conversations
+        """
+        if not self.enabled:
+            return None
+        
+        conn = self._get_connection()
+        if not conn:
+            return None
+        
+        try:
+            cursor = conn.cursor(cursor_factory=RealDictCursor)
+            
+            # Get session analytics
+            cursor.execute("SELECT * FROM session_analytics WHERE session_id = %s LIMIT 1", (session_id,))
+            analytics = cursor.fetchone()
+            
+            # Get user_id from conversations (if available)
+            cursor.execute("""
+                SELECT DISTINCT user_id 
+                FROM conversations 
+                WHERE session_id = %s AND user_id IS NOT NULL
+                LIMIT 1
+            """, (session_id,))
+            user_result = cursor.fetchone()
+            user_id = user_result['user_id'] if user_result and user_result.get('user_id') else None
+            
+            # Get user profile if user_id exists
+            profile = None
+            if user_id:
+                cursor.execute("SELECT * FROM user_profiles WHERE user_id = %s", (user_id,))
+                profile = cursor.fetchone()
+            
+            # Get all conversations for this session
+            cursor.execute("""
+                SELECT * FROM conversations 
+                WHERE session_id = %s 
+                ORDER BY created_at DESC
+            """, (session_id,))
+            
+            conversations = cursor.fetchall()
+            
+            if not conversations:
+                cursor.close()
+                conn.close()
+                return None
+            
+            # Get first login
+            cursor.execute("""
+                SELECT MIN(created_at) as first_login 
+                FROM conversations 
+                WHERE session_id = %s
+            """, (session_id,))
+            first_result = cursor.fetchone()
+            first_login = None
+            if first_result and first_result['first_login']:
+                first_login = first_result['first_login'].strftime('%Y-%m-%d %H:%M:%S')
+            
+            cursor.close()
+            conn.close()
+            
+            # Format conversations - food details will be added by the calling code
+            formatted_conversations = []
+            for conv in conversations:
+                recommendations = []
+                if conv.get('recommendations'):
+                    try:
+                        rec_ids = json.loads(conv['recommendations']) if isinstance(conv['recommendations'], str) else conv['recommendations']
+                    except:
+                        rec_ids = []
+                else:
+                    rec_ids = []
+                
+                formatted_conv = {
+                    'timestamp': conv['created_at'].strftime('%Y-%m-%d %H:%M:%S') if conv.get('created_at') else 'N/A',
+                    'user_input': conv.get('user_message', ''),
+                    'ai_response': conv.get('bot_response', ''),
+                    'recommended_food_ids': rec_ids if isinstance(rec_ids, list) else [],
+                    'recommended_foods': [],  # Will be populated by caller with food details
+                    'is_followup': False  # Can enhance this later
+                }
+                formatted_conversations.append(formatted_conv)
+            
+            # Determine display name
+            display_name = session_id
+            if profile:
+                if profile.get('name'):
+                    display_name = f"{profile['name']} ({session_id})"
+                elif profile.get('email'):
+                    display_name = f"{profile['email']} ({session_id})"
+            elif user_id:
+                display_name = f"User {user_id} ({session_id})"
+            
+            return {
+                'session_id': session_id,
+                'user_id': user_id,
+                'display_name': display_name,
+                'username': display_name,  # For template compatibility
+                'login_time': first_login or 'N/A',
+                'conversations': formatted_conversations,
+                'profile': dict(profile) if profile else None
+            }
+            
+        except Exception as e:
+            print(f"❌ Error getting session details: {e}")
+            if conn:
+                conn.close()
+            return None
 

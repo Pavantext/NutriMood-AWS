@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - NutriMood</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/fonts.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/niloufer-logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/niloufer-logo.png">
+    <link rel="apple-touch-icon" href="/static/images/niloufer-logo.png">
+    <link rel="shortcut icon" href="/static/images/niloufer-logo.png">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--chat-bg);
+            position: relative;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            /* margin: 2rem auto; */
+            padding: 0 1rem;
+            min-height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background-color: #F9B231;
+            width: 100%;
+            height: 80px;
+            position: sticky;
+            top: 0;
+            padding: 0 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .admin-title {
+            color: var(--text-color);
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-left: 2rem;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .admin-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .logout-button {
+            background: #161619;
+            color: white;
+            border: none;
+        }
+
+        .logout-button:hover {
+            background: #c82333;
+            color: #F9B231;
+        }
+
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .user-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .user-card-header {
+            padding: 1.5rem;
+            background:  #F9B231;
+            color: white;
+        }
+
+        .user-card-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        .user-card-body {
+            padding: 1.5rem;
+        }
+
+        .user-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-stat:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .stat-value {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .view-details {
+            display: block;
+            text-align: center;
+            padding: 1rem;
+            background:  #323232;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .view-details:hover {
+            background: #F9B231;
+            color: #161619;
+        }
+
+        .no-users {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .no-users i {
+            font-size: 3rem;
+            color: var(--text-color);
+            opacity: 0.5;
+            margin-bottom: 1rem;
+        }
+
+        .no-users p {
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                /* gap: 1rem; */
+                text-align: center;
+                padding: 0.5rem 0.5rem;
+                height: auto;
+            }
+
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-container {
+                margin: 1rem auto;
+                padding: 0 0.5rem;
+            }
+
+            .admin-title {
+                font-size: 2rem;
+                word-break: break-word;
+                padding: 0.2rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-header">
+        <h1 class="admin-title">Admin Dashboard</h1>
+        <div class="admin-actions">
+            <a href="/admin/logout" class="admin-button logout-button">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+    <div class="admin-container">
+        
+
+        {% if users %}
+        <div class="users-grid">
+            {% for session_id, data in users.items() %}
+            <div class="user-card">
+                <div class="user-card-header">
+                    <h3>{{ data.display_name }}</h3>
+                </div>
+                <div class="user-card-body">
+                    <div class="user-stat">
+                        <span class="stat-label">Session ID</span>
+                        <span class="stat-value" style="font-size: 0.85rem; word-break: break-all;">{{ session_id }}</span>
+                    </div>
+                    {% if data.user_id %}
+                    <div class="user-stat">
+                        <span class="stat-label">User ID</span>
+                        <span class="stat-value">{{ data.user_id }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="user-stat">
+                        <span class="stat-label">First Message</span>
+                        <span class="stat-value">{{ data.login_time }}</span>
+                    </div>
+                    <div class="user-stat">
+                        <span class="stat-label">Conversations</span>
+                        <span class="stat-value">{{ data.conversation_count }}</span>
+                    </div>
+                    <div class="user-stat">
+                        <span class="stat-label">Total Recommendations</span>
+                        <span class="stat-value">{{ data.total_recommendations }}</span>
+                    </div>
+                </div>
+                <a href="/admin/user/{{ session_id }}" class="view-details">
+                    View Details
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-users">
+            <i class="fas fa-users"></i>
+            <p>No sessions found in the database.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html> 
