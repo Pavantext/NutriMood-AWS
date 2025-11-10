@@ -227,9 +227,12 @@ async def chat(request: ChatRequest):
                     last_rec = last_recommendations[-1]
                     previous_food_ids = last_rec.get("food_ids", [])
                     
+                    # Filter out invalid IDs
+                    valid_previous_ids = [fid for fid in previous_food_ids if fid and str(fid).strip()]
+                    
                     # Fetch these specific foods
                     food_matches = []
-                    for food_id in previous_food_ids[:5]:
+                    for food_id in valid_previous_ids[:5]:
                         food_item = food_service.get_food_by_id(food_id)
                         if food_item:
                             food_matches.append((food_item, 1.0))
@@ -268,10 +271,16 @@ async def chat(request: ChatRequest):
                 food_matches
             )
 
-            # Fallback if LLM invents something
+            # Fallback if LLM invents something or no IDs extracted
             if not recommended_ids:
                 print("⚠️ No valid food matches found in LLM response, falling back to top matches.")
-                recommended_ids = [food[0].get("Id") for food in food_matches[:2]]
+                # Extract IDs from top matches, filtering out None/empty values
+                fallback_ids = []
+                for food, score in food_matches[:2]:
+                    food_id = food.get("Id") or food.get("id")  # Try both capital and lowercase
+                    if food_id and str(food_id).strip():  # Ensure it's not None or empty
+                        fallback_ids.append(str(food_id))
+                recommended_ids = fallback_ids
             
             # Save assistant response to session
             session_service.add_message(session_id, "assistant", full_response)
@@ -303,10 +312,12 @@ async def chat(request: ChatRequest):
                 )
             
             # Send final JSON response
+            # Filter out any None/empty values before joining
+            valid_ids = [str(fid) for fid in recommended_ids if fid and str(fid).strip()]
             final_response = {
                 "message": full_response,
                 "session_id": session_id,
-                "food_recommendation_id": ",".join(recommended_ids) if recommended_ids else ""
+                "food_recommendation_id": ",".join(valid_ids) if valid_ids else ""
             }
             
             yield f"\n\n__RESPONSE__:{json.dumps(final_response)}"
