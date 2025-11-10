@@ -1,12 +1,8 @@
-"""
-Database Service - AWS RDS PostgreSQL operations for storing conversations and analytics
-"""
-
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from typing import List, Optional, Dict
 import json
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import os
 from interfaces.database_models import (
     UserProfile,
@@ -18,6 +14,29 @@ from interfaces.database_models import (
 
 class DatabaseService:
     """Service class for AWS RDS PostgreSQL operations"""
+    
+    # IST timezone offset: UTC+5:30
+    IST = timezone(timedelta(hours=5, minutes=30))
+    
+    @staticmethod
+    def _to_ist(dt: datetime) -> datetime:
+        """Convert UTC datetime to IST (Indian Standard Time)"""
+        if dt is None:
+            return None
+        # If datetime is naive (no timezone info), assume it's UTC
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        # Convert to IST
+        ist_dt = dt.astimezone(DatabaseService.IST)
+        return ist_dt
+    
+    @staticmethod
+    def _format_ist_datetime(dt: datetime) -> str:
+        """Format datetime in IST timezone"""
+        if dt is None:
+            return 'N/A'
+        ist_dt = DatabaseService._to_ist(dt)
+        return ist_dt.strftime('%Y-%m-%d %H:%M:%S IST')
     
     def __init__(self):
         """Initialize database service with connection parameters"""
@@ -694,10 +713,10 @@ class DatabaseService:
                 if row.get('total_recommendations') is not None:
                     total_recs = row['total_recommendations']
                 
-                # Format first login time
+                # Format first login time in IST
                 first_login = 'N/A'
                 if row.get('first_message_at'):
-                    first_login = row['first_message_at'].strftime('%Y-%m-%d %H:%M:%S')
+                    first_login = self._format_ist_datetime(row['first_message_at'])
                 
                 # Determine display name
                 display_name = session_id
@@ -794,7 +813,7 @@ class DatabaseService:
             first_result = cursor.fetchone()
             first_login = None
             if first_result and first_result['first_login']:
-                first_login = first_result['first_login'].strftime('%Y-%m-%d %H:%M:%S')
+                first_login = self._format_ist_datetime(first_result['first_login'])
             
             cursor.close()
             conn.close()
@@ -812,7 +831,7 @@ class DatabaseService:
                     rec_ids = []
                 
                 formatted_conv = {
-                    'timestamp': conv['created_at'].strftime('%Y-%m-%d %H:%M:%S') if conv.get('created_at') else 'N/A',
+                    'timestamp': self._format_ist_datetime(conv['created_at']) if conv.get('created_at') else 'N/A',
                     'user_input': conv.get('user_message', ''),
                     'ai_response': conv.get('bot_response', ''),
                     'recommended_food_ids': rec_ids if isinstance(rec_ids, list) else [],
@@ -1478,11 +1497,11 @@ class DatabaseService:
                     "session_id": row['session_id'],
                     "message_id": row['message_id'],
                     "rating": row['rating'],
-                    "timestamp": row['timestamp'].isoformat() if row['timestamp'] else None,
+                    "timestamp": self._format_ist_datetime(row['timestamp']) if row['timestamp'] else None,
                     "user_name": row['user_name'],
                     "user_query": row['user_message'],
                     "bot_response": row['bot_response'],
-                    "conversation_time": row['conversation_time'].isoformat() if row['conversation_time'] else None
+                    "conversation_time": self._format_ist_datetime(row['conversation_time']) if row.get('conversation_time') else None
                 })
             
             return feedback_list
@@ -1690,7 +1709,7 @@ class DatabaseService:
                 
                 first_login = 'N/A'
                 if row.get('first_message_at'):
-                    first_login = row['first_message_at'].strftime('%Y-%m-%d %H:%M:%S')
+                    first_login = self._format_ist_datetime(row['first_message_at'])
                 
                 display_name = session_id
                 if row.get('user_name'):

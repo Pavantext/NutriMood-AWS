@@ -1123,6 +1123,54 @@
             return div.innerHTML;
         }
 
+        // Format IST date string (format: "YYYY-MM-DD HH:MM:SS IST")
+        function formatISTDate(timestampStr) {
+            if (!timestampStr || timestampStr === 'N/A') return 'N/A';
+            // If already formatted as IST string, extract date part
+            if (timestampStr.includes(' IST')) {
+                const datePart = timestampStr.split(' ')[0];
+                const [year, month, day] = datePart.split('-');
+                return `${day}/${month}/${year}`;
+            }
+            // If ISO format, parse and convert to IST
+            try {
+                const date = new Date(timestampStr);
+                if (isNaN(date.getTime())) return timestampStr;
+                // Convert to IST (UTC+5:30)
+                const istDate = new Date(date.getTime() + (5.5 * 60 * 60 * 1000));
+                return istDate.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' });
+            } catch (e) {
+                return timestampStr;
+            }
+        }
+
+        // Format IST time string
+        function formatISTTime(timestampStr) {
+            if (!timestampStr || timestampStr === 'N/A') return 'N/A';
+            // If already formatted as IST string, extract time part
+            if (timestampStr.includes(' IST')) {
+                const parts = timestampStr.split(' ');
+                if (parts.length >= 2) {
+                    return parts[1] + ' IST';
+                }
+                return timestampStr;
+            }
+            // If ISO format, parse and convert to IST
+            try {
+                const date = new Date(timestampStr);
+                if (isNaN(date.getTime())) return timestampStr;
+                return date.toLocaleTimeString('en-IN', { 
+                    timeZone: 'Asia/Kolkata',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                }) + ' IST';
+            } catch (e) {
+                return timestampStr;
+            }
+        }
+
         // Mobile Menu Toggle
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -1498,7 +1546,7 @@
                                         <td>${escapeHtml(f.user_name || 'Anonymous')}</td>
                                         <td>${escapeHtml(f.user_query ? (f.user_query.length > 50 ? f.user_query.substring(0, 50) + '...' : f.user_query) : 'N/A')}</td>
                                         <td>${escapeHtml(f.bot_response ? (f.bot_response.length > 50 ? f.bot_response.substring(0, 50) + '...' : f.bot_response) : 'N/A')}</td>
-                                        <td>${f.timestamp ? new Date(f.timestamp).toLocaleDateString() : 'N/A'}</td>
+                                        <td>${formatISTDate(f.timestamp || 'N/A')}</td>
                                         <td class="action-cell">
                                             <button class="action-btn btn-primary" onclick="showFeedbackDetails(${index})">
                                                 <i class="fas fa-eye"></i>
@@ -1572,12 +1620,11 @@
                 .replace(/'/g, '&#039;');
             modalResponse.innerHTML = botResponse;
             
-            // Set date
+            // Set date in IST
             if (feedback.timestamp) {
-                const date = new Date(feedback.timestamp);
                 modalDate.innerHTML = `
-                    <div><strong>Date:</strong> ${date.toLocaleDateString()}</div>
-                    <div style="margin-top: 0.5rem;"><strong>Time:</strong> ${date.toLocaleTimeString()}</div>
+                    <div><strong>Date:</strong> ${formatISTDate(feedback.timestamp)}</div>
+                    <div style="margin-top: 0.5rem;"><strong>Time:</strong> ${formatISTTime(feedback.timestamp)}</div>
                 `;
             } else {
                 modalDate.innerHTML = 'N/A';
