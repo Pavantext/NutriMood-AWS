@@ -142,6 +142,8 @@
             padding: 2rem;
             margin-bottom: 2rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: visible;
+            width: 80%;
         }
 
         .section-title {
@@ -432,6 +434,55 @@
 
         .table-container {
             overflow-x: auto;
+            overflow-y: visible;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+            max-width: 100%;
+            position: relative;
+            display: block;
+            scrollbar-width: thin;
+            scrollbar-color: #888 #f1f1f1;
+        }
+        
+        .table-container::-webkit-scrollbar {
+            height: 12px;
+        }
+        
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 6px;
+        }
+        
+        .table-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 6px;
+        }
+        
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        .table-container table {
+            min-width: 1000px;
+            width: max-content;
+            border-collapse: collapse;
+        }
+        
+        .table-container table th.action-header,
+        .table-container table td.action-cell {
+            position: sticky;
+            right: 0;
+            background: white;
+            z-index: 10;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .table-container table thead th.action-header {
+            background: #f9fafb;
+        }
+        
+        .table-container table tbody tr:hover td.action-cell {
+            background: #f9fafb;
         }
 
         .action-cell {
@@ -858,7 +909,7 @@
                             Clear
                         </button>
                     </div>
-                    <div id="sessionsContent">
+                    <div id="sessionsContent" style="width: 100%;">
                         {% if users %}
                         <div class="table-container">
                             <table>
@@ -1350,7 +1401,7 @@
                                     <th>First Message</th>
                                     <th>Conversations</th>
                                     <th>Recommendations</th>
-                                    <th>Actions</th>
+                                    <th class="action-header">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
