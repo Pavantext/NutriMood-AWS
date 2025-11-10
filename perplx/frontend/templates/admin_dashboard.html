@@ -828,6 +828,9 @@
                         <canvas id="ratingsChart"></canvas>
                     </div>
                 </div>
+                <script type="application/json" id="ratingsData">
+                    {{ chatbot_analytics.ratings_distribution | tojson }}
+                </script>
                 {% endif %}
                 {% endif %}
             </div>
@@ -1061,6 +1064,14 @@
     </div>
 
     <script>
+        // Utility function to escape HTML to prevent XSS
+        function escapeHtml(text) {
+            if (text == null) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         // Mobile Menu Toggle
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -1132,17 +1143,17 @@
                     <div class="stats-grid">
                         <div class="stat-card primary">
                             <div class="stat-label">Total Orders</div>
-                            <div class="stat-value">${data.total_orders}</div>
-                            <div class="stat-change">${data.total_items_ordered} items</div>
+                            <div class="stat-value">${data.total_orders || 0}</div>
+                            <div class="stat-change">${data.total_items_ordered || 0} items</div>
                         </div>
                         <div class="stat-card info">
                             <div class="stat-label">Added to Cart</div>
-                            <div class="stat-value">${data.total_added_to_cart}</div>
-                            <div class="stat-change">${data.total_items_in_cart} items</div>
+                            <div class="stat-value">${data.total_added_to_cart || 0}</div>
+                            <div class="stat-change">${data.total_items_in_cart || 0} items</div>
                         </div>
                         <div class="stat-card success">
                             <div class="stat-label">Conversion Rate</div>
-                            <div class="stat-value">${data.conversion_rate}%</div>
+                            <div class="stat-value">${data.conversion_rate || 0}%</div>
                             <div class="stat-change">cart to order</div>
                         </div>
                     </div>
@@ -1168,9 +1179,9 @@
                                 <tbody>
                                     ${data.top_products.map(p => `
                                         <tr>
-                                            <td><strong>${p.product_name}</strong></td>
-                                            <td>${p.order_count}</td>
-                                            <td>${p.total_quantity}</td>
+                                            <td><strong>${escapeHtml(p.product_name || 'Unknown')}</strong></td>
+                                            <td>${p.order_count || 0}</td>
+                                            <td>${p.total_quantity || 0}</td>
                                         </tr>
                                     `).join('')}
                                 </tbody>
@@ -1182,31 +1193,33 @@
                 container.innerHTML = html;
                 
                 // Create pie chart
-                const ctx = document.getElementById('ordersChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: ['Orders Placed', 'Added to Cart'],
-                        datasets: [{
-                            data: [data.total_orders, data.total_added_to_cart],
-                            backgroundColor: ['#10b981', '#3b82f6'],
-                            borderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom'
-                            },
-                            title: {
-                                display: true,
-                                text: 'Orders: Placed vs Added to Cart'
+                const ctx = document.getElementById('ordersChart');
+                if (ctx) {
+                    new Chart(ctx.getContext('2d'), {
+                        type: 'pie',
+                        data: {
+                            labels: ['Orders Placed', 'Added to Cart'],
+                            datasets: [{
+                                data: [data.total_orders || 0, data.total_added_to_cart || 0],
+                                backgroundColor: ['#10b981', '#3b82f6'],
+                                borderWidth: 2
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Orders: Placed vs Added to Cart'
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             } catch (error) {
                 container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading orders data</p></div>`;
             }
@@ -1234,15 +1247,15 @@
                     <div class="stats-grid">
                         <div class="stat-card primary">
                             <div class="stat-label">Total Users</div>
-                            <div class="stat-value">${data.total_users}</div>
+                            <div class="stat-value">${data.total_users || 0}</div>
                         </div>
                         <div class="stat-card success">
                             <div class="stat-label">New Users</div>
-                            <div class="stat-value">${data.new_users}</div>
+                            <div class="stat-value">${data.new_users || 0}</div>
                         </div>
                         <div class="stat-card info">
                             <div class="stat-label">Active Users (7 days)</div>
-                            <div class="stat-value">${data.active_users}</div>
+                            <div class="stat-value">${data.active_users || 0}</div>
                         </div>
                     </div>
                     <div class="chart-container">
@@ -1253,41 +1266,43 @@
                 container.innerHTML = html;
                 
                 // Create bar chart
-                const ctx = document.getElementById('usersChart').getContext('2d');
-                const labels = data.users_by_date.map(d => d.date).reverse();
-                const counts = data.users_by_date.map(d => d.count).reverse();
-                
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Users',
-                            data: counts,
-                            backgroundColor: '#F9B231',
-                            borderColor: '#f59e0b',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            title: {
-                                display: true,
-                                text: 'Users by Date'
-                            }
+                const ctx = document.getElementById('usersChart');
+                if (ctx && data.users_by_date && data.users_by_date.length > 0) {
+                    const labels = data.users_by_date.map(d => d.date).reverse();
+                    const counts = data.users_by_date.map(d => d.count || 0).reverse();
+                    
+                    new Chart(ctx.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Users',
+                                data: counts,
+                                backgroundColor: '#F9B231',
+                                borderColor: '#f59e0b',
+                                borderWidth: 1
+                            }]
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Users by Date'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             } catch (error) {
                 container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading users data</p></div>`;
             }
@@ -1339,15 +1354,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                ${Object.entries(data.sessions).map(([session_id, data]) => `
+                                ${Object.entries(data.sessions).map(([session_id, sessionData]) => `
                                     <tr>
-                                        <td><strong>${data.display_name}</strong></td>
-                                        <td><code style="font-size: 0.85rem;">${session_id.substring(0, 20)}...</code></td>
-                                        <td>${data.login_time}</td>
-                                        <td>${data.conversation_count}</td>
-                                        <td>${data.total_recommendations}</td>
+                                        <td><strong>${escapeHtml(sessionData.display_name || 'Unknown')}</strong></td>
+                                        <td><code style="font-size: 0.85rem;">${escapeHtml(session_id.substring(0, 20))}...</code></td>
+                                        <td>${escapeHtml(sessionData.login_time || 'N/A')}</td>
+                                        <td>${sessionData.conversation_count || 0}</td>
+                                        <td>${sessionData.total_recommendations || 0}</td>
                                         <td class="action-cell">
-                                            <a href="/admin/user/${session_id}" class="action-btn btn-primary">
+                                            <a href="/admin/user/${encodeURIComponent(session_id)}" class="action-btn btn-primary">
                                                 <i class="fas fa-eye"></i>
                                                 <span>View</span>
                                             </a>
@@ -1425,16 +1440,16 @@
                                 ${data.map((f, index) => `
                                     <tr>
                                         <td>
-                                            <span class="rating-badge rating-${f.rating}">
-                                                ${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}
+                                            <span class="rating-badge rating-${f.rating || 0}">
+                                                ${'★'.repeat(f.rating || 0)}${'☆'.repeat(5 - (f.rating || 0))}
                                             </span>
                                         </td>
-                                        <td>${f.user_name || 'Anonymous'}</td>
-                                        <td>${f.user_query ? (f.user_query.length > 50 ? f.user_query.substring(0, 50) + '...' : f.user_query) : 'N/A'}</td>
-                                        <td>${f.bot_response ? (f.bot_response.length > 50 ? f.bot_response.substring(0, 50) + '...' : f.bot_response) : 'N/A'}</td>
+                                        <td>${escapeHtml(f.user_name || 'Anonymous')}</td>
+                                        <td>${escapeHtml(f.user_query ? (f.user_query.length > 50 ? f.user_query.substring(0, 50) + '...' : f.user_query) : 'N/A')}</td>
+                                        <td>${escapeHtml(f.bot_response ? (f.bot_response.length > 50 ? f.bot_response.substring(0, 50) + '...' : f.bot_response) : 'N/A')}</td>
                                         <td>${f.timestamp ? new Date(f.timestamp).toLocaleDateString() : 'N/A'}</td>
                                         <td class="action-cell">
-                                            <button class="action-btn btn-primary" onclick='showFeedbackDetails(${index})'>
+                                            <button class="action-btn btn-primary" onclick="showFeedbackDetails(${index})">
                                                 <i class="fas fa-eye"></i>
                                                 <span>View</span>
                                             </button>
@@ -1548,13 +1563,13 @@
                     <div class="stats-grid">
                         <div class="stat-card primary">
                             <div class="stat-label">Average Session Time</div>
-                            <div class="stat-value">${Math.round(data.average_time / 60)}m ${Math.round(data.average_time % 60)}s</div>
-                            <div class="stat-change">${data.completed_sessions} sessions</div>
+                            <div class="stat-value">${Math.round((data.average_time || 0) / 60)}m ${Math.round((data.average_time || 0) % 60)}s</div>
+                            <div class="stat-change">${data.completed_sessions || 0} sessions</div>
                         </div>
                         <div class="stat-card info">
                             <div class="stat-label">Total Time</div>
-                            <div class="stat-value">${Math.round(data.total_time / 3600)}h</div>
-                            <div class="stat-change">${Math.round((data.total_time % 3600) / 60)}m</div>
+                            <div class="stat-value">${Math.round((data.total_time || 0) / 3600)}h</div>
+                            <div class="stat-change">${Math.round(((data.total_time || 0) % 3600) / 60)}m</div>
                         </div>
                     </div>
                     <div class="chart-container">
@@ -1579,9 +1594,9 @@
                                 <tbody>
                                     ${data.top_users_by_time.map(u => `
                                         <tr>
-                                            <td><strong>${u.user_name}</strong></td>
-                                            <td>${Math.round(u.total_time / 60)}m ${Math.round(u.total_time % 60)}s</td>
-                                            <td>${u.session_count}</td>
+                                            <td><strong>${escapeHtml(u.user_name || 'Unknown')}</strong></td>
+                                            <td>${Math.round((u.total_time || 0) / 60)}m ${Math.round((u.total_time || 0) % 60)}s</td>
+                                            <td>${u.session_count || 0}</td>
                                         </tr>
                                     `).join('')}
                                 </tbody>
@@ -1593,85 +1608,92 @@
                 container.innerHTML = html;
                 
                 // Create bar chart
-                const ctx = document.getElementById('sessionTimesChart').getContext('2d');
-                const labels = data.sessions_by_time.map(d => d.range);
-                const counts = data.sessions_by_time.map(d => d.count);
-                
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Sessions',
-                            data: counts,
-                            backgroundColor: '#F9B231',
-                            borderColor: '#f59e0b',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            title: {
-                                display: true,
-                                text: 'Sessions by Time Range'
-                            }
+                const ctx = document.getElementById('sessionTimesChart');
+                if (ctx && data.sessions_by_time && data.sessions_by_time.length > 0) {
+                    const labels = data.sessions_by_time.map(d => d.range || 'Unknown');
+                    const counts = data.sessions_by_time.map(d => d.count || 0);
+                    
+                    new Chart(ctx.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Sessions',
+                                data: counts,
+                                backgroundColor: '#F9B231',
+                                borderColor: '#f59e0b',
+                                borderWidth: 1
+                            }]
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Sessions by Time Range'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             } catch (error) {
                 container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading session times data</p></div>`;
             }
         }
 
         // Initialize Overview Chart
-        {% if chatbot_analytics and chatbot_analytics.ratings_distribution %}
         window.addEventListener('DOMContentLoaded', function() {
             const ctx = document.getElementById('ratingsChart');
-            if (ctx) {
-                new Chart(ctx.getContext('2d'), {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['5 Stars', '4 Stars', '3 Stars', '2 Stars', '1 Star'],
-                        datasets: [{
-                            data: [
-                                {{ chatbot_analytics.ratings_distribution['5_stars'] }},
-                                {{ chatbot_analytics.ratings_distribution['4_stars'] }},
-                                {{ chatbot_analytics.ratings_distribution['3_stars'] }},
-                                {{ chatbot_analytics.ratings_distribution['2_stars'] }},
-                                {{ chatbot_analytics.ratings_distribution['1_star'] }}
-                            ],
-                            backgroundColor: [
-                                '#10b981',
-                                '#3b82f6',
-                                '#f59e0b',
-                                '#f97316',
-                                '#ef4444'
-                            ]
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom'
+            const ratingsDataElement = document.getElementById('ratingsData');
+            
+            if (ctx && ratingsDataElement) {
+                try {
+                    const ratingsData = JSON.parse(ratingsDataElement.textContent);
+                    new Chart(ctx.getContext('2d'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['5 Stars', '4 Stars', '3 Stars', '2 Stars', '1 Star'],
+                            datasets: [{
+                                data: [
+                                    ratingsData['5_stars'] || 0,
+                                    ratingsData['4_stars'] || 0,
+                                    ratingsData['3_stars'] || 0,
+                                    ratingsData['2_stars'] || 0,
+                                    ratingsData['1_star'] || 0
+                                ],
+                                backgroundColor: [
+                                    '#10b981',
+                                    '#3b82f6',
+                                    '#f59e0b',
+                                    '#f97316',
+                                    '#ef4444'
+                                ]
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                } catch (error) {
+                    console.error('Error initializing ratings chart:', error);
+                }
             }
         });
-        {% endif %}
     </script>
 </body>
 </html>
