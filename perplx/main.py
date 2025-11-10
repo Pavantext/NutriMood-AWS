@@ -769,12 +769,62 @@ async def get_users_analytics(start_date: Optional[str] = None, end_date: Option
     return analytics
 
 @app.get("/analytics/feedback")
-async def get_feedback_analytics(limit: int = 50):
-    """Get feedback with user queries and responses"""
+async def get_feedback_analytics(
+    limit: int = 50,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    rating: Optional[str] = None
+):
+    """Get feedback with user queries and responses, with optional date and rating filters"""
     if not database_service.enabled:
         raise HTTPException(status_code=503, detail="Database not configured")
     
-    feedback = database_service.get_feedback_with_conversations(limit)
+    print(f"🔍 Received feedback request - start_date: {start_date}, end_date: {end_date}, rating: {rating}")
+    
+    start_dt = None
+    end_dt = None
+    if start_date:
+        try:
+            # Handle YYYY-MM-DD format from HTML date inputs
+            if len(start_date) == 10:  # YYYY-MM-DD format
+                start_dt = datetime.strptime(start_date, '%Y-%m-%d')
+            else:
+                # Handle ISO format with time
+                start_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+                if start_dt.tzinfo:
+                    start_dt = start_dt.astimezone().replace(tzinfo=None)
+        except Exception as e:
+            print(f"Error parsing start_date: {e}")
+            pass
+    if end_date:
+        try:
+            # Handle YYYY-MM-DD format from HTML date inputs
+            if len(end_date) == 10:  # YYYY-MM-DD format
+                # Add time to end of day for inclusive end date filtering
+                end_dt = datetime.strptime(end_date, '%Y-%m-%d')
+                end_dt = end_dt.replace(hour=23, minute=59, second=59)
+            else:
+                # Handle ISO format with time
+                end_dt = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+                if end_dt.tzinfo:
+                    end_dt = end_dt.astimezone().replace(tzinfo=None)
+        except Exception as e:
+            print(f"Error parsing end_date: {e}")
+            pass
+    
+    # Validate and convert rating
+    rating_int = None
+    if rating and rating.strip():
+        try:
+            rating_int = int(rating.strip())
+            if rating_int < 1 or rating_int > 5:
+                rating_int = None
+        except (ValueError, AttributeError):
+            rating_int = None
+    
+    print(f"🔍 Parsed filters - start_dt: {start_dt}, end_dt: {end_dt}, rating_int: {rating_int}")
+    
+    feedback = database_service.get_feedback_with_conversations(limit, start_dt, end_dt, rating_int)
     return feedback
 
 @app.get("/analytics/session-times")
@@ -785,6 +835,32 @@ async def get_session_times_analytics():
     
     analytics = database_service.get_session_times_analytics()
     return analytics
+
+@app.get("/analytics/sessions")
+async def get_sessions_analytics(start_date: Optional[str] = None, end_date: Optional[str] = None):
+    """Get user sessions with optional date range filter"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    start_dt = None
+    end_dt = None
+    if start_date:
+        try:
+            start_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+            if start_dt.tzinfo:
+                start_dt = start_dt.astimezone().replace(tzinfo=None)
+        except:
+            pass
+    if end_date:
+        try:
+            end_dt = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+            if end_dt.tzinfo:
+                end_dt = end_dt.astimezone().replace(tzinfo=None)
+        except:
+            pass
+    
+    sessions = database_service.get_all_users_filtered(start_dt, end_dt)
+    return {"sessions": sessions, "count": len(sessions)}
 
 # Admin Endpoints
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")

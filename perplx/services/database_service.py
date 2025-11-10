@@ -1394,8 +1394,14 @@ class DatabaseService:
                 "active_users": 0
             }
     
-    def get_feedback_with_conversations(self, limit: int = 50) -> List[Dict]:
-        """Get feedback with associated user queries and bot responses"""
+    def get_feedback_with_conversations(
+        self, 
+        limit: int = 50,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+        rating: Optional[int] = None
+    ) -> List[Dict]:
+        """Get feedback with associated user queries and bot responses, with optional filters"""
         if not self.enabled:
             return []
         
@@ -1406,9 +1412,37 @@ class DatabaseService:
         try:
             cursor = conn.cursor(cursor_factory=RealDictCursor)
             
+            # Build WHERE clause for filters
+            where_conditions = []
+            params = []
+            
+            if start_date:
+                where_conditions.append("DATE(cr.timestamp) >= %s")
+                params.append(start_date.date())
+                print(f"🔍 Adding start_date filter: {start_date.date()}")
+            
+            if end_date:
+                where_conditions.append("DATE(cr.timestamp) <= %s")
+                params.append(end_date.date())
+                print(f"🔍 Adding end_date filter: {end_date.date()}")
+            
+            if rating is not None:
+                where_conditions.append("cr.rating = %s")
+                params.append(rating)
+                print(f"🔍 Adding rating filter: {rating}")
+            
+            where_clause = ""
+            if where_conditions:
+                where_clause = "WHERE " + " AND ".join(where_conditions)
+            
+            print(f"🔍 SQL WHERE clause: {where_clause}")
+            print(f"🔍 SQL params: {params}")
+            
             # Get ratings with message_id and join with conversations if possible
-            cursor.execute("""
-                SELECT 
+            # Use DISTINCT ON to avoid duplicates from JOIN
+            # Note: DISTINCT ON requires the columns to be first in ORDER BY
+            query = f"""
+                SELECT DISTINCT ON (cr.id)
                     cr.id,
                     cr.session_id,
                     cr.message_id,
@@ -1420,11 +1454,19 @@ class DatabaseService:
                     c.created_at as conversation_time
                 FROM chatbot_ratings cr
                 LEFT JOIN conversations c ON cr.session_id = c.session_id
-                ORDER BY cr.timestamp DESC
+                {where_clause}
+                ORDER BY cr.id, cr.timestamp DESC, c.created_at DESC NULLS LAST
                 LIMIT %s
-            """, (limit,))
+            """
+            params.append(limit)
             
+            print(f"🔍 Final SQL query: {query}")
+            print(f"🔍 Final params: {params}")
+            
+            cursor.execute(query, params)
             results = cursor.fetchall()
+            
+            print(f"🔍 Query returned {len(results)} results")
             
             cursor.close()
             conn.close()
@@ -1553,4 +1595,130 @@ class DatabaseService:
                 "sessions_by_time": [],
                 "top_users_by_time": []
             }
+    
+    def get_all_users_filtered(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> Dict[str, Dict]:
+        """
+        Get all sessions with date filtering for admin dashboard
+        """
+        if not self.enabled:
+            return {}
+        
+        conn = self._get_connection(autocommit=True)
+        if not conn:
+            return {}
+        
+        sessions_data = {}
+        
+        try:
+            cursor = conn.cursor(cursor_factory=RealDictCursor)
+            
+            # Build date filter
+            date_filter = ""
+            params = []
+            if start_date or end_date:
+                conditions = []
+                if start_date:
+                    conditions.append("DATE(c.created_at) >= %s")
+                    params.append(start_date.date())
+                if end_date:
+                    conditions.append("DATE(c.created_at) <= %s")
+                    params.append(end_date.date())
+                if conditions:
+                    date_filter = "WHERE " + " AND ".join(conditions)
+            
+            # Single optimized query to get all session data at once with date filter
+            cursor.execute(f"""
+                WITH session_stats AS (
+                    SELECT 
+                        c.session_id,
+                        MIN(c.user_id) as user_id,
+                        COUNT(*) as conversation_count,
+                        MIN(c.created_at) as first_message_at,
+                        MAX(c.created_at) as last_message_at,
+                        ARRAY_AGG(c.recommendations) FILTER (WHERE c.recommendations IS NOT NULL) as all_recommendations
+                    FROM conversations c
+                    {date_filter}
+                    GROUP BY c.session_id
+                )
+                SELECT 
+                    ss.session_id,
+                    ss.user_id,
+                    ss.conversation_count,
+                    ss.first_message_at,
+                    ss.last_message_at,
+                    ss.all_recommendations,
+                    up.name as user_name,
+                    up.email as user_email,
+                    sa.total_messages,
+                    sa.total_recommendations
+                FROM session_stats ss
+                LEFT JOIN user_profiles up ON ss.user_id = up.user_id
+                LEFT JOIN session_analytics sa ON ss.session_id = sa.session_id
+                ORDER BY ss.last_message_at DESC
+            """, params)
+            
+            rows = cursor.fetchall()
+            cursor.close()
+            
+            # Process results (same as get_all_users)
+            for row in rows:
+                session_id = row['session_id']
+                user_id = row['user_id']
+                
+                total_recs = 0
+                if row.get('all_recommendations'):
+                    for rec in row['all_recommendations']:
+                        if rec:
+                            try:
+                                if isinstance(rec, str):
+                                    if rec and rec != '' and rec != '[]':
+                                        rec_list = json.loads(rec)
+                                        if isinstance(rec_list, list):
+                                            total_recs += len(rec_list)
+                                        else:
+                                            total_recs += 1
+                                elif isinstance(rec, list):
+                                    total_recs += len(rec)
+                                else:
+                                    total_recs += 1
+                            except (json.JSONDecodeError, TypeError):
+                                if rec and rec != '' and rec != '[]':
+                                    total_recs += 1
+                
+                if row.get('total_recommendations') is not None:
+                    total_recs = row['total_recommendations']
+                
+                first_login = 'N/A'
+                if row.get('first_message_at'):
+                    first_login = row['first_message_at'].strftime('%Y-%m-%d %H:%M:%S')
+                
+                display_name = session_id
+                if row.get('user_name'):
+                    display_name = f"{row['user_name']} ({session_id[:8]}...)"
+                elif row.get('user_email'):
+                    display_name = f"{row['user_email']} ({session_id[:8]}...)"
+                elif user_id:
+                    display_name = f"User {user_id[:8]}... ({session_id[:8]}...)"
+                
+                sessions_data[session_id] = {
+                    'session_id': session_id,
+                    'user_id': user_id,
+                    'display_name': display_name,
+                    'login_time': first_login,
+                    'conversation_count': row.get('conversation_count', 0),
+                    'total_recommendations': total_recs
+                }
+            
+            conn.close()
+            return sessions_data
+            
+        except Exception as e:
+            print(f"❌ Error getting filtered sessions: {e}")
+            if conn:
+                try:
+                    conn.rollback()
+                    conn.close()
+                except:
+                    pass
+            return {}
 

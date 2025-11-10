@@ -229,6 +229,167 @@
             border-color: #F9B231;
         }
 
+        .rating-select {
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+            background: white;
+            cursor: pointer;
+        }
+
+        .rating-select:focus {
+            outline: none;
+            border-color: #F9B231;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 2px solid #e5e7eb;
+            background: #F9B231;
+            color: #161619;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #161619;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: background 0.2s;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(0,0,0,0.1);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .modal-section-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-section-content {
+            font-size: 1rem;
+            color: #161619;
+            line-height: 1.6;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                max-width: 95%;
+                margin: 1rem;
+            }
+
+            .modal-header {
+                padding: 1rem;
+            }
+
+            .modal-title {
+                font-size: 1.25rem;
+            }
+
+            .modal-body {
+                padding: 1rem;
+            }
+
+            .modal-section-content {
+                font-size: 0.9rem;
+                max-height: 200px;
+            }
+        }
+
         .btn {
             padding: 0.75rem 1.5rem;
             border: none;
@@ -248,8 +409,52 @@
             background: #f59e0b;
         }
 
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-icon {
+            padding: 0.4rem 0.6rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
         .table-container {
             overflow-x: auto;
+        }
+
+        .action-cell {
+            white-space: nowrap;
+            width: 1%;
+            text-align: center;
+        }
+
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         table {
@@ -272,6 +477,12 @@
             color: #6b7280;
             font-size: 0.875rem;
             text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        th.action-header {
+            text-align: center;
+            width: 120px;
         }
 
         tbody tr:hover {
@@ -333,10 +544,69 @@
             opacity: 0.5;
         }
 
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: #F9B231;
+            color: #161619;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.25rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+
+        .mobile-overlay.active {
+            display: block;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .chart-container {
+                height: 300px;
+            }
+
+            table {
+                font-size: 0.875rem;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
         @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: block;
+            }
+
             .sidebar {
                 transform: translateX(-100%);
-                transition: transform 0.3s;
+                transition: transform 0.3s ease;
             }
 
             .sidebar.open {
@@ -346,15 +616,135 @@
             .main-content {
                 margin-left: 0;
                 padding: 1rem;
+                padding-top: 4rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
             }
 
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .content-section {
+                padding: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+
+            .date-filter {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .date-filter label {
+                width: 100%;
+            }
+
+            .date-input, .rating-select {
+                width: 100%;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                min-width: 600px;
+                font-size: 0.8rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+                white-space: nowrap;
+            }
+
+            .action-btn {
+                padding: 0.35rem 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            .action-btn span {
+                display: none;
+            }
+
+            .action-btn i {
+                margin: 0;
+            }
+
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+
+            .sidebar-header {
+                padding: 1rem;
+                font-size: 1.25rem;
+            }
+
+            .menu-item {
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 0.75rem;
+                padding-top: 3.5rem;
+            }
+
+            .page-title {
+                font-size: 1.25rem;
+            }
+
+            .stat-value {
+                font-size: 1.25rem;
+            }
+
+            .chart-container {
+                height: 200px;
+            }
+
+            table {
+                min-width: 500px;
+                font-size: 0.75rem;
+            }
+
+            th, td {
+                padding: 0.4rem;
             }
         }
     </style>
 </head>
 <body>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="mobile-overlay" id="mobileOverlay" onclick="toggleSidebar()"></div>
+
     <div class="dashboard-container">
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
@@ -448,47 +838,64 @@
                     <h1 class="page-title">User Sessions</h1>
                 </div>
 
-                {% if users %}
                 <div class="content-section">
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Session ID</th>
-                                    <th>First Message</th>
-                                    <th>Conversations</th>
-                                    <th>Recommendations</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for session_id, data in users.items() %}
-                                <tr>
-                                    <td><strong>{{ data.display_name }}</strong></td>
-                                    <td><code style="font-size: 0.85rem;">{{ session_id[:20] }}...</code></td>
-                                    <td>{{ data.login_time }}</td>
-                                    <td>{{ data.conversation_count }}</td>
-                                    <td>{{ data.total_recommendations }}</td>
-                                    <td>
-                                        <a href="/admin/user/{{ session_id }}" class="btn btn-primary" style="padding: 0.5rem 1rem; text-decoration: none;">
-                                            View Details
-                                        </a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    <div class="date-filter">
+                        <label>
+                            <strong>Start Date:</strong>
+                            <input type="date" id="sessionsStartDate" class="date-input">
+                        </label>
+                        <label>
+                            <strong>End Date:</strong>
+                            <input type="date" id="sessionsEndDate" class="date-input">
+                        </label>
+                        <button class="btn btn-primary" onclick="loadSessionsData()">
+                            <i class="fas fa-filter"></i> Apply Filter
+                        </button>
+                        <button class="btn" onclick="clearSessionsFilter()" style="background: #e5e7eb;">
+                            Clear
+                        </button>
+                    </div>
+                    <div id="sessionsContent">
+                        {% if users %}
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Session ID</th>
+                                        <th>First Message</th>
+                                        <th>Conversations</th>
+                                        <th>Recommendations</th>
+                                        <th class="action-header">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for session_id, data in users.items() %}
+                                    <tr>
+                                        <td><strong>{{ data.display_name }}</strong></td>
+                                        <td><code style="font-size: 0.85rem;">{{ session_id[:20] }}...</code></td>
+                                        <td>{{ data.login_time }}</td>
+                                        <td>{{ data.conversation_count }}</td>
+                                        <td>{{ data.total_recommendations }}</td>
+                                        <td class="action-cell">
+                                            <a href="/admin/user/{{ session_id }}" class="action-btn btn-primary">
+                                                <i class="fas fa-eye"></i>
+                                                <span>View</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <p>No sessions found in the database.</p>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
-                {% else %}
-                <div class="content-section">
-                    <div class="empty-state">
-                        <i class="fas fa-users"></i>
-                        <p>No sessions found in the database.</p>
-                    </div>
-                </div>
-                {% endif %}
             </div>
 
             <!-- Orders Page -->
@@ -543,6 +950,33 @@
                     <h1 class="page-title">User Feedback</h1>
                 </div>
                 <div class="content-section">
+                    <div class="date-filter">
+                        <label>
+                            <strong>Start Date:</strong>
+                            <input type="date" id="feedbackStartDate" class="date-input">
+                        </label>
+                        <label>
+                            <strong>End Date:</strong>
+                            <input type="date" id="feedbackEndDate" class="date-input">
+                        </label>
+                        <label>
+                            <strong>Rating:</strong>
+                            <select id="feedbackRating" class="rating-select">
+                                <option value="">All Ratings</option>
+                                <option value="5">5 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="2">2 Stars</option>
+                                <option value="1">1 Star</option>
+                            </select>
+                        </label>
+                        <button class="btn btn-primary" onclick="loadFeedbackData()">
+                            <i class="fas fa-filter"></i> Apply Filter
+                        </button>
+                        <button class="btn" onclick="clearFeedbackFilter()" style="background: #e5e7eb;">
+                            Clear
+                        </button>
+                    </div>
                     <div id="feedbackContent">
                         <div class="empty-state">
                             <i class="fas fa-spinner fa-spin"></i>
@@ -569,7 +1003,75 @@
         </div>
     </div>
 
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal" onclick="if(event.target === this) closeFeedbackModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i class="fas fa-comment-dots"></i>
+                    Feedback Details
+                </h2>
+                <button class="modal-close" onclick="closeFeedbackModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <div class="modal-section-title">
+                        <i class="fas fa-star"></i> Rating
+                    </div>
+                    <div class="modal-section-content" id="modalRating">
+                        <!-- Rating will be inserted here -->
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">
+                        <i class="fas fa-user"></i> User
+                    </div>
+                    <div class="modal-section-content" id="modalUser">
+                        <!-- User info will be inserted here -->
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">
+                        <i class="fas fa-question-circle"></i> User Query
+                    </div>
+                    <div class="modal-section-content" id="modalQuery">
+                        <!-- User query will be inserted here -->
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">
+                        <i class="fas fa-robot"></i> Bot Response
+                    </div>
+                    <div class="modal-section-content" id="modalResponse">
+                        <!-- Bot response will be inserted here -->
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <div class="modal-section-title">
+                        <i class="fas fa-calendar"></i> Date & Time
+                    </div>
+                    <div class="modal-section-content" id="modalDate">
+                        <!-- Date will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Mobile Menu Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.getElementById('mobileOverlay').addEventListener('click', toggleSidebar);
+
         // Page Navigation
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', function(e) {
@@ -585,6 +1087,11 @@
                     section.classList.remove('active');
                 });
                 document.getElementById(page).classList.add('active');
+                
+                // Close mobile menu if open
+                if (window.innerWidth <= 768) {
+                    toggleSidebar();
+                }
                 
                 // Load data for the page
                 loadPageData(page);
@@ -605,6 +1112,9 @@
                     break;
                 case 'session-times':
                     loadSessionTimesData();
+                    break;
+                case 'sessions':
+                    // Sessions data is loaded from server initially
                     break;
             }
         }
@@ -789,44 +1299,59 @@
             loadUsersData();
         }
 
-        // Load Feedback Data
-        async function loadFeedbackData() {
-            const container = document.getElementById('feedbackContent');
+        // Load Sessions Data
+        async function loadSessionsData() {
+            const container = document.getElementById('sessionsContent');
             container.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>';
             
+            const startDate = document.getElementById('sessionsStartDate').value;
+            const endDate = document.getElementById('sessionsEndDate').value;
+            
+            let url = '/analytics/sessions';
+            const params = new URLSearchParams();
+            if (startDate) params.append('start_date', startDate);
+            if (endDate) params.append('end_date', endDate);
+            if (params.toString()) url += '?' + params.toString();
+            
             try {
-                const response = await fetch('/analytics/feedback?limit=100');
+                const response = await fetch(url);
                 const data = await response.json();
                 
-                if (data.length === 0) {
-                    container.innerHTML = '<div class="empty-state"><i class="fas fa-comments"></i><p>No feedback available</p></div>';
+                if (!data.sessions || Object.keys(data.sessions).length === 0) {
+                    container.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><p>No sessions found for the selected date range.</p></div>';
                     return;
                 }
                 
                 let html = `
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: #f0f9ff; border-radius: 8px;">
+                        <strong>Total Sessions:</strong> ${data.count}
+                    </div>
                     <div class="table-container">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Rating</th>
                                     <th>User</th>
-                                    <th>User Query</th>
-                                    <th>Bot Response</th>
-                                    <th>Date</th>
+                                    <th>Session ID</th>
+                                    <th>First Message</th>
+                                    <th>Conversations</th>
+                                    <th>Recommendations</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                ${data.map(f => `
+                                ${Object.entries(data.sessions).map(([session_id, data]) => `
                                     <tr>
-                                        <td>
-                                            <span class="rating-badge rating-${f.rating}">
-                                                ${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}
-                                            </span>
+                                        <td><strong>${data.display_name}</strong></td>
+                                        <td><code style="font-size: 0.85rem;">${session_id.substring(0, 20)}...</code></td>
+                                        <td>${data.login_time}</td>
+                                        <td>${data.conversation_count}</td>
+                                        <td>${data.total_recommendations}</td>
+                                        <td class="action-cell">
+                                            <a href="/admin/user/${session_id}" class="action-btn btn-primary">
+                                                <i class="fas fa-eye"></i>
+                                                <span>View</span>
+                                            </a>
                                         </td>
-                                        <td>${f.user_name || 'Anonymous'}</td>
-                                        <td>${f.user_query ? f.user_query.substring(0, 50) + '...' : 'N/A'}</td>
-                                        <td>${f.bot_response ? f.bot_response.substring(0, 50) + '...' : 'N/A'}</td>
-                                        <td>${f.timestamp ? new Date(f.timestamp).toLocaleDateString() : 'N/A'}</td>
                                     </tr>
                                 `).join('')}
                             </tbody>
@@ -836,9 +1361,179 @@
                 
                 container.innerHTML = html;
             } catch (error) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading sessions data</p></div>';
+            }
+        }
+
+        function clearSessionsFilter() {
+            document.getElementById('sessionsStartDate').value = '';
+            document.getElementById('sessionsEndDate').value = '';
+            loadSessionsData();
+        }
+
+        // Load Feedback Data
+        async function loadFeedbackData() {
+            const container = document.getElementById('feedbackContent');
+            container.innerHTML = '<div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>';
+            
+            const startDate = document.getElementById('feedbackStartDate').value;
+            const endDate = document.getElementById('feedbackEndDate').value;
+            const rating = document.getElementById('feedbackRating').value;
+            
+            let url = '/analytics/feedback';
+            const params = new URLSearchParams();
+            params.append('limit', '200');
+            if (startDate) {
+                params.append('start_date', startDate);
+            }
+            if (endDate) {
+                params.append('end_date', endDate);
+            }
+            if (rating && rating.trim() !== '') {
+                params.append('rating', rating);
+            }
+            url += '?' + params.toString();
+            
+            console.log('Feedback filters:', { startDate, endDate, rating, url });
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><i class="fas fa-comments"></i><p>No feedback available for the selected filters.</p></div>';
+                    return;
+                }
+                
+                let html = `
+                    <div style="margin-bottom: 1rem; padding: 1rem; background: #f0f9ff; border-radius: 8px;">
+                        <strong>Total Feedback:</strong> ${data.length}
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rating</th>
+                                    <th>User</th>
+                                    <th>User Query</th>
+                                    <th>Bot Response</th>
+                                    <th>Date</th>
+                                    <th class="action-header">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${data.map((f, index) => `
+                                    <tr>
+                                        <td>
+                                            <span class="rating-badge rating-${f.rating}">
+                                                ${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}
+                                            </span>
+                                        </td>
+                                        <td>${f.user_name || 'Anonymous'}</td>
+                                        <td>${f.user_query ? (f.user_query.length > 50 ? f.user_query.substring(0, 50) + '...' : f.user_query) : 'N/A'}</td>
+                                        <td>${f.bot_response ? (f.bot_response.length > 50 ? f.bot_response.substring(0, 50) + '...' : f.bot_response) : 'N/A'}</td>
+                                        <td>${f.timestamp ? new Date(f.timestamp).toLocaleDateString() : 'N/A'}</td>
+                                        <td class="action-cell">
+                                            <button class="action-btn btn-primary" onclick='showFeedbackDetails(${index})'>
+                                                <i class="fas fa-eye"></i>
+                                                <span>View</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                container.innerHTML = html;
+                // Store feedback data globally for modal access
+                window.feedbackData = data;
+            } catch (error) {
                 container.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error loading feedback data</p></div>`;
             }
         }
+
+        function clearFeedbackFilter() {
+            document.getElementById('feedbackStartDate').value = '';
+            document.getElementById('feedbackEndDate').value = '';
+            document.getElementById('feedbackRating').value = '';
+            loadFeedbackData();
+        }
+
+        // Show Feedback Details Modal
+        function showFeedbackDetails(index) {
+            const modal = document.getElementById('feedbackModal');
+            const modalRating = document.getElementById('modalRating');
+            const modalUser = document.getElementById('modalUser');
+            const modalQuery = document.getElementById('modalQuery');
+            const modalResponse = document.getElementById('modalResponse');
+            const modalDate = document.getElementById('modalDate');
+            
+            // Get feedback from stored data
+            const feedback = window.feedbackData && window.feedbackData[index];
+            
+            if (!feedback) {
+                alert('Error loading feedback details');
+                return;
+            }
+            
+            // Set rating
+            const stars = '★'.repeat(feedback.rating) + '☆'.repeat(5 - feedback.rating);
+            modalRating.innerHTML = `
+                <div style="font-size: 1.5rem; color: #F9B231; margin-bottom: 0.5rem;">${stars}</div>
+                <div><strong>Rating:</strong> ${feedback.rating}/5</div>
+            `;
+            
+            // Set user
+            modalUser.innerHTML = feedback.user_name || 'Anonymous';
+            
+            // Set query - preserve line breaks and escape HTML
+            const userQuery = (feedback.user_query || 'N/A')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+            modalQuery.innerHTML = userQuery;
+            
+            // Set response - preserve line breaks and escape HTML
+            const botResponse = (feedback.bot_response || 'N/A')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+            modalResponse.innerHTML = botResponse;
+            
+            // Set date
+            if (feedback.timestamp) {
+                const date = new Date(feedback.timestamp);
+                modalDate.innerHTML = `
+                    <div><strong>Date:</strong> ${date.toLocaleDateString()}</div>
+                    <div style="margin-top: 0.5rem;"><strong>Time:</strong> ${date.toLocaleTimeString()}</div>
+                `;
+            } else {
+                modalDate.innerHTML = 'N/A';
+            }
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close Feedback Modal
+        function closeFeedbackModal() {
+            const modal = document.getElementById('feedbackModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeFeedbackModal();
+            }
+        });
 
         // Load Session Times Data
         async function loadSessionTimesData() {
