@@ -1548,16 +1548,20 @@ class DatabaseService:
             # Get sessions grouped by time ranges
             cursor.execute("""
                 SELECT 
-                    CASE
-                        WHEN total_time_seconds < 60 THEN '0-1 min'
-                        WHEN total_time_seconds < 300 THEN '1-5 min'
-                        WHEN total_time_seconds < 600 THEN '5-10 min'
-                        WHEN total_time_seconds < 1800 THEN '10-30 min'
-                        ELSE '30+ min'
-                    END as time_range,
+                    time_range,
                     COUNT(*) as session_count
-                FROM chatbot_sessions
-                WHERE total_time_seconds IS NOT NULL
+                FROM (
+                    SELECT 
+                        CASE
+                            WHEN total_time_seconds < 60 THEN '0-1 min'
+                            WHEN total_time_seconds < 300 THEN '1-5 min'
+                            WHEN total_time_seconds < 600 THEN '5-10 min'
+                            WHEN total_time_seconds < 1800 THEN '10-30 min'
+                            ELSE '30+ min'
+                        END as time_range
+                    FROM chatbot_sessions
+                    WHERE total_time_seconds IS NOT NULL
+                ) as time_ranges
                 GROUP BY time_range
                 ORDER BY 
                     CASE time_range
