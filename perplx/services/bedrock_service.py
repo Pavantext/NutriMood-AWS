@@ -4,6 +4,7 @@ Bedrock Service - Handles AWS Bedrock LLM interactions with streaming support
 
 import boto3
 import json
+import os
 from typing import List, Dict, AsyncGenerator
 import asyncio
 from botocore.exceptions import ClientError
@@ -327,11 +328,15 @@ Shorter + Funnier + Helpful = Perfect NutriMood!"""
         user_query: str,
         conversation_history: List[Dict],
         food_context: str,
-        session_preferences: Dict
+        session_preferences: Dict,
+        debug: bool = False
     ) -> AsyncGenerator[str, None]:
         """
         Generate streaming response from AWS Bedrock
         Yields text chunks as they arrive
+        
+        Args:
+            debug: If True, prints the exact data sent to LLM (for debugging)
         """
         try:
             # Build the complete prompt
@@ -343,6 +348,19 @@ Shorter + Funnier + Helpful = Perfect NutriMood!"""
             )
             
             system_prompt = self._build_system_prompt()
+            
+            # Debug: Print what's being sent to LLM
+            if debug or os.getenv("DEBUG_LLM_PROMPTS", "false").lower() == "true":
+                print("\n" + "=" * 80)
+                print("🔍 DEBUG: LLM INPUT DATA")
+                print("=" * 80)
+                print("\n📋 SYSTEM PROMPT (first 500 chars):")
+                print(system_prompt[:500] + "..." if len(system_prompt) > 500 else system_prompt)
+                print("\n📝 USER PROMPT:")
+                print(prompt)
+                print("\n" + "=" * 80)
+                print("END DEBUG OUTPUT")
+                print("=" * 80 + "\n")
             
             # Prepare request body for Claude
             request_body = {

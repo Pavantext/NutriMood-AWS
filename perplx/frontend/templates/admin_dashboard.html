@@ -859,7 +859,14 @@
                     </div>
                     <div class="stat-card info">
                         <div class="stat-label">Avg Session Duration</div>
-                        <div class="stat-value">{{ "%.0f"|format(chatbot_analytics.average_session_duration) }}s</div>
+                        <div class="stat-value">
+                            {% if chatbot_analytics.average_session_duration > 0 %}
+                                {% set minutes = (chatbot_analytics.average_session_duration / 60) %}
+                                {{ "%.1f"|format(minutes) }} min
+                            {% else %}
+                                0 min
+                            {% endif %}
+                        </div>
                         <div class="stat-change">per session</div>
                     </div>
                     <div class="stat-card warning">
@@ -1241,19 +1248,12 @@
                 let html = `
                     <div class="stats-grid">
                         <div class="stat-card primary">
-                            <div class="stat-label">Total Orders</div>
+                            <div class="stat-label">Total Verified Orders</div>
                             <div class="stat-value">${data.total_orders || 0}</div>
-                            <div class="stat-change">${data.total_items_ordered || 0} items</div>
                         </div>
                         <div class="stat-card info">
-                            <div class="stat-label">Added to Cart</div>
+                            <div class="stat-label">Total Added to Cart Items</div>
                             <div class="stat-value">${data.total_added_to_cart || 0}</div>
-                            <div class="stat-change">${data.total_items_in_cart || 0} items</div>
-                        </div>
-                        <div class="stat-card success">
-                            <div class="stat-label">Conversion Rate</div>
-                            <div class="stat-value">${data.conversion_rate || 0}%</div>
-                            <div class="stat-change">cart to order</div>
                         </div>
                     </div>
                     <div class="chart-container">
