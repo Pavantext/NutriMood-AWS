@@ -1,8 +1,3 @@
-"""
-Nutrimood Chatbot - Main Application
-A food recommendation chatbot using AWS Bedrock and MCP
-"""
-
 from fastapi import FastAPI, HTTPException, Request, Form, status
 from fastapi.responses import StreamingResponse, RedirectResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,7 +5,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from pydantic import BaseModel
+from interfaces.base_models import ChatRequest, RecommendRequest, TrackSessionRequest, TrackFoodOrderRequest, ChatbotRatingRequest
 from typing import Optional, List, Dict
 from contextlib import asynccontextmanager
 import uvicorn
@@ -131,23 +126,6 @@ database_service = DatabaseService()  # AWS RDS PostgreSQL
 response_formatter = ResponseFormatter()
 mcp_server = None  # Will be initialized after food data is loaded
 
-# Request/Response Models
-class ChatRequest(BaseModel):
-    message: str
-    session_id: Optional[str] = None
-    user_preferences: Optional[Dict] = None
-    user_name: Optional[str] = None  # User's name for personalized responses
-    user_id: Optional[str] = None  # User ID for database tracking
-
-class ChatResponse(BaseModel):
-    message: str
-    session_id: str
-    food_recommendation_id: str
-
-class RecommendRequest(BaseModel):
-    query: str
-    top_k: int = 5
-    filters: Optional[Dict] = None
 
 def _is_followup_question(query: str, conversation_history: List[Dict]) -> bool:
     """
@@ -585,6 +563,270 @@ async def get_feedback_statistics(user_id: Optional[str] = None):
     
     return stats
 
+
+@app.post("/chat/track-session")
+async def track_session(request: TrackSessionRequest):
+    """
+    Track chatbot session time
+    Called when chat window opens (start_time) and closes (end_time)
+    """
+    try:
+        # Parse timestamps - handle ISO 8601 format
+        start_time_str = request.start_time.replace('Z', '+00:00') if request.start_time.endswith('Z') else request.start_time
+        start_time = datetime.fromisoformat(start_time_str)
+        
+        end_time = None
+        if request.end_time:
+            end_time_str = request.end_time.replace('Z', '+00:00') if request.end_time.endswith('Z') else request.end_time
+            end_time = datetime.fromisoformat(end_time_str)
+        
+        # Convert to UTC if timezone-aware, otherwise assume UTC
+        if start_time.tzinfo is not None:
+            start_time = start_time.astimezone().replace(tzinfo=None)
+        
+        if end_time and end_time.tzinfo is not None:
+            end_time = end_time.astimezone().replace(tzinfo=None)
+        
+        success = database_service.track_chatbot_session(
+            session_id=request.session_id,
+            start_time=start_time,
+            end_time=end_time,
+            total_time_seconds=request.total_time_seconds,
+            user_name=request.user_name
+        )
+        
+        if success:
+            return {"status": "success", "message": "Session tracked successfully"}
+        else:
+            return {"status": "error", "message": "Failed to track session"}
+            
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid timestamp format: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error tracking session: {str(e)}")
+
+@app.post("/chat/track-food-order")
+async def track_food_order(request: TrackFoodOrderRequest):
+    """
+    Track food orders from chatbot
+    Called when items are added to cart or orders are placed
+    """
+    try:
+        # Validate event_type
+        if request.event_type not in ['added_to_cart', 'order_placed']:
+            raise HTTPException(
+                status_code=400, 
+                detail="event_type must be either 'added_to_cart' or 'order_placed'"
+            )
+        
+        # Parse timestamp - handle ISO 8601 format
+        timestamp_str = request.timestamp.replace('Z', '+00:00') if request.timestamp.endswith('Z') else request.timestamp
+        timestamp = datetime.fromisoformat(timestamp_str)
+        if timestamp.tzinfo is not None:
+            timestamp = timestamp.astimezone().replace(tzinfo=None)
+        
+        success = database_service.track_food_order(
+            session_id=request.session_id,
+            product_id=request.product_id,
+            product_name=request.product_name,
+            timestamp=timestamp,
+            event_type=request.event_type,
+            user_name=request.user_name,
+            order_id=request.order_id,
+            quantity=request.quantity
+        )
+        
+        if success:
+            return {"status": "success", "message": "Food order tracked successfully"}
+        else:
+            return {"status": "error", "message": "Failed to track food order"}
+            
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid timestamp format: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error tracking food order: {str(e)}")
+
+@app.post("/chat/rating")
+async def submit_chatbot_rating(request: ChatbotRatingRequest):
+    """
+    Submit chatbot rating/feedback
+    Called when user clicks on a star rating (1-5 stars)
+    Tracks which specific bot message was rated using message_id
+    """
+    try:
+        # Validate rating
+        if request.rating < 1 or request.rating > 5:
+            raise HTTPException(
+                status_code=400,
+                detail="Rating must be between 1 and 5"
+            )
+        
+        # Parse timestamp - handle ISO 8601 format
+        timestamp_str = request.timestamp.replace('Z', '+00:00') if request.timestamp.endswith('Z') else request.timestamp
+        timestamp = datetime.fromisoformat(timestamp_str)
+        if timestamp.tzinfo is not None:
+            timestamp = timestamp.astimezone().replace(tzinfo=None)
+        
+        success = database_service.track_chatbot_rating(
+            session_id=request.session_id,
+            rating=request.rating,
+            timestamp=timestamp,
+            message_id=request.message_id,
+            user_name=request.user_name
+        )
+        
+        if success:
+            return {"status": "success", "message": "Rating submitted successfully"}
+        else:
+            raise HTTPException(status_code=500, detail="Failed to submit rating")
+            
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid timestamp format: {str(e)}")
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error submitting rating: {str(e)}")
+
+@app.get("/analytics/chatbot/stats")
+async def get_chatbot_analytics():
+    """
+    Get comprehensive chatbot analytics for admin dashboard
+    """
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    analytics = database_service.get_chatbot_analytics()
+    return analytics
+
+@app.get("/analytics/orders")
+async def get_orders_analytics():
+    """Get orders analytics (added to cart vs placed)"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    analytics = database_service.get_orders_analytics()
+    return analytics
+
+@app.get("/analytics/users")
+async def get_users_analytics(start_date: Optional[str] = None, end_date: Optional[str] = None):
+    """Get users analytics with optional date range filter"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    start_dt = None
+    end_dt = None
+    if start_date:
+        try:
+            start_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+            if start_dt.tzinfo:
+                start_dt = start_dt.astimezone().replace(tzinfo=None)
+        except:
+            pass
+    if end_date:
+        try:
+            end_dt = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+            if end_dt.tzinfo:
+                end_dt = end_dt.astimezone().replace(tzinfo=None)
+        except:
+            pass
+    
+    analytics = database_service.get_users_analytics(start_dt, end_dt)
+    return analytics
+
+@app.get("/analytics/feedback")
+async def get_feedback_analytics(
+    limit: int = 50,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    rating: Optional[str] = None
+):
+    """Get feedback with user queries and responses, with optional date and rating filters"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    print(f"🔍 Received feedback request - start_date: {start_date}, end_date: {end_date}, rating: {rating}")
+    
+    start_dt = None
+    end_dt = None
+    if start_date:
+        try:
+            # Handle YYYY-MM-DD format from HTML date inputs
+            if len(start_date) == 10:  # YYYY-MM-DD format
+                start_dt = datetime.strptime(start_date, '%Y-%m-%d')
+            else:
+                # Handle ISO format with time
+                start_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+                if start_dt.tzinfo:
+                    start_dt = start_dt.astimezone().replace(tzinfo=None)
+        except Exception as e:
+            print(f"Error parsing start_date: {e}")
+            pass
+    if end_date:
+        try:
+            # Handle YYYY-MM-DD format from HTML date inputs
+            if len(end_date) == 10:  # YYYY-MM-DD format
+                # Add time to end of day for inclusive end date filtering
+                end_dt = datetime.strptime(end_date, '%Y-%m-%d')
+                end_dt = end_dt.replace(hour=23, minute=59, second=59)
+            else:
+                # Handle ISO format with time
+                end_dt = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+                if end_dt.tzinfo:
+                    end_dt = end_dt.astimezone().replace(tzinfo=None)
+        except Exception as e:
+            print(f"Error parsing end_date: {e}")
+            pass
+    
+    # Validate and convert rating
+    rating_int = None
+    if rating and rating.strip():
+        try:
+            rating_int = int(rating.strip())
+            if rating_int < 1 or rating_int > 5:
+                rating_int = None
+        except (ValueError, AttributeError):
+            rating_int = None
+    
+    print(f"🔍 Parsed filters - start_dt: {start_dt}, end_dt: {end_dt}, rating_int: {rating_int}")
+    
+    feedback = database_service.get_feedback_with_conversations(limit, start_dt, end_dt, rating_int)
+    return feedback
+
+@app.get("/analytics/session-times")
+async def get_session_times_analytics():
+    """Get session time analytics per user"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    analytics = database_service.get_session_times_analytics()
+    return analytics
+
+@app.get("/analytics/sessions")
+async def get_sessions_analytics(start_date: Optional[str] = None, end_date: Optional[str] = None):
+    """Get user sessions with optional date range filter"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    start_dt = None
+    end_dt = None
+    if start_date:
+        try:
+            start_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+            if start_dt.tzinfo:
+                start_dt = start_dt.astimezone().replace(tzinfo=None)
+        except:
+            pass
+    if end_date:
+        try:
+            end_dt = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+            if end_dt.tzinfo:
+                end_dt = end_dt.astimezone().replace(tzinfo=None)
+        except:
+            pass
+    
+    sessions = database_service.get_all_users_filtered(start_dt, end_dt)
+    return {"sessions": sessions, "count": len(sessions)}
+
 # Admin Endpoints
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
@@ -640,14 +882,17 @@ async def admin_dashboard(request: Request):
         return templates.TemplateResponse("admin_dashboard.html", {
             "request": request,
             "users": {},
+            "chatbot_analytics": {},
             "error": "Database not configured"
         })
     
     users = database_service.get_all_users()
+    chatbot_analytics = database_service.get_chatbot_analytics()
     
     return templates.TemplateResponse("admin_dashboard.html", {
         "request": request,
-        "users": users
+        "users": users,
+        "chatbot_analytics": chatbot_analytics
     })
 
 @app.get("/admin/user/{session_id}", response_class=HTMLResponse)
