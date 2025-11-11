@@ -77,8 +77,11 @@ class SessionService:
         """Add recommended food IDs to session"""
         session = self.get_or_create_session(session_id)
         
+        # Filter out None, empty strings, and invalid IDs
+        valid_ids = [str(fid).strip() for fid in food_ids if fid and str(fid).strip()]
+        
         recommendation_entry = {
-            "food_ids": food_ids,
+            "food_ids": valid_ids,
             "timestamp": datetime.now().isoformat()
         }
         

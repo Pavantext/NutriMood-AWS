@@ -53,11 +53,12 @@ class FoodService:
             with open(file_path, 'r', encoding='utf-8') as f:
                 self.food_items = json.load(f)
             
-            # Create index for quick lookups
-            self.food_index = {
-                item.get('Id'): item 
-                for item in self.food_items
-            }
+            # Create index for quick lookups (handle both 'Id' and 'id' formats)
+            self.food_index = {}
+            for item in self.food_items:
+                food_id = item.get('Id') or item.get('id')
+                if food_id and str(food_id).strip():
+                    self.food_index[str(food_id).strip()] = item
             
             print(f"✅ Loaded {len(self.food_items)} food items")
             
@@ -455,8 +456,9 @@ class FoodService:
         id_reference = []
         
         for idx, (food, score) in enumerate(food_matches, 1):
-            food_id = food.get('Id')
-            name = food.get('ProductName', 'Unknown')
+            # Try both 'Id' and 'id' to handle different formats
+            food_id = food.get('Id') or food.get('id')
+            name = food.get('ProductName', '') or food.get('name', 'Unknown')
             description = food.get('Description', '')
             category = food.get('KioskCategoryName', 'N/A')
             calories = food.get('calories', 'N/A')
@@ -488,7 +490,9 @@ class FoodService:
             context_parts.append(food_context)
             
             # Keep ID reference separate (for internal tracking only)
-            id_reference.append(f"[{name} = {food_id}]")
+            # Only add if food_id is valid
+            if food_id and str(food_id).strip():
+                id_reference.append(f"[{name} = {food_id}]")
         
         # Build final context with ID reference at the end (hidden from main view)
         main_context = "\n\n".join(context_parts)
@@ -538,30 +542,58 @@ class FoodService:
         # Clean response for better matching
         response_clean = response_lower.replace('!', ' ').replace('?', ' ').replace('.', ' ').replace(',', ' ')
         
+        # Create synonym mapping for common variations
+        synonyms = {
+            'veggies': 'vegetables',
+            'veggie': 'vegetables',
+            'fries': 'fry',
+            'burger': 'burger',
+            'pizza': 'pizza'
+        }
+        
+        # First pass: Try exact matches from food_matches
         for food, _ in food_matches:
-            food_id = food.get('Id')
-            food_name = food.get('ProductName', '')
+            # Try both 'Id' and 'id' to handle different formats
+            food_id = food.get('Id') or food.get('id')
+            food_name = food.get('ProductName', '') or food.get('name', '')
             
-            if not food_name or not food_id:
+            # Skip if missing essential data
+            if not food_name or not food_id or not str(food_id).strip():
                 continue
             
             food_name_lower = food_name.lower()
             
             # Method 1: Exact full name match
             if food_name_lower in response_lower:
-                if food_id not in mentioned_ids:
-                    mentioned_ids.append(food_id)
-                    print(f"   ✓ Matched '{food_name}' (exact)")
+                food_id_str = str(food_id).strip()
+                if food_id_str and food_id_str not in mentioned_ids:
+                    mentioned_ids.append(food_id_str)
+                    print(f"   ✓ Matched '{food_name}' (exact) -> ID: {food_id_str}")
                 continue
             
             # Method 2: Remove parentheses and special chars, then match
             # E.g., "Jalapeno Cheese Poppers (6.Pcs)" → "Jalapeno Cheese Poppers"
             clean_name = food_name_lower.split('(')[0].strip()
             if clean_name and clean_name in response_lower:
-                if food_id not in mentioned_ids:
-                    mentioned_ids.append(food_id)
-                    print(f"   ✓ Matched '{food_name}' (cleaned)")
+                food_id_str = str(food_id).strip()
+                if food_id_str and food_id_str not in mentioned_ids:
+                    mentioned_ids.append(food_id_str)
+                    print(f"   ✓ Matched '{food_name}' (cleaned) -> ID: {food_id_str}")
                 continue
+            
+            # Method 2b: Try with synonyms (e.g., "veggies" → "vegetables")
+            # Check if response contains synonym and food name contains replacement
+            for synonym, replacement in synonyms.items():
+                if synonym in response_lower and replacement in clean_name:
+                    # For better accuracy, check if other words from food name also appear
+                    # E.g., "Sauteed Veggies" should match "Sauteed Vegetables"
+                    other_words = [w for w in clean_name.split() if w != replacement and len(w) > 3]
+                    if not other_words or any(w in response_lower for w in other_words):
+                        food_id_str = str(food_id).strip()
+                        if food_id_str and food_id_str not in mentioned_ids:
+                            mentioned_ids.append(food_id_str)
+                            print(f"   ✓ Matched '{food_name}' (synonym: {synonym}→{replacement}) -> ID: {food_id_str}")
+                            break
             
             # Method 3: Check significant word combinations
             # For names like "Peri Peri Fries", check if "peri" AND "fries" appear
@@ -570,22 +602,54 @@ class FoodService:
             if len(name_words) >= 2:
                 # Check if multiple words appear
                 words_found = [w for w in name_words if w in response_clean]
+                # Also check synonyms
+                for synonym, replacement in synonyms.items():
+                    if synonym in response_clean and replacement in name_words:
+                        words_found.append(replacement)
                 if len(words_found) >= 2:
-                    if food_id not in mentioned_ids:
-                        mentioned_ids.append(food_id)
-                        print(f"   ✓ Matched '{food_name}' (multi-word)")
+                    food_id_str = str(food_id).strip()
+                    if food_id_str and food_id_str not in mentioned_ids:
+                        mentioned_ids.append(food_id_str)
+                        print(f"   ✓ Matched '{food_name}' (multi-word) -> ID: {food_id_str}")
+                    continue
+        
+        # Second pass: If LLM mentioned foods not in food_matches, search entire database
+        # Extract potential food mentions from response
+        response_words = set(response_clean.split())
+        
+        # Look for food names that might have been mentioned but weren't in food_matches
+        for food in self.food_items:
+            food_id = food.get('Id') or food.get('id')
+            food_name = food.get('ProductName', '') or food.get('name', '')
+            
+            if not food_name or not food_id or str(food_id).strip() in mentioned_ids:
+                continue
+            
+            food_name_lower = food_name.lower()
+            clean_name = food_name_lower.split('(')[0].strip()
+            
+            # Check if this food was mentioned but not in food_matches
+            # Only do exact/cleaned name matches to avoid false positives
+            if clean_name in response_lower or food_name_lower in response_lower:
+                food_id_str = str(food_id).strip()
+                if food_id_str and food_id_str not in mentioned_ids:
+                    mentioned_ids.append(food_id_str)
+                    print(f"   ✓ Matched '{food_name}' (database search) -> ID: {food_id_str}")
                     continue
             
-            # Method 4: Check for unique/distinctive words
-            # For single distinctive words in the name
-            if len(name_words) >= 1:
-                # Check for the most distinctive word (usually the first or longest)
-                distinctive_word = max(name_words, key=len) if name_words else None
-                if distinctive_word and len(distinctive_word) > 4:
-                    if distinctive_word in response_clean:
-                        if food_id not in mentioned_ids:
-                            mentioned_ids.append(food_id)
-                            print(f"   ✓ Matched '{food_name}' (keyword: {distinctive_word})")
+            # Try synonym matching for database search
+            for synonym, replacement in synonyms.items():
+                if synonym in response_lower:
+                    # Check if food name contains the replacement
+                    if replacement in clean_name:
+                        # For better accuracy, check if other words from food name also appear
+                        other_words = [w for w in clean_name.split() if w != replacement and len(w) > 3]
+                        if not other_words or any(w in response_lower for w in other_words):
+                            food_id_str = str(food_id).strip()
+                            if food_id_str and food_id_str not in mentioned_ids:
+                                mentioned_ids.append(food_id_str)
+                                print(f"   ✓ Matched '{food_name}' (synonym search: {synonym}→{replacement}) -> ID: {food_id_str}")
+                                break
         
         if not mentioned_ids:
             print(f"   ⚠️  No food IDs extracted from response")
@@ -604,14 +668,24 @@ class FoodService:
         Returns:
             Food item dictionary or None
         """
+        if not food_id or not str(food_id).strip():
+            return None
+        
         # Try Pinecone first if available
         if self.use_vector_search:
-            food = self.pinecone_service.get_food_by_id(food_id)
+            food = self.pinecone_service.get_food_by_id(str(food_id).strip())
             if food:
                 return food
         
-        # Fallback to local index
-        return self.food_index.get(food_id)
+        # Fallback to local index (try both 'Id' and 'id' keys)
+        food_id_str = str(food_id).strip()
+        food = self.food_index.get(food_id_str)
+        if not food:
+            # Try finding by iterating if direct lookup fails
+            for item in self.food_items:
+                if str(item.get('Id', '')).strip() == food_id_str or str(item.get('id', '')).strip() == food_id_str:
+                    return item
+        return food
     
     def get_all_foods(
         self,
