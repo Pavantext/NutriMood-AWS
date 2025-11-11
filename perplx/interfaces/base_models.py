@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 # Request/Response Models
 class ChatRequest(BaseModel):
@@ -43,4 +43,28 @@ class ChatbotRatingRequest(BaseModel):
     rating: int  # 1-5
     timestamp: str  # ISO 8601 timestamp
     user_name: Optional[str] = None
+
+# Menu Item Ingestion (Bill of Materials)
+class MenuItemRequest(BaseModel):
+    """Request model for ingesting a menu item (Bill of Materials)"""
+    id: str  # Unique identifier for the menu item
+    product_name: str  # Name of the product
+    description: Optional[str] = ""  # Product description
+    category_name: Optional[str] = ""  # Category name
+    sub_category: Optional[str] = ""  # Sub-category name
+    calories: Optional[int] = 0  # Calories
+    price: Optional[float] = 0.0  # Price
+    image_url: Optional[str] = ""  # Image URL
+    gst: Optional[float] = 5.0  # GST percentage
+    is_popular: Optional[bool] = False  # Whether item is popular
+    ingredients: Optional[List[str]] = []  # List of ingredients
+    dietary: Optional[List[str]] = []  # Dietary information (e.g., ["vegetarian", "vegan"])
+    macronutrients: Optional[Dict[str, str]] = {}  # Macronutrients dict with keys like "protein", "carbohydrates", "fat", "fiber"
+
+class MenuItemIngestResponse(BaseModel):
+    """Response model for menu item ingestion"""
+    status: str  # "success" or "error"
+    message: str
+    item_id: Optional[str] = None
+    total_items: Optional[int] = None  # For batch ingestion
 

@@ -5,7 +5,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from interfaces.base_models import ChatRequest, RecommendRequest, TrackSessionRequest, TrackFoodOrderRequest, ChatbotRatingRequest
+from interfaces.base_models import ChatRequest, RecommendRequest, TrackSessionRequest, TrackFoodOrderRequest, ChatbotRatingRequest, MenuItemRequest, MenuItemIngestResponse
 from typing import Optional, List, Dict
 from contextlib import asynccontextmanager
 import uvicorn
@@ -246,10 +246,9 @@ async def chat(request: ChatRequest):
                 food_matches
             )
 
-            # Fallback if LLM invents something
+            # If no food IDs extracted, don't show any food items to frontend
             if not recommended_ids:
-                print("⚠️ No valid food matches found in LLM response, falling back to top matches.")
-                recommended_ids = [food[0].get("Id") for food in food_matches[:2]]
+                print("⚠️ No valid food matches found in LLM response. Not showing any food items.")
             
             # Save assistant response to session
             session_service.add_message(session_id, "assistant", full_response)
@@ -416,6 +415,276 @@ async def list_foods(
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error listing foods: {str(e)}")
+
+@app.post("/menu/ingest", response_model=MenuItemIngestResponse)
+async def ingest_menu_item(request: MenuItemRequest):
+    """
+    Ingest a new menu item (Bill of Materials) and store it in Pinecone BOM index
+    
+    This endpoint allows users to upload their menu items which will be:
+    1. Converted to embeddings using AWS Titan
+    2. Stored in a separate Pinecone BOM index (for user-uploaded items)
+    3. Made available for semantic search
+    
+    Note: User-uploaded BOM items are stored in a separate Pinecone index to keep them
+    isolated from the original menu items.
+    
+    **Request Body:**
+    ```json
+    {
+      "id": "menu-item-001",
+      "product_name": "Chicken Biryani",
+      "description": "Fragrant basmati rice cooked with tender chicken pieces",
+      "category_name": "Main Course",
+      "sub_category": "Rice Dishes",
+      "calories": 450,
+      "price": 250.0,
+      "image_url": "https://example.com/biryani.jpg",
+      "gst": 5.0,
+      "is_popular": true,
+      "ingredients": ["chicken", "basmati rice", "spices", "yogurt"],
+      "dietary": ["non-vegetarian"],
+      "macronutrients": {
+        "protein": "25g",
+        "carbohydrates": "45g",
+        "fat": "15g",
+        "fiber": "3g"
+      }
+    }
+    ```
+    
+    **Response:**
+    ```json
+    {
+      "status": "success",
+      "message": "Menu item successfully ingested and stored in Pinecone",
+      "item_id": "menu-item-001"
+    }
+    ```
+    """
+    try:
+        # Check if Pinecone and embedding services are available
+        if not food_service.use_vector_search:
+            raise HTTPException(
+                status_code=503,
+                detail="Vector search not available. Please configure Pinecone and AWS Titan embeddings."
+            )
+        
+        # Build embedding text for the menu item
+        embedding_parts = [
+            f"Food: {request.product_name}",
+            f"Description: {request.description}",
+            f"Category: {request.category_name}",
+            f"Calories: {request.calories}, Protein: {request.macronutrients.get('protein', '0g')}",
+            f"macronutrients: {request.macronutrients}",
+            f"Ingredients: {', '.join(request.ingredients)}" if request.ingredients else "",
+            f"Dietary: {', '.join(request.dietary)}" if request.dietary else ""
+        ]
+        embedding_text = '. '.join(filter(None, embedding_parts))
+        
+        # Generate embedding using AWS Titan
+        embedding = food_service.embedding_service.generate_embedding(embedding_text)
+        
+        if not embedding:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to generate embedding for menu item"
+            )
+        
+        # Prepare food data dictionary
+        food_data = {
+            'id': request.id,
+            'product_name': request.product_name,
+            'description': request.description,
+            'category_name': request.category_name,
+            'sub_category': request.sub_category,
+            'calories': request.calories,
+            'price': request.price,
+            'image_url': request.image_url,
+            'gst': request.gst,
+            'is_popular': request.is_popular,
+            'ingredients': request.ingredients,
+            'dietary': request.dietary,
+            'macronutrients': request.macronutrients
+        }
+        
+        # Upsert to Pinecone BOM index (separate index for user-uploaded items)
+        success = food_service.pinecone_service.upsert_food_item(
+            food_id=request.id,
+            embedding=embedding,
+            food_data=food_data,
+            use_bom_index=True  # Use BOM index for user-uploaded items
+        )
+        
+        if not success:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to store menu item in Pinecone BOM index"
+            )
+        
+        return MenuItemIngestResponse(
+            status="success",
+            message="Menu item successfully ingested and stored in Pinecone BOM index",
+            item_id=request.id
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error ingesting menu item: {str(e)}")
+
+@app.post("/menu/ingest/batch", response_model=MenuItemIngestResponse)
+async def ingest_menu_items_batch(requests: List[MenuItemRequest]):
+    """
+    Ingest multiple menu items (Bill of Materials) in batch and store them in Pinecone BOM index
+    
+    This endpoint allows users to upload multiple menu items at once.
+    All items will be converted to embeddings and stored in the separate Pinecone BOM index.
+    
+    **Request Body:**
+    ```json
+    [
+      {
+        "id": "menu-item-001",
+        "product_name": "Chicken Biryani",
+        ...
+      },
+      {
+        "id": "menu-item-002",
+        "product_name": "Vegetable Curry",
+        ...
+      }
+    ]
+    ```
+    
+    **Response:**
+    ```json
+    {
+      "status": "success",
+      "message": "Successfully ingested 2 menu items",
+      "total_items": 2
+    }
+    ```
+    """
+    try:
+        # Check if Pinecone and embedding services are available
+        if not food_service.use_vector_search:
+            raise HTTPException(
+                status_code=503,
+                detail="Vector search not available. Please configure Pinecone and AWS Titan embeddings."
+            )
+        
+        success_count = 0
+        failed_items = []
+        
+        for request in requests:
+            try:
+                # Build embedding text for the menu item
+                embedding_parts = [
+                    f"Food: {request.product_name}",
+                    f"Description: {request.description}",
+                    f"Category: {request.category_name}",
+                    f"Calories: {request.calories}, Protein: {request.macronutrients.get('protein', '0g')}",
+                    f"macronutrients: {request.macronutrients}",
+                    f"Ingredients: {', '.join(request.ingredients)}" if request.ingredients else "",
+                    f"Dietary: {', '.join(request.dietary)}" if request.dietary else ""
+                ]
+                embedding_text = '. '.join(filter(None, embedding_parts))
+                
+                # Generate embedding using AWS Titan
+                embedding = food_service.embedding_service.generate_embedding(embedding_text)
+                
+                if not embedding:
+                    failed_items.append(request.id)
+                    continue
+                
+                # Prepare food data dictionary
+                food_data = {
+                    'id': request.id,
+                    'product_name': request.product_name,
+                    'description': request.description,
+                    'category_name': request.category_name,
+                    'sub_category': request.sub_category,
+                    'calories': request.calories,
+                    'price': request.price,
+                    'image_url': request.image_url,
+                    'gst': request.gst,
+                    'is_popular': request.is_popular,
+                    'ingredients': request.ingredients,
+                    'dietary': request.dietary,
+                    'macronutrients': request.macronutrients
+                }
+                
+                # Upsert to Pinecone BOM index (separate index for user-uploaded items)
+                success = food_service.pinecone_service.upsert_food_item(
+                    food_id=request.id,
+                    embedding=embedding,
+                    food_data=food_data,
+                    use_bom_index=True  # Use BOM index for user-uploaded items
+                )
+                
+                if success:
+                    success_count += 1
+                else:
+                    failed_items.append(request.id)
+                    
+            except Exception as e:
+                print(f"❌ Error processing menu item {request.id}: {e}")
+                failed_items.append(request.id)
+        
+        if success_count == 0:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to ingest all menu items. Failed items: {', '.join(failed_items)}"
+            )
+        
+        message = f"Successfully ingested {success_count} menu item(s) to BOM index"
+        if failed_items:
+            message += f". Failed items: {', '.join(failed_items)}"
+        
+        return MenuItemIngestResponse(
+            status="success" if len(failed_items) == 0 else "partial",
+            message=message,
+            total_items=success_count
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error ingesting menu items: {str(e)}")
+
+@app.get("/menu/bom/stats")
+async def get_bom_index_stats():
+    """
+    Get statistics for the BOM (Bill of Materials) Pinecone index
+    
+    Returns information about the separate index used for user-uploaded menu items.
+    
+    **Response:**
+    ```json
+    {
+      "index_name": "niloufer-bom",
+      "total_vectors": 150,
+      "dimension": 1024,
+      "namespaces": {}
+    }
+    ```
+    """
+    try:
+        stats = food_service.pinecone_service.get_bom_index_stats()
+        
+        if "error" in stats:
+            raise HTTPException(
+                status_code=503,
+                detail=f"BOM index not available: {stats['error']}"
+            )
+        
+        return stats
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error getting BOM index stats: {str(e)}")
 
 # MCP Endpoints
 @app.get("/mcp/info")
