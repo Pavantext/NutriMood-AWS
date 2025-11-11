@@ -1660,14 +1660,9 @@
                 let html = `
                     <div class="stats-grid">
                         <div class="stat-card primary">
-                            <div class="stat-label">Average Session Time</div>
-                            <div class="stat-value">${Math.round((data.average_time || 0) / 60)}m ${Math.round((data.average_time || 0) % 60)}s</div>
-                            <div class="stat-change">${data.completed_sessions || 0} sessions</div>
-                        </div>
-                        <div class="stat-card info">
                             <div class="stat-label">Total Time</div>
-                            <div class="stat-value">${Math.round((data.total_time || 0) / 3600)}h</div>
-                            <div class="stat-change">${Math.round(((data.total_time || 0) % 3600) / 60)}m</div>
+                            <div class="stat-value">${Math.round((data.total_time || 0) / 60)}m</div>
+                            <div class="stat-change">${data.completed_sessions || 0} sessions</div>
                         </div>
                     </div>
                     <div class="chart-container">
