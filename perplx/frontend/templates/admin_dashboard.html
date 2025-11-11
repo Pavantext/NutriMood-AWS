@@ -859,7 +859,14 @@
                     </div>
                     <div class="stat-card info">
                         <div class="stat-label">Avg Session Duration</div>
-                        <div class="stat-value">{{ "%.0f"|format(chatbot_analytics.average_session_duration) }}s</div>
+                        <div class="stat-value">
+                            {% if chatbot_analytics.average_session_duration > 0 %}
+                                {% set minutes = (chatbot_analytics.average_session_duration / 60) %}
+                                {{ "%.1f"|format(minutes) }} min
+                            {% else %}
+                                0 min
+                            {% endif %}
+                        </div>
                         <div class="stat-change">per session</div>
                     </div>
                     <div class="stat-card warning">
@@ -1253,6 +1260,34 @@
                         <canvas id="ordersChart"></canvas>
                     </div>
                 `;
+                
+                if (data.top_products && data.top_products.length > 0) {
+                    html += `
+                        <h3 class="section-title" style="margin-top: 2rem;">
+                            <i class="fas fa-trophy"></i> Top Products
+                        </h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Orders</th>
+                                        <th>Total Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.top_products.map(p => `
+                                        <tr>
+                                            <td><strong>${escapeHtml(p.product_name || 'Unknown')}</strong></td>
+                                            <td>${p.order_count || 0}</td>
+                                            <td>${p.total_quantity || 0}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                }
                 
                 container.innerHTML = html;
                 
