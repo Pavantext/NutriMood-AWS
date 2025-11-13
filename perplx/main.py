@@ -42,7 +42,7 @@ class StreamingMiddleware(BaseHTTPMiddleware):
 from services.bedrock_service import BedrockService
 from services.food_service import FoodService
 from services.session_service import SessionService
-from services.mcp_server import MCPServer
+# from services.mcp_server import MCPServer
 from services.database_service import DatabaseService
 from utils.response_formatter import ResponseFormatter
 
@@ -79,9 +79,9 @@ async def lifespan(app: FastAPI):
         print("⚠️  Warning: Could not load food data. Please check the data path.")
     
     # Initialize MCP server after food data is loaded
-    global mcp_server
-    mcp_server = MCPServer(food_service)
-    print("✅ MCP Server initialized")
+    # global mcp_server
+    # mcp_server = MCPServer(food_service)
+    # print("✅ MCP Server initialized")
     
     yield
     
@@ -437,24 +437,27 @@ async def ingest_menu_item(request: MenuItemRequest):
     **Request Body:**
     ```json
     {
-      "id": "menu-item-001",
-      "product_name": "Chicken Biryani",
-      "description": "Fragrant basmati rice cooked with tender chicken pieces",
-      "category_name": "Main Course",
-      "sub_category": "Rice Dishes",
-      "calories": 450,
-      "price": 250.0,
-      "image_url": "https://example.com/biryani.jpg",
-      "gst": 5.0,
-      "is_popular": true,
-      "ingredients": ["chicken", "basmati rice", "spices", "yogurt"],
-      "dietary": ["non-vegetarian"],
-      "macronutrients": {
-        "protein": "25g",
-        "carbohydrates": "45g",
-        "fat": "15g",
-        "fiber": "3g"
-      }
+        "Id": "e754af8d-bb53-421a-ace5-c28ab216b4d2",
+        "GST": 5.0,
+        "IsPopular": false,
+        "ProductName": "Jalapeno Cheese Poppers (6.Pcs)",
+        "Description": "Our jalapeños are carefully selected for their perfect balance of heat and flavor, .....",
+        "Image": "https://niloufer.blob.core.windows.net/menu-images/jalapino%20poppers%2001-min-min.jpg",
+        "Price": 380.0,
+        "Calories": 280,
+        "Macronutrients": {
+            "protein": "10g",
+            "carbohydrates": "25g",
+            "fat": "20g",
+            "fiber": "2g"
+        },
+        "Ingredients": ["JALAPINO CHEESE POPPERS SEMI FINISHED 1 NO", "GARLIC MAYO SEMI FINISHED 60 GRAM"],
+        "Dietary": ["High-protein"],
+        "HealthBenefits": "The JALAPINO CHEESE POPPERS contain capsaicin from jalapeños, offering mild antioxidant...",
+        "CuisineType": "Fusion",
+        "MealType": "Snack",
+        "Occasion": "Indulgence",
+        "SpiceLevel": "Hot"
     }
     ```
     
@@ -477,13 +480,18 @@ async def ingest_menu_item(request: MenuItemRequest):
         
         # Build embedding text for the menu item
         embedding_parts = [
-            f"Food: {request.product_name}",
-            f"Description: {request.description}",
-            f"Category: {request.category_name}",
-            f"Calories: {request.calories}, Protein: {request.macronutrients.get('protein', '0g')}",
-            f"macronutrients: {request.macronutrients}",
-            f"Ingredients: {', '.join(request.ingredients)}" if request.ingredients else "",
-            f"Dietary: {', '.join(request.dietary)}" if request.dietary else ""
+            f"Food: {request.ProductName}",
+            f"Description: {request.Description}",
+            f"Calories: {request.Calories}",
+            f"Protein: {request.Macronutrients.get('protein', '0g') if request.Macronutrients else '0g'}",
+            f"Macronutrients: {request.Macronutrients}",
+            f"Ingredients: {', '.join(request.Ingredients)}" if request.Ingredients else "",
+            f"Dietary: {', '.join(request.Dietary)}" if request.Dietary else "",
+            f"Health Benefits: {request.HealthBenefits}" if request.HealthBenefits else "",
+            f"Cuisine Type: {request.CuisineType}" if request.CuisineType else "",
+            f"Meal Type: {request.MealType}" if request.MealType else "",
+            f"Occasion: {request.Occasion}" if request.Occasion else "",
+            f"Spice Level: {request.SpiceLevel}" if request.SpiceLevel else ""
         ]
         embedding_text = '. '.join(filter(None, embedding_parts))
         
@@ -498,24 +506,27 @@ async def ingest_menu_item(request: MenuItemRequest):
         
         # Prepare food data dictionary
         food_data = {
-            'id': request.id,
-            'product_name': request.product_name,
-            'description': request.description,
-            'category_name': request.category_name,
-            'sub_category': request.sub_category,
-            'calories': request.calories,
-            'price': request.price,
-            'image_url': request.image_url,
-            'gst': request.gst,
-            'is_popular': request.is_popular,
-            'ingredients': request.ingredients,
-            'dietary': request.dietary,
-            'macronutrients': request.macronutrients
+            'id': request.Id,
+            'product_name': request.ProductName,
+            'description': request.Description,
+            'calories': request.Calories,
+            'price': request.Price,
+            'image_url': request.Image,
+            'gst': request.GST,
+            'is_popular': request.IsPopular,
+            'ingredients': request.Ingredients,
+            'dietary': request.Dietary,
+            'macronutrients': request.Macronutrients,
+            'health_benefits': request.HealthBenefits,
+            'cuisine_type': request.CuisineType,
+            'meal_type': request.MealType,
+            'occasion': request.Occasion,
+            'spice_level': request.SpiceLevel
         }
         
         # Upsert to Pinecone BOM index (separate index for user-uploaded items)
         success = food_service.pinecone_service.upsert_food_item(
-            food_id=request.id,
+            food_id=request.Id,
             embedding=embedding,
             food_data=food_data,
             use_bom_index=True  # Use BOM index for user-uploaded items
@@ -530,7 +541,7 @@ async def ingest_menu_item(request: MenuItemRequest):
         return MenuItemIngestResponse(
             status="success",
             message="Menu item successfully ingested and stored in Pinecone BOM index",
-            item_id=request.id
+            item_id=request.Id
         )
         
     except HTTPException:
@@ -550,13 +561,13 @@ async def ingest_menu_items_batch(requests: List[MenuItemRequest]):
     ```json
     [
       {
-        "id": "menu-item-001",
-        "product_name": "Chicken Biryani",
+        "Id": "menu-item-001",
+        "ProductName": "Chicken Biryani",
         ...
       },
       {
-        "id": "menu-item-002",
-        "product_name": "Vegetable Curry",
+        "Id": "menu-item-002",
+        "ProductName": "Vegetable Curry",
         ...
       }
     ]
@@ -586,13 +597,18 @@ async def ingest_menu_items_batch(requests: List[MenuItemRequest]):
             try:
                 # Build embedding text for the menu item
                 embedding_parts = [
-                    f"Food: {request.product_name}",
-                    f"Description: {request.description}",
-                    f"Category: {request.category_name}",
-                    f"Calories: {request.calories}, Protein: {request.macronutrients.get('protein', '0g')}",
-                    f"macronutrients: {request.macronutrients}",
-                    f"Ingredients: {', '.join(request.ingredients)}" if request.ingredients else "",
-                    f"Dietary: {', '.join(request.dietary)}" if request.dietary else ""
+                    f"Food: {request.ProductName}",
+                    f"Description: {request.Description}",
+                    f"Calories: {request.Calories}",
+                    f"Protein: {request.Macronutrients.get('protein', '0g') if request.Macronutrients else '0g'}",
+                    f"Macronutrients: {request.Macronutrients}",
+                    f"Ingredients: {', '.join(request.Ingredients)}" if request.Ingredients else "",
+                    f"Dietary: {', '.join(request.Dietary)}" if request.Dietary else "",
+                    f"Health Benefits: {request.HealthBenefits}" if request.HealthBenefits else "",
+                    f"Cuisine Type: {request.CuisineType}" if request.CuisineType else "",
+                    f"Meal Type: {request.MealType}" if request.MealType else "",
+                    f"Occasion: {request.Occasion}" if request.Occasion else "",
+                    f"Spice Level: {request.SpiceLevel}" if request.SpiceLevel else ""
                 ]
                 embedding_text = '. '.join(filter(None, embedding_parts))
                 
@@ -600,29 +616,32 @@ async def ingest_menu_items_batch(requests: List[MenuItemRequest]):
                 embedding = food_service.embedding_service.generate_embedding(embedding_text)
                 
                 if not embedding:
-                    failed_items.append(request.id)
+                    failed_items.append(request.Id)
                     continue
                 
                 # Prepare food data dictionary
                 food_data = {
-                    'id': request.id,
-                    'product_name': request.product_name,
-                    'description': request.description,
-                    'category_name': request.category_name,
-                    'sub_category': request.sub_category,
-                    'calories': request.calories,
-                    'price': request.price,
-                    'image_url': request.image_url,
-                    'gst': request.gst,
-                    'is_popular': request.is_popular,
-                    'ingredients': request.ingredients,
-                    'dietary': request.dietary,
-                    'macronutrients': request.macronutrients
+                    'id': request.Id,
+                    'product_name': request.ProductName,
+                    'description': request.Description,
+                    'calories': request.Calories,
+                    'price': request.Price,
+                    'image_url': request.Image,
+                    'gst': request.GST,
+                    'is_popular': request.IsPopular,
+                    'ingredients': request.Ingredients,
+                    'dietary': request.Dietary,
+                    'macronutrients': request.Macronutrients,
+                    'health_benefits': request.HealthBenefits,
+                    'cuisine_type': request.CuisineType,
+                    'meal_type': request.MealType,
+                    'occasion': request.Occasion,
+                    'spice_level': request.SpiceLevel
                 }
                 
                 # Upsert to Pinecone BOM index (separate index for user-uploaded items)
                 success = food_service.pinecone_service.upsert_food_item(
-                    food_id=request.id,
+                    food_id=request.Id,
                     embedding=embedding,
                     food_data=food_data,
                     use_bom_index=True  # Use BOM index for user-uploaded items
@@ -631,11 +650,11 @@ async def ingest_menu_items_batch(requests: List[MenuItemRequest]):
                 if success:
                     success_count += 1
                 else:
-                    failed_items.append(request.id)
+                    failed_items.append(request.Id)
                     
             except Exception as e:
-                print(f"❌ Error processing menu item {request.id}: {e}")
-                failed_items.append(request.id)
+                print(f"❌ Error processing menu item {request.Id}: {e}")
+                failed_items.append(request.Id)
         
         if success_count == 0:
             raise HTTPException(
