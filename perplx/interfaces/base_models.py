@@ -47,20 +47,23 @@ class ChatbotRatingRequest(BaseModel):
 # Menu Item Ingestion (Bill of Materials)
 class MenuItemRequest(BaseModel):
     """Request model for ingesting a menu item (Bill of Materials)"""
-    id: str  # Unique identifier for the menu item
-    product_name: str  # Name of the product
-    description: Optional[str] = ""  # Product description
-    category_name: Optional[str] = ""  # Category name
-    sub_category: Optional[str] = ""  # Sub-category name
-    calories: Optional[int] = 0  # Calories
-    price: Optional[float] = 0.0  # Price
-    image_url: Optional[str] = ""  # Image URL
-    gst: Optional[float] = 5.0  # GST percentage
-    is_popular: Optional[bool] = False  # Whether item is popular
-    ingredients: Optional[List[str]] = []  # List of ingredients
-    dietary: Optional[List[str]] = []  # Dietary information (e.g., ["vegetarian", "vegan"])
-    macronutrients: Optional[Dict[str, str]] = {}  # Macronutrients dict with keys like "protein", "carbohydrates", "fat", "fiber"
-
+    Id: str  # Unique identifier for the menu item  
+    GST: Optional[float] = 5.0 
+    IsPopular: Optional[bool] = False  # Whether item is popular
+    ProductName: str  # Name of the product
+    Description: Optional[str] = ""  # Product description
+    Image: Optional[str] = ""  # Image URL
+    Price: Optional[float] = 0.0  # Price
+    Calories: Optional[int] = 0  # Calories
+    Macronutrients: Optional[Dict[str, str]] = {}  # Macronutrients dict with keys like "protein", "carbohydrates", "fat", "fiber"
+    Ingredients: Optional[List[str]] = []  # List of ingredients
+    Dietary: Optional[List[str]] = []  # Dietary information (e.g., ["vegetarian", "vegan"])
+    HealthBenefits: Optional[str] = ""  # Health benefits
+    CuisineType: Optional[str] = ""  # Cuisine type
+    MealType: Optional[str] = ""  # Meal type
+    Occasion: Optional[str] = ""  # Occasion
+    SpiceLevel: Optional[str] = ""  # Spice level
+    
 class MenuItemIngestResponse(BaseModel):
     """Response model for menu item ingestion"""
     status: str  # "success" or "error"
