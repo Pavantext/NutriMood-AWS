@@ -187,6 +187,117 @@ class DatabaseService:
                 ON chatbot_ratings(timestamp);
             """)
             
+            # Create user_profiles table
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS user_profiles (
+                    id SERIAL PRIMARY KEY,
+                    user_id VARCHAR(255) UNIQUE NOT NULL,
+                    email VARCHAR(255),
+                    name VARCHAR(255),
+                    preferences TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            """)
+            
+            # Create indexes for user_profiles
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_user_profiles_user_id 
+                ON user_profiles(user_id);
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_user_profiles_email 
+                ON user_profiles(email);
+            """)
+            
+            # Create conversations table
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS conversations (
+                    id SERIAL PRIMARY KEY,
+                    session_id VARCHAR(255) NOT NULL,
+                    user_id VARCHAR(255),
+                    user_message TEXT NOT NULL,
+                    bot_response TEXT NOT NULL,
+                    recommendations TEXT,
+                    query_intent VARCHAR(255),
+                    response_time_ms INTEGER,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            """)
+            
+            # Create indexes for conversations
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_conversations_session_id 
+                ON conversations(session_id);
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_conversations_user_id 
+                ON conversations(user_id);
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_conversations_created_at 
+                ON conversations(created_at);
+            """)
+            
+            # Create session_analytics table
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS session_analytics (
+                    id SERIAL PRIMARY KEY,
+                    session_id VARCHAR(255) UNIQUE NOT NULL,
+                    user_id VARCHAR(255),
+                    total_messages INTEGER DEFAULT 0,
+                    total_recommendations INTEGER DEFAULT 0,
+                    session_duration_minutes INTEGER,
+                    first_message_at TIMESTAMP,
+                    last_message_at TIMESTAMP,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            """)
+            
+            # Create indexes for session_analytics
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_session_analytics_session_id 
+                ON session_analytics(session_id);
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_session_analytics_user_id 
+                ON session_analytics(user_id);
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_session_analytics_created_at 
+                ON session_analytics(created_at);
+            """)
+            
+            # Create user_feedback table
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS user_feedback (
+                    id SERIAL PRIMARY KEY,
+                    conversation_id VARCHAR(255) NOT NULL,
+                    user_id VARCHAR(255),
+                    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+                    feedback_text TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            """)
+            
+            # Create indexes for user_feedback
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_user_feedback_conversation_id 
+                ON user_feedback(conversation_id);
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_user_feedback_user_id 
+                ON user_feedback(user_id);
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_user_feedback_rating 
+                ON user_feedback(rating);
+            """)
+            cursor.execute("""
+                CREATE INDEX IF NOT EXISTS idx_user_feedback_created_at 
+                ON user_feedback(created_at);
+            """)
+            
             conn.commit()
             
             # Verify tables exist
