@@ -11,7 +11,7 @@ from contextlib import asynccontextmanager
 import uvicorn
 import json
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 import os
 from dotenv import load_dotenv
@@ -862,12 +862,12 @@ async def track_session(request: TrackSessionRequest):
             end_time_str = request.end_time.replace('Z', '+00:00') if request.end_time.endswith('Z') else request.end_time
             end_time = datetime.fromisoformat(end_time_str)
         
-        # Convert to UTC if timezone-aware, otherwise assume UTC
+        # Convert to UTC naive datetime for storage
         if start_time.tzinfo is not None:
-            start_time = start_time.astimezone().replace(tzinfo=None)
+            start_time = start_time.astimezone(timezone.utc).replace(tzinfo=None)
         
         if end_time and end_time.tzinfo is not None:
-            end_time = end_time.astimezone().replace(tzinfo=None)
+            end_time = end_time.astimezone(timezone.utc).replace(tzinfo=None)
         
         success = database_service.track_chatbot_session(
             session_id=request.session_id,
@@ -904,8 +904,9 @@ async def track_food_order(request: TrackFoodOrderRequest):
         # Parse timestamp - handle ISO 8601 format
         timestamp_str = request.timestamp.replace('Z', '+00:00') if request.timestamp.endswith('Z') else request.timestamp
         timestamp = datetime.fromisoformat(timestamp_str)
+        # Convert to UTC naive datetime for storage
         if timestamp.tzinfo is not None:
-            timestamp = timestamp.astimezone().replace(tzinfo=None)
+            timestamp = timestamp.astimezone(timezone.utc).replace(tzinfo=None)
         
         success = database_service.track_food_order(
             session_id=request.session_id,
@@ -946,8 +947,9 @@ async def submit_chatbot_rating(request: ChatbotRatingRequest):
         # Parse timestamp - handle ISO 8601 format
         timestamp_str = request.timestamp.replace('Z', '+00:00') if request.timestamp.endswith('Z') else request.timestamp
         timestamp = datetime.fromisoformat(timestamp_str)
+        # Convert to UTC naive datetime for storage
         if timestamp.tzinfo is not None:
-            timestamp = timestamp.astimezone().replace(tzinfo=None)
+            timestamp = timestamp.astimezone(timezone.utc).replace(tzinfo=None)
         
         success = database_service.track_chatbot_rating(
             session_id=request.session_id,

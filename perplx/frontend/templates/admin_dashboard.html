@@ -143,7 +143,7 @@
             margin-bottom: 2rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             overflow: visible;
-            width: 80%;
+            width: 65%;
         }
 
         .section-title {
@@ -1130,52 +1130,29 @@
             return div.innerHTML;
         }
 
-        // Format IST date string (format: "YYYY-MM-DD HH:MM:SS IST")
+        // Format IST date string (backend already sends "YYYY-MM-DD HH:MM:SS IST")
         function formatISTDate(timestampStr) {
             if (!timestampStr || timestampStr === 'N/A') return 'N/A';
-            // If already formatted as IST string, extract date part
+            // Backend already formats as "YYYY-MM-DD HH:MM:SS IST", extract date part
             if (timestampStr.includes(' IST')) {
                 const datePart = timestampStr.split(' ')[0];
                 const [year, month, day] = datePart.split('-');
                 return `${day}/${month}/${year}`;
             }
-            // If ISO format, parse and convert to IST
-            try {
-                const date = new Date(timestampStr);
-                if (isNaN(date.getTime())) return timestampStr;
-                // Convert to IST (UTC+5:30)
-                const istDate = new Date(date.getTime() + (5.5 * 60 * 60 * 1000));
-                return istDate.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata' });
-            } catch (e) {
-                return timestampStr;
-            }
+            return timestampStr;
         }
 
-        // Format IST time string
+        // Format IST time string (backend already sends "YYYY-MM-DD HH:MM:SS IST")
         function formatISTTime(timestampStr) {
             if (!timestampStr || timestampStr === 'N/A') return 'N/A';
-            // If already formatted as IST string, extract time part
+            // Backend already formats as "YYYY-MM-DD HH:MM:SS IST", extract time part
             if (timestampStr.includes(' IST')) {
                 const parts = timestampStr.split(' ');
                 if (parts.length >= 2) {
                     return parts[1] + ' IST';
                 }
-                return timestampStr;
             }
-            // If ISO format, parse and convert to IST
-            try {
-                const date = new Date(timestampStr);
-                if (isNaN(date.getTime())) return timestampStr;
-                return date.toLocaleTimeString('en-IN', { 
-                    timeZone: 'Asia/Kolkata',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false
-                }) + ' IST';
-            } catch (e) {
-                return timestampStr;
-            }
+            return timestampStr;
         }
 
         // Mobile Menu Toggle

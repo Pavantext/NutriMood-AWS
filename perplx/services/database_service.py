@@ -19,24 +19,15 @@ class DatabaseService:
     IST = timezone(timedelta(hours=5, minutes=30))
     
     @staticmethod
-    def _to_ist(dt: datetime) -> datetime:
-        """Convert UTC datetime to IST (Indian Standard Time)"""
-        if dt is None:
-            return None
-        # If datetime is naive (no timezone info), assume it's UTC
-        if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=timezone.utc)
-        # Convert to IST
-        ist_dt = dt.astimezone(DatabaseService.IST)
-        return ist_dt
-    
-    @staticmethod
     def _format_ist_datetime(dt: datetime) -> str:
-        """Format datetime in IST timezone"""
+        """Format UTC datetime to IST string for display"""
         if dt is None:
             return 'N/A'
-        ist_dt = DatabaseService._to_ist(dt)
-        return ist_dt.strftime('%Y-%m-%d %H:%M:%S IST')
+        # Assume naive datetime is UTC (as stored in DB)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        # Convert to IST and format
+        return dt.astimezone(DatabaseService.IST).strftime('%Y-%m-%d %H:%M:%S IST')
     
     def __init__(self):
         """Initialize database service with connection parameters"""
@@ -1448,57 +1439,126 @@ class DatabaseService:
                     date_filter = "WHERE " + " AND ".join(conditions)
             
             # Get total unique users
+            # First try to count users with user_id from conversations, then fall back to session_id
             cursor.execute(f"""
-                SELECT COUNT(DISTINCT session_id) as total_users
-                FROM chatbot_sessions
-                {date_filter}
-            """, params)
+                SELECT COUNT(DISTINCT COALESCE(c.user_id, c.session_id)) as total_users
+                FROM conversations c
+                {date_filter.replace('created_at', 'c.created_at') if date_filter else ''}
+            """, params if date_filter else [])
             total_result = cursor.fetchone()
             
-            # Get users by date
+            # If no conversations, fall back to chatbot_sessions
+            if total_result['total_users'] == 0:
+                cursor.execute(f"""
+                    SELECT COUNT(DISTINCT session_id) as total_users
+                    FROM chatbot_sessions
+                    {date_filter}
+                """, params)
+                total_result = cursor.fetchone()
+            
+            # Get users by date - count distinct user_id or session_id from conversations
             cursor.execute(f"""
                 SELECT 
-                    DATE(created_at) as date,
-                    COUNT(DISTINCT session_id) as user_count
-                FROM chatbot_sessions
-                {date_filter}
-                GROUP BY DATE(created_at)
+                    DATE(c.created_at) as date,
+                    COUNT(DISTINCT COALESCE(c.user_id, c.session_id)) as user_count
+                FROM conversations c
+                {date_filter.replace('created_at', 'c.created_at') if date_filter else ''}
+                GROUP BY DATE(c.created_at)
                 ORDER BY date DESC
                 LIMIT 30
-            """, params)
+            """, params if date_filter else [])
             users_by_date = cursor.fetchall()
             
-            # Get new users (first time sessions) - simplified approach
-            if date_filter:
+            # If no conversations data, fall back to chatbot_sessions
+            if not users_by_date:
                 cursor.execute(f"""
-                    SELECT COUNT(DISTINCT session_id) as new_users
-                    FROM chatbot_sessions cs
-                    WHERE cs.created_at = (
-                        SELECT MIN(cs2.created_at)
-                        FROM chatbot_sessions cs2
-                        WHERE cs2.session_id = cs.session_id
-                    )
-                    {date_filter.replace('created_at', 'cs.created_at')}
+                    SELECT 
+                        DATE(created_at) as date,
+                        COUNT(DISTINCT session_id) as user_count
+                    FROM chatbot_sessions
+                    {date_filter}
+                    GROUP BY DATE(created_at)
+                    ORDER BY date DESC
+                    LIMIT 30
                 """, params)
+                users_by_date = cursor.fetchall()
+            
+            # Get new users - users who had their first conversation/session in the date range
+            if date_filter:
+                new_user_conditions = []
+                new_user_params = []
+                if start_date:
+                    new_user_conditions.append("first_date >= %s")
+                    new_user_params.append(start_date.date())
+                if end_date:
+                    new_user_conditions.append("first_date <= %s")
+                    new_user_params.append(end_date.date())
+                new_user_where = "WHERE " + " AND ".join(new_user_conditions) if new_user_conditions else ""
+                
+                cursor.execute(f"""
+                    SELECT COUNT(DISTINCT user_identifier) as new_users
+                    FROM (
+                        SELECT 
+                            COALESCE(user_id, session_id) as user_identifier,
+                            MIN(DATE(created_at)) as first_date
+                        FROM conversations
+                        GROUP BY COALESCE(user_id, session_id)
+                    ) as first_conversations
+                    {new_user_where}
+                """, new_user_params)
             else:
                 cursor.execute("""
-                    SELECT COUNT(DISTINCT session_id) as new_users
-                    FROM chatbot_sessions cs
-                    WHERE cs.created_at = (
-                        SELECT MIN(cs2.created_at)
-                        FROM chatbot_sessions cs2
-                        WHERE cs2.session_id = cs.session_id
+                    SELECT COUNT(DISTINCT COALESCE(user_id, session_id)) as new_users
+                    FROM conversations c
+                    WHERE DATE(c.created_at) = (
+                        SELECT MIN(DATE(c2.created_at))
+                        FROM conversations c2
+                        WHERE COALESCE(c2.user_id, c2.session_id) = COALESCE(c.user_id, c.session_id)
                     )
                 """)
             new_users_result = cursor.fetchone()
             
-            # Get active users (sessions with activity in last 7 days)
+            # If no conversations, fall back to chatbot_sessions for new users
+            if new_users_result['new_users'] == 0:
+                if date_filter:
+                    cursor.execute(f"""
+                        SELECT COUNT(DISTINCT session_id) as new_users
+                        FROM chatbot_sessions cs
+                        WHERE cs.created_at = (
+                            SELECT MIN(cs2.created_at)
+                            FROM chatbot_sessions cs2
+                            WHERE cs2.session_id = cs.session_id
+                        )
+                        {date_filter.replace('created_at', 'cs.created_at')}
+                    """, params)
+                else:
+                    cursor.execute("""
+                        SELECT COUNT(DISTINCT session_id) as new_users
+                        FROM chatbot_sessions cs
+                        WHERE cs.created_at = (
+                            SELECT MIN(cs2.created_at)
+                            FROM chatbot_sessions cs2
+                            WHERE cs2.session_id = cs.session_id
+                        )
+                    """)
+                new_users_result = cursor.fetchone()
+            
+            # Get active users - users with conversations in last 7 days
             cursor.execute("""
-                SELECT COUNT(DISTINCT session_id) as active_users
-                FROM chatbot_sessions
+                SELECT COUNT(DISTINCT COALESCE(user_id, session_id)) as active_users
+                FROM conversations
                 WHERE created_at >= NOW() - INTERVAL '7 days'
             """)
             active_result = cursor.fetchone()
+            
+            # If no conversations, fall back to chatbot_sessions
+            if active_result['active_users'] == 0:
+                cursor.execute("""
+                    SELECT COUNT(DISTINCT session_id) as active_users
+                    FROM chatbot_sessions
+                    WHERE created_at >= NOW() - INTERVAL '7 days'
+                """)
+                active_result = cursor.fetchone()
             
             cursor.close()
             conn.close()
