@@ -1,498 +1,506 @@
-"""
-MCP Server - Model Context Protocol integration for food data
-Provides structured access to food database via MCP protocol
-"""
-
+import os
 import json
-from typing import Dict, List, Optional
-from datetime import datetime
+import logging
+from typing import Any, Optional
+from dotenv import load_dotenv
+from fastmcp import FastMCP
+from pinecone import Pinecone, ServerlessSpec
+
+# Load environment variables
+load_dotenv()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
+
+PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+PINECONE_INDEX_NAME = os.getenv("PINECONE_INDEX_NAME", "food-recommendations")
+PINECONE_INDEX_HOST = os.getenv("PINECONE_INDEX_HOST")
+
+# Validate configuration
+if not PINECONE_API_KEY:
+    raise ValueError("PINECONE_API_KEY environment variable not set")
+
+# Initialize Pinecone client
+pc = Pinecone(api_key=PINECONE_API_KEY)
+
+# Initialize MCP server
+mcp = FastMCP(name="NutriMood Vector DB Server")
+
+logger.info(f"✅ NutriMood MCP Server initialized")
+logger.info(f"📍 Index: {PINECONE_INDEX_NAME}")
 
 
-class MCPServer:
-    """
-    MCP (Model Context Protocol) Server for NutriMood
-    Provides structured interface for LLMs to query food database
-    """
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+def get_index():
+    """Get Pinecone index instance with connection pooling."""
+    try:
+        if PINECONE_INDEX_HOST:
+            # Connect to existing index
+            index = pc.Index(
+                name=PINECONE_INDEX_NAME,
+                host=PINECONE_INDEX_HOST,
+                pool_threads=50,
+                connection_pool_maxsize=50
+            )
+        else:
+            # Describe index to get host
+            index_desc = pc.describe_index(PINECONE_INDEX_NAME)
+            index = pc.Index(
+                name=PINECONE_INDEX_NAME,
+                host=index_desc.host,
+                pool_threads=50,
+                connection_pool_maxsize=50
+            )
+        return index
+    except Exception as e:
+        logger.error(f"Failed to connect to index: {str(e)}")
+        raise
+
+
+def format_search_results(results: dict) -> dict:
+    """Format search results for LLM consumption."""
+    formatted_matches = []
     
-    def __init__(self, food_service):
-        """
-        Initialize MCP Server
-        
-        Args:
-            food_service: FoodService instance for accessing food data
-        """
-        self.food_service = food_service
-        self.server_info = {
-            "name": "nutrimood-food-mcp",
-            "version": "1.0.0",
-            "protocol_version": "2024-01-01",
-            "capabilities": {
-                "tools": True,
-                "resources": True,
-                "prompts": True
-            }
+    for match in results.get("matches", []):
+        formatted_match = {
+            "id": match.get("id"),
+            "score": round(match.get("score", 0), 4),
+            "metadata": match.get("metadata", {})
         }
+        formatted_matches.append(formatted_match)
+    
+    return {
+        "matches": formatted_matches,
+        "namespace": results.get("namespace", "default"),
+        "usage": results.get("usage", {})
+    }
+
+
+# ============================================================================
+# RESOURCES - Read-only data access for LLM context
+# ============================================================================
+
+@mcp.resource("index://stats")
+def get_index_stats() -> dict:
+    """
+    Get comprehensive statistics about the Pinecone index.
+    Provides: total vectors, dimensions, namespaces, memory usage
+    """
+    try:
+        index = get_index()
+        stats = index.describe_index_stats()
         
-        # Define available MCP tools
-        self.tools = self._define_tools()
+        return {
+            "total_vectors": stats.total_vector_count,
+            "index_name": PINECONE_INDEX_NAME,
+            "index_fullness": stats.index_fullness,
+            "namespaces": list(stats.namespaces.keys()) if stats.namespaces else ["default"],
+            "dimension": getattr(stats, "dimension", "Unknown"),
+            "status": "Ready"
+        }
+    except Exception as e:
+        logger.error(f"Error fetching index stats: {str(e)}")
+        return {"error": str(e), "status": "Error"}
+
+
+@mcp.resource("schema://food-categories")
+def get_food_categories() -> dict:
+    """
+    Get available food categories from index metadata.
+    Helps LLM understand what types of foods are available.
+    """
+    try:
+        return {
+            "categories": [
+                "breakfast",
+                "lunch",
+                "dinner",
+                "snacks",
+                "beverages",
+                "desserts",
+                "healthy",
+                "comfort-food",
+                "vegetarian",
+                "vegan"
+            ],
+            "description": "Food categories used in the NutriMood database"
+        }
+    except Exception as e:
+        logger.error(f"Error fetching categories: {str(e)}")
+        return {"error": str(e)}
+
+
+# ============================================================================
+# TOOLS - Executable functions for LLM actions
+# ============================================================================
+
+@mcp.tool()
+def search_food_by_description(
+    query: str,
+    top_k: int = 5,
+    namespace: str = "default",
+    include_metadata: bool = True
+) -> str:
+    """
+    Semantic search for food items by description or preference.
+    
+    Args:
+        query: Natural language description (e.g., "healthy breakfast with protein")
+        top_k: Number of results to return (default: 5, max: 20)
+        namespace: Pinecone namespace to search in
+        include_metadata: Include food metadata in results
+    
+    Returns: JSON string with matching food items and similarity scores
+    
+    Example query: "I want something spicy and vegetarian"
+    """
+    try:
+        if not query or len(query.strip()) < 2:
+            return json.dumps({"error": "Query must be at least 2 characters"})
         
-        # Define available resources
-        self.resources = self._define_resources()
+        # Limit top_k for safety
+        top_k = min(top_k, 20)
         
-        # Define available prompts
-        self.prompts = self._define_prompts()
-    
-    def _define_tools(self) -> List[Dict]:
-        """Define MCP tools for food operations"""
-        return [
-            {
-                "name": "search_foods",
-                "description": "Search for food items based on query and filters",
-                "inputSchema": {
-                    "type": "object",
-                    "properties": {
-                        "query": {
-                            "type": "string",
-                            "description": "Search query for food items"
-                        },
-                        "category": {
-                            "type": "string",
-                            "description": "Filter by category (optional)"
-                        },
-                        "max_calories": {
-                            "type": "number",
-                            "description": "Maximum calories per item (optional)"
-                        },
-                        "min_calories": {
-                            "type": "number",
-                            "description": "Minimum calories per item (optional)"
-                        },
-                        "dietary": {
-                            "type": "string",
-                            "description": "Dietary preference filter (optional)"
-                        },
-                        "top_k": {
-                            "type": "number",
-                            "description": "Number of results to return",
-                            "default": 5
-                        }
-                    },
-                    "required": ["query"]
-                }
-            },
-            {
-                "name": "get_food_by_id",
-                "description": "Get detailed information about a specific food item",
-                "inputSchema": {
-                    "type": "object",
-                    "properties": {
-                        "food_id": {
-                            "type": "string",
-                            "description": "Unique identifier for the food item"
-                        }
-                    },
-                    "required": ["food_id"]
-                }
-            },
-            {
-                "name": "list_categories",
-                "description": "List all available food categories",
-                "inputSchema": {
-                    "type": "object",
-                    "properties": {}
-                }
-            },
-            {
-                "name": "get_food_statistics",
-                "description": "Get statistics about the food database",
-                "inputSchema": {
-                    "type": "object",
-                    "properties": {}
-                }
-            },
-            {
-                "name": "recommend_foods",
-                "description": "Get personalized food recommendations based on preferences",
-                "inputSchema": {
-                    "type": "object",
-                    "properties": {
-                        "preferences": {
-                            "type": "object",
-                            "description": "User preferences (dietary, calorie_goal, mood, etc.)"
-                        },
-                        "exclude_ids": {
-                            "type": "array",
-                            "items": {"type": "string"},
-                            "description": "Food IDs to exclude from recommendations"
-                        },
-                        "top_k": {
-                            "type": "number",
-                            "description": "Number of recommendations",
-                            "default": 5
-                        }
-                    },
-                    "required": ["preferences"]
-                }
-            }
-        ]
-    
-    def _define_resources(self) -> List[Dict]:
-        """Define MCP resources for food data access"""
-        return [
-            {
-                "uri": "nutrimood://foods",
-                "name": "All Foods",
-                "description": "Access to complete food database",
-                "mimeType": "application/json"
-            },
-            {
-                "uri": "nutrimood://categories",
-                "name": "Food Categories",
-                "description": "List of all food categories",
-                "mimeType": "application/json"
-            },
-            {
-                "uri": "nutrimood://statistics",
-                "name": "Database Statistics",
-                "description": "Statistics about the food database",
-                "mimeType": "application/json"
-            }
-        ]
-    
-    def _define_prompts(self) -> List[Dict]:
-        """Define MCP prompts for common use cases"""
-        return [
-            {
-                "name": "food_recommendation",
-                "description": "Generate food recommendation based on user preferences",
-                "arguments": [
-                    {
-                        "name": "mood",
-                        "description": "User's current mood",
-                        "required": False
-                    },
-                    {
-                        "name": "dietary_preference",
-                        "description": "Dietary preference (vegetarian, vegan, etc.)",
-                        "required": False
-                    },
-                    {
-                        "name": "calorie_goal",
-                        "description": "Target calorie range",
-                        "required": False
-                    }
-                ]
-            },
-            {
-                "name": "meal_planning",
-                "description": "Help plan meals for specific requirements",
-                "arguments": [
-                    {
-                        "name": "meal_type",
-                        "description": "Type of meal (breakfast, lunch, dinner, snack)",
-                        "required": True
-                    },
-                    {
-                        "name": "dietary_restrictions",
-                        "description": "Any dietary restrictions",
-                        "required": False
-                    }
-                ]
-            }
-        ]
-    
-    def get_server_info(self) -> Dict:
-        """Get MCP server information"""
-        return self.server_info
-    
-    def list_tools(self) -> List[Dict]:
-        """List available MCP tools"""
-        return self.tools
-    
-    def list_resources(self) -> List[Dict]:
-        """List available MCP resources"""
-        return self.resources
-    
-    def list_prompts(self) -> List[Dict]:
-        """List available MCP prompts"""
-        return self.prompts
-    
-    def call_tool(self, tool_name: str, arguments: Dict) -> Dict:
-        """
-        Execute an MCP tool
+        index = get_index()
         
-        Args:
-            tool_name: Name of the tool to execute
-            arguments: Tool arguments
-        
-        Returns:
-            Tool execution result
-        """
-        try:
-            if tool_name == "search_foods":
-                return self._tool_search_foods(arguments)
-            
-            elif tool_name == "get_food_by_id":
-                return self._tool_get_food_by_id(arguments)
-            
-            elif tool_name == "list_categories":
-                return self._tool_list_categories(arguments)
-            
-            elif tool_name == "get_food_statistics":
-                return self._tool_get_food_statistics(arguments)
-            
-            elif tool_name == "recommend_foods":
-                return self._tool_recommend_foods(arguments)
-            
-            else:
-                return {
-                    "error": f"Unknown tool: {tool_name}",
-                    "available_tools": [tool["name"] for tool in self.tools]
-                }
-        
-        except Exception as e:
-            return {
-                "error": f"Tool execution failed: {str(e)}",
-                "tool": tool_name,
-                "arguments": arguments
-            }
-    
-    def _tool_search_foods(self, args: Dict) -> Dict:
-        """Execute search_foods tool"""
-        query = args.get("query", "")
-        top_k = args.get("top_k", 5)
-        
-        # Build filters
-        filters = {}
-        if "category" in args:
-            filters["category"] = args["category"]
-        if "max_calories" in args:
-            filters["max_calories"] = args["max_calories"]
-        if "min_calories" in args:
-            filters["min_calories"] = args["min_calories"]
-        if "dietary" in args:
-            filters["dietary"] = args["dietary"]
-        
-        # Search using food service
-        matches = self.food_service.find_matching_foods(
-            query=query,
-            conversation_history=[],
+        # Perform semantic search
+        results = index.query(
+            vector=[0] * 1536,  # Placeholder - Pinecone will embed for integrated models
+            text=query,  # Use text query with integrated embedding
+            namespace=namespace,
             top_k=top_k,
-            filters=filters if filters else None
+            include_metadata=include_metadata,
+            include_values=False
         )
         
-        # Format results
-        results = []
-        for food, score in matches:
-            results.append({
-                "id": food.get("Id"),
-                "name": food.get("ProductName"),
-                "description": food.get("Description"),
-                "category": food.get("KioskCategoryName"),
-                "calories": food.get("calories"),
-                "price": food.get("Price"),
-                "relevance_score": round(score, 3)
-            })
+        formatted_results = format_search_results(results)
+        logger.info(f"Search query: '{query}' returned {len(formatted_results['matches'])} results")
         
-        return {
-            "query": query,
-            "count": len(results),
-            "results": results
-        }
-    
-    def _tool_get_food_by_id(self, args: Dict) -> Dict:
-        """Execute get_food_by_id tool"""
-        food_id = args.get("food_id")
+        return json.dumps(formatted_results, indent=2, default=str)
         
-        if not food_id:
-            return {"error": "food_id is required"}
-        
-        food = self.food_service.get_food_by_id(food_id)
-        
-        if not food:
-            return {"error": f"Food not found: {food_id}"}
-        
-        return {
-            "food": food
-        }
-    
-    def _tool_list_categories(self, args: Dict) -> Dict:
-        """Execute list_categories tool"""
-        categories = self.food_service.get_categories()
-        
-        return {
-            "categories": categories,
-            "count": len(categories)
-        }
-    
-    def _tool_get_food_statistics(self, args: Dict) -> Dict:
-        """Execute get_food_statistics tool"""
-        stats = self.food_service.get_food_statistics()
-        
-        return stats
-    
-    def _tool_recommend_foods(self, args: Dict) -> Dict:
-        """Execute recommend_foods tool"""
-        preferences = args.get("preferences", {})
-        exclude_ids = args.get("exclude_ids", [])
-        top_k = args.get("top_k", 5)
-        
-        # Build query from preferences
-        query_parts = []
-        
-        if "mood" in preferences:
-            query_parts.append(preferences["mood"])
-        
-        if "dietary" in preferences:
-            query_parts.append(preferences["dietary"])
-        
-        if "cuisine" in preferences:
-            query_parts.append(preferences["cuisine"])
-        
-        query = " ".join(query_parts) if query_parts else "food"
-        
-        # Build filters from preferences
-        filters = {}
-        if "calorie_max" in preferences:
-            filters["max_calories"] = preferences["calorie_max"]
-        if "calorie_min" in preferences:
-            filters["min_calories"] = preferences["calorie_min"]
-        if "category" in preferences:
-            filters["category"] = preferences["category"]
-        
-        # Get recommendations
-        matches = self.food_service.find_matching_foods(
-            query=query,
-            conversation_history=[],
-            top_k=top_k * 2,  # Get more to filter
-            filters=filters if filters else None
-        )
-        
-        # Filter out excluded IDs
-        filtered_matches = [
-            (food, score) for food, score in matches
-            if food.get("Id") not in exclude_ids
-        ][:top_k]
-        
-        # Format results
-        recommendations = []
-        for food, score in filtered_matches:
-            recommendations.append({
-                "id": food.get("Id"),
-                "name": food.get("ProductName"),
-                "description": food.get("Description"),
-                "category": food.get("KioskCategoryName"),
-                "calories": food.get("calories"),
-                "price": food.get("Price"),
-                "score": round(score, 3)
-            })
-        
-        return {
-            "preferences": preferences,
-            "count": len(recommendations),
-            "recommendations": recommendations
-        }
-    
-    def read_resource(self, uri: str) -> Dict:
-        """
-        Read an MCP resource
-        
-        Args:
-            uri: Resource URI
-        
-        Returns:
-            Resource content
-        """
-        if uri == "nutrimood://foods":
-            return {
-                "uri": uri,
-                "mimeType": "application/json",
-                "content": self.food_service.get_all_foods(limit=100)
-            }
-        
-        elif uri == "nutrimood://categories":
-            return {
-                "uri": uri,
-                "mimeType": "application/json",
-                "content": self.food_service.get_categories()
-            }
-        
-        elif uri == "nutrimood://statistics":
-            return {
-                "uri": uri,
-                "mimeType": "application/json",
-                "content": self.food_service.get_food_statistics()
-            }
-        
-        else:
-            return {
-                "error": f"Unknown resource: {uri}",
-                "available_resources": [r["uri"] for r in self.resources]
-            }
-    
-    def get_prompt(self, prompt_name: str, arguments: Dict) -> str:
-        """
-        Generate a prompt template
-        
-        Args:
-            prompt_name: Name of the prompt
-            arguments: Prompt arguments
-        
-        Returns:
-            Generated prompt text
-        """
-        if prompt_name == "food_recommendation":
-            return self._prompt_food_recommendation(arguments)
-        
-        elif prompt_name == "meal_planning":
-            return self._prompt_meal_planning(arguments)
-        
-        else:
-            return f"Unknown prompt: {prompt_name}"
-    
-    def _prompt_food_recommendation(self, args: Dict) -> str:
-        """Generate food recommendation prompt"""
-        prompt_parts = [
-            "Generate a food recommendation based on the following:"
-        ]
-        
-        if "mood" in args:
-            prompt_parts.append(f"- User's mood: {args['mood']}")
-        
-        if "dietary_preference" in args:
-            prompt_parts.append(f"- Dietary preference: {args['dietary_preference']}")
-        
-        if "calorie_goal" in args:
-            prompt_parts.append(f"- Calorie goal: {args['calorie_goal']}")
-        
-        prompt_parts.append("\nProvide 3-5 food recommendations with explanations.")
-        
-        return "\n".join(prompt_parts)
-    
-    def _prompt_meal_planning(self, args: Dict) -> str:
-        """Generate meal planning prompt"""
-        meal_type = args.get("meal_type", "meal")
-        
-        prompt = f"Help plan a {meal_type} with the following requirements:\n"
-        
-        if "dietary_restrictions" in args:
-            prompt += f"- Dietary restrictions: {args['dietary_restrictions']}\n"
-        
-        prompt += "\nProvide a complete meal plan with food items from the database."
-        
-        return prompt
-    
-    def to_mcp_format(self) -> Dict:
-        """
-        Export server configuration in MCP format
-        
-        Returns:
-            MCP server configuration
-        """
-        return {
-            "server": self.server_info,
-            "tools": self.tools,
-            "resources": self.resources,
-            "prompts": self.prompts
-        }
+    except Exception as e:
+        logger.error(f"Search error: {str(e)}")
+        return json.dumps({"error": f"Search failed: {str(e)}"})
 
+
+@mcp.tool()
+def search_food_by_category(
+    category: str,
+    top_k: int = 10,
+    namespace: str = "default"
+) -> str:
+    """
+    Search food items filtered by category using metadata.
+    
+    Args:
+        category: Food category (breakfast, lunch, dinner, snacks, etc.)
+        top_k: Number of results to return
+        namespace: Pinecone namespace
+    
+    Returns: JSON string with filtered food items
+    
+    Example: category="vegetarian" returns all vegetarian options
+    """
+    try:
+        index = get_index()
+        
+        # Use metadata filter to find items in category
+        filter_condition = {"category": {"$eq": category}}
+        
+        results = index.query(
+            vector=[0] * 1536,
+            top_k=top_k,
+            namespace=namespace,
+            filter=filter_condition,
+            include_metadata=True,
+            include_values=False
+        )
+        
+        formatted_results = format_search_results(results)
+        logger.info(f"Category search '{category}' returned {len(formatted_results['matches'])} items")
+        
+        return json.dumps(formatted_results, indent=2, default=str)
+        
+    except Exception as e:
+        logger.error(f"Category search error: {str(e)}")
+        return json.dumps({"error": f"Category search failed: {str(e)}"})
+
+
+@mcp.tool()
+def upsert_food_item(
+    item_id: str,
+    name: str,
+    description: str,
+    category: str,
+    nutrition_info: dict,
+    mood_tags: Optional[list] = None,
+    namespace: str = "default",
+    vector_values: Optional[list] = None
+) -> str:
+    """
+    Add or update a food item in the vector database.
+    
+    Args:
+        item_id: Unique identifier for the food item
+        name: Name of the food item
+        description: Description of the food (used for semantic search)
+        category: Food category
+        nutrition_info: Dict with calories, protein, carbs, fat, etc.
+        mood_tags: List of mood tags (happy, energetic, calm, etc.)
+        namespace: Pinecone namespace
+        vector_values: Pre-computed embedding vector (optional)
+    
+    Returns: JSON with upsert confirmation
+    
+    Example: Add "Grilled Chicken Salad" with health metrics
+    """
+    try:
+        if not item_id or not name or not description:
+            return json.dumps({"error": "item_id, name, and description are required"})
+        
+        index = get_index()
+        
+        # Prepare metadata
+        metadata = {
+            "name": name,
+            "category": category,
+            "description": description,
+            "nutrition_info": nutrition_info,
+            "mood_tags": mood_tags or []
+        }
+        
+        # Use random vector if not provided (Pinecone will embed for integrated models)
+        if vector_values is None:
+            vector_values = [0.1] * 1536  # Placeholder vector
+        
+        # Upsert to Pinecone
+        index.upsert(
+            vectors=[(item_id, vector_values, metadata)],
+            namespace=namespace
+        )
+        
+        logger.info(f"Upserted food item: {name} (ID: {item_id})")
+        
+        return json.dumps({
+            "status": "success",
+            "message": f"Food item '{name}' added/updated successfully",
+            "item_id": item_id,
+            "namespace": namespace
+        })
+        
+    except Exception as e:
+        logger.error(f"Upsert error: {str(e)}")
+        return json.dumps({"error": f"Upsert failed: {str(e)}"})
+
+
+@mcp.tool()
+def get_food_details(
+    item_id: str,
+    namespace: str = "default"
+) -> str:
+    """
+    Retrieve detailed information about a specific food item.
+    
+    Args:
+        item_id: Unique identifier of the food item
+        namespace: Pinecone namespace
+    
+    Returns: JSON with complete food item details
+    """
+    try:
+        index = get_index()
+        
+        # Fetch specific item
+        result = index.fetch(
+            ids=[item_id],
+            namespace=namespace
+        )
+        
+        if not result.vectors:
+            return json.dumps({
+                "error": f"Food item '{item_id}' not found",
+                "item_id": item_id
+            })
+        
+        food_item = result.vectors[0]
+        return json.dumps({
+            "id": food_item.id,
+            "metadata": food_item.metadata,
+            "found": True
+        }, indent=2, default=str)
+        
+    except Exception as e:
+        logger.error(f"Fetch error: {str(e)}")
+        return json.dumps({"error": f"Failed to fetch item: {str(e)}"})
+
+
+@mcp.tool()
+def delete_food_item(
+    item_id: str,
+    namespace: str = "default"
+) -> str:
+    """
+    Delete a food item from the vector database.
+    
+    Args:
+        item_id: Unique identifier of the food item to delete
+        namespace: Pinecone namespace
+    
+    Returns: JSON with deletion confirmation
+    """
+    try:
+        index = get_index()
+        
+        index.delete(
+            ids=[item_id],
+            namespace=namespace
+        )
+        
+        logger.info(f"Deleted food item: {item_id}")
+        
+        return json.dumps({
+            "status": "success",
+            "message": f"Food item deleted successfully",
+            "item_id": item_id
+        })
+        
+    except Exception as e:
+        logger.error(f"Delete error: {str(e)}")
+        return json.dumps({"error": f"Delete failed: {str(e)}"})
+
+
+@mcp.tool()
+def search_by_mood(
+    mood: str,
+    query: Optional[str] = None,
+    top_k: int = 5,
+    namespace: str = "default"
+) -> str:
+    """
+    Find food recommendations based on mood using semantic search and metadata filtering.
+    
+    Args:
+        mood: Target mood (happy, energetic, calm, focused, sad, stressed, etc.)
+        query: Optional natural language query to refine search
+        top_k: Number of results
+        namespace: Pinecone namespace
+    
+    Returns: JSON with mood-matched food items
+    
+    Example: mood="energetic" finds foods tagged for energy boost
+    """
+    try:
+        index = get_index()
+        
+        # Build search query
+        search_query = query or f"Food for {mood} mood"
+        
+        # Create metadata filter for mood
+        filter_condition = {"mood_tags": {"$in": [mood]}}
+        
+        # Search with mood filter
+        results = index.query(
+            vector=[0] * 1536,
+            text=search_query,
+            namespace=namespace,
+            top_k=top_k,
+            filter=filter_condition,
+            include_metadata=True,
+            include_values=False
+        )
+        
+        formatted_results = format_search_results(results)
+        logger.info(f"Mood search for '{mood}' returned {len(formatted_results['matches'])} items")
+        
+        return json.dumps(formatted_results, indent=2, default=str)
+        
+    except Exception as e:
+        logger.error(f"Mood search error: {str(e)}")
+        return json.dumps({"error": f"Mood search failed: {str(e)}"})
+
+
+@mcp.tool()
+def list_all_food_items(
+    namespace: str = "default",
+    limit: int = 100
+) -> str:
+    """
+    List all food items in the index (with pagination).
+    
+    Args:
+        namespace: Pinecone namespace to list from
+        limit: Maximum items to return (max 1000)
+    
+    Returns: JSON with list of all food items and their metadata
+    """
+    try:
+        index = get_index()
+        limit = min(limit, 1000)  # Cap limit for safety
+        
+        # List all vectors from namespace
+        results = index.list(
+            namespace=namespace,
+            limit=limit
+        )
+        
+        # Convert IDs to full items with metadata
+        item_ids = [item for item in results]
+        
+        if item_ids:
+            fetch_result = index.fetch(ids=item_ids, namespace=namespace)
+            items = [
+                {
+                    "id": vec.id,
+                    "metadata": vec.metadata
+                }
+                for vec in fetch_result.vectors
+            ]
+        else:
+            items = []
+        
+        logger.info(f"Listed {len(items)} food items from namespace '{namespace}'")
+        
+        return json.dumps({
+            "total_items": len(items),
+            "namespace": namespace,
+            "items": items
+        }, indent=2, default=str)
+        
+    except Exception as e:
+        logger.error(f"List error: {str(e)}")
+        return json.dumps({"error": f"Failed to list items: {str(e)}"})
+
+
+# ============================================================================
+# RUN SERVER
+# ============================================================================
+
+if __name__ == "__main__":
+    import sys
+    
+    # Determine transport from command line or env variable
+    transport = os.getenv("MCP_TRANSPORT", "stdio")
+    
+    if len(sys.argv) > 1:
+        transport = sys.argv[1]
+    
+    logger.info(f"🚀 Starting MCP server with {transport} transport")
+    
+    if transport == "sse":
+        # For remote access (e.g., from AWS Bedrock or remote clients)
+        port = int(os.getenv("MCP_PORT", 8000))
+        host = os.getenv("MCP_HOST", "127.0.0.1")
+        logger.info(f"📡 Server listening on {host}:{port}")
+        mcp.run(transport="sse", host=host, port=port)
+    else:
+        # For local development with Claude Desktop (default: stdio)
+        logger.info("📟 Using stdio transport (local mode)")
+        mcp.run(transport="stdio")

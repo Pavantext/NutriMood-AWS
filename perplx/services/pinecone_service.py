@@ -1,10 +1,6 @@
-"""
-Pinecone Service - Handles vector search for food recommendations
-"""
-
 import os
 from typing import List, Dict, Tuple, Optional
-from pinecone import Pinecone
+from pinecone import Pinecone, ServerlessSpec
 
 
 class PineconeService:
@@ -13,6 +9,7 @@ class PineconeService:
         self.api_key = os.getenv("PINECONE_API_KEY")
         self.index_name = os.getenv("PINECONE_INDEX_NAME", "niloufer-test")
         self.bom_index_name = os.getenv("PINECONE_BOM_INDEX_NAME", "niloufer-bom")  # Separate index for user-uploaded BOM items
+        self.embedding_dimension = int(os.getenv("TITAN_EMBEDDING_DIMENSIONS", "1024"))  # Default to 1024 for Titan V2
         
         if not self.api_key:
             print("⚠️  Warning: PINECONE_API_KEY not found in environment")
@@ -28,9 +25,15 @@ class PineconeService:
             # Connect to main index (for original food items)
             self.index = self.client.Index(self.index_name)
             
-            # Get index stats
+            # Get index stats and dimension
             stats = self.index.describe_index_stats()
             total_vectors = stats.get('total_vector_count', 0)
+            index_dimension = stats.get('dimension', self.embedding_dimension)
+            
+            # Update embedding dimension if index has a different dimension
+            if index_dimension != self.embedding_dimension:
+                self.embedding_dimension = index_dimension
+                print(f"ℹ️  Using index dimension: {index_dimension}")
             
             print(f"✅ Connected to Pinecone index '{self.index_name}' with {total_vectors} vectors")
             
@@ -267,15 +270,9 @@ class PineconeService:
             if use_bom_index:
                 # Try to create/connect to BOM index if it doesn't exist
                 if self.client:
-                    try:
-                        # Try to get or create the BOM index
-                        self.bom_index = self.client.Index(self.bom_index_name)
-                        target_index = self.bom_index
-                        print(f"✅ Connected to BOM index '{self.bom_index_name}'")
-                    except Exception as e:
-                        print(f"⚠️  BOM index '{self.bom_index_name}' not found. Please create it in Pinecone console.")
-                        print(f"   Error: {e}")
+                    if not self._ensure_bom_index_exists():
                         return False
+                    target_index = self.bom_index
                 else:
                     print("⚠️  Pinecone client not initialized, cannot upsert food item")
                     return False
@@ -381,4 +378,104 @@ class PineconeService:
         metadata['is_low_calorie'] = int(metadata.get('calories', 0)) < 300
         
         return metadata
+    
+    def _ensure_bom_index_exists(self) -> bool:
+        """
+        Ensure BOM index exists, create it if it doesn't
+        
+        Returns:
+            True if index exists or was created successfully, False otherwise
+        """
+        if not self.client:
+            return False
+        
+        try:
+            # First, try to connect to existing index
+            try:
+                self.bom_index = self.client.Index(self.bom_index_name)
+                bom_stats = self.bom_index.describe_index_stats()
+                bom_vectors = bom_stats.get('total_vector_count', 0)
+                print(f"✅ Connected to existing BOM index '{self.bom_index_name}' with {bom_vectors} vectors")
+                return True
+            except Exception:
+                # Index doesn't exist, try to create it
+                pass
+            
+            # Check if index exists in the list
+            existing_indexes = [index.name for index in self.client.list_indexes()]
+            
+            if self.bom_index_name in existing_indexes:
+                # Index exists but connection failed, try again
+                try:
+                    self.bom_index = self.client.Index(self.bom_index_name)
+                    print(f"✅ Connected to BOM index '{self.bom_index_name}'")
+                    return True
+                except Exception as e:
+                    print(f"❌ Error connecting to existing BOM index: {e}")
+                    return False
+            
+            # Index doesn't exist, create it
+            print(f"📦 Creating BOM index '{self.bom_index_name}' with dimension {self.embedding_dimension}...")
+            
+            try:
+                # Get cloud and region from main index if available
+                cloud = "aws"  # Default to AWS
+                region = "us-east-1"  # Default region
+                
+                # Try to get cloud and region from main index
+                if self.index:
+                    try:
+                        index_info = self.client.describe_index(self.index_name)
+                        if hasattr(index_info, 'spec') and hasattr(index_info.spec, 'serverless'):
+                            if hasattr(index_info.spec.serverless, 'cloud'):
+                                cloud = index_info.spec.serverless.cloud
+                            if hasattr(index_info.spec.serverless, 'region'):
+                                region = index_info.spec.serverless.region
+                    except Exception:
+                        pass  # Use defaults
+                
+                # Create the index with ServerlessSpec
+                self.client.create_index(
+                    name=self.bom_index_name,
+                    dimension=self.embedding_dimension,
+                    metric="cosine",
+                    spec=ServerlessSpec(
+                        cloud=cloud,
+                        region=region
+                    )
+                )
+                
+                print(f"✅ Successfully created BOM index '{self.bom_index_name}'")
+                
+                # Wait for index to be ready, then connect (with retries)
+                import time
+                max_retries = 10
+                retry_delay = 2
+                
+                for attempt in range(max_retries):
+                    try:
+                        time.sleep(retry_delay)
+                        # Connect to the newly created index
+                        self.bom_index = self.client.Index(self.bom_index_name)
+                        # Try to get stats to verify it's ready
+                        self.bom_index.describe_index_stats()
+                        print(f"✅ Connected to newly created BOM index '{self.bom_index_name}'")
+                        return True
+                    except Exception as e:
+                        if attempt < max_retries - 1:
+                            print(f"⏳ Waiting for index to be ready... (attempt {attempt + 1}/{max_retries})")
+                            continue
+                        else:
+                            print(f"⚠️  Index created but connection failed: {e}")
+                            print(f"💡 The index should be ready shortly. Please try again in a moment.")
+                            return False
+                
+            except Exception as e:
+                print(f"❌ Error creating BOM index '{self.bom_index_name}': {e}")
+                print(f"💡 Please create the index manually in Pinecone console or check your API permissions")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Error ensuring BOM index exists: {e}")
+            return False
 
