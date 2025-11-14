@@ -1111,6 +1111,40 @@ async def get_sessions_analytics(start_date: Optional[str] = None, end_date: Opt
     sessions = database_service.get_all_users_filtered(start_dt, end_dt)
     return {"sessions": sessions, "count": len(sessions)}
 
+@app.get("/analytics/user-details/{session_id}")
+async def get_user_details_api(session_id: str):
+    """Get detailed session/user information as JSON"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    user_data = database_service.get_user_details(session_id)
+    
+    if not user_data:
+        raise HTTPException(status_code=404, detail=f"Session '{session_id}' not found")
+    
+    # Populate food details for recommendations
+    for conversation in user_data['conversations']:
+        food_details = []
+        for food_id in conversation.get('recommended_food_ids', []):
+            # Handle both string IDs and dict objects
+            if isinstance(food_id, dict):
+                # Already a food object, use it directly
+                food_item = food_id
+            else:
+                # It's an ID string, fetch the food item
+                food_item = food_service.get_food_by_id(food_id)
+            
+            if food_item:
+                food_details.append({
+                    'id': food_item.get('Id') or food_item.get('id'),
+                    'name': food_item.get('Name') or food_item.get('ProductName', 'Unknown'),
+                    'description': food_item.get('Description', ''),
+                    'image_url': food_item.get('Image') or food_item.get('ImageUrl') or food_item.get('image_url') or '/static/default-food.jpg'
+                })
+        conversation['recommended_foods'] = food_details
+    
+    return user_data
+
 # Admin Endpoints
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
