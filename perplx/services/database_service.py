@@ -301,11 +301,15 @@ class DatabaseService:
             required_tables = ['user_profiles', 'conversations', 'session_analytics', 'user_feedback',
                              'chatbot_sessions', 'chatbot_food_orders', 'chatbot_ratings']
             
-            for table in required_tables:
-                if table in tables:
-                    print(f"   ✓ Table '{table}' exists")
-                else:
-                    print(f"   ⚠️  Table '{table}' not found")
+            # Check tables and print summary
+            missing_tables = [table for table in required_tables if table not in tables]
+            if missing_tables:
+                print(f"⚠️  Missing tables: {', '.join(missing_tables)}")
+            else:
+                # Only print if all tables exist (reduces verbosity)
+                existing_count = sum(1 for table in required_tables if table in tables)
+                if existing_count == len(required_tables):
+                    print(f"   ✓ All {len(required_tables)} required tables exist")
             
             cursor.close()
             conn.close()

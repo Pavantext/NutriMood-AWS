@@ -46,12 +46,29 @@ from services.session_service import SessionService
 from services.database_service import DatabaseService
 from utils.response_formatter import ResponseFormatter
 
+# Global service instances (initialized in lifespan)
+bedrock_service = None
+food_service = None
+session_service = None
+database_service = None
+response_formatter = None
+mcp_server = None
+
 # Lifespan event handler
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
-    # Startup
+    global bedrock_service, food_service, session_service, database_service, response_formatter, mcp_server
+    
+    # Startup - Initialize services only once per process
     print("🚀 Starting Nutrimood Chatbot...")
+    
+    # Initialize services (moved from module level to avoid duplicate init with reloader)
+    bedrock_service = BedrockService()
+    food_service = FoodService()
+    session_service = SessionService()
+    database_service = DatabaseService()  # AWS RDS PostgreSQL
+    response_formatter = ResponseFormatter()
     
     # Get food data path from environment or use default
     food_data_path = os.getenv("FOOD_DATA_PATH", "../data/raw/Niloufer_data.json")
@@ -79,7 +96,6 @@ async def lifespan(app: FastAPI):
         print("⚠️  Warning: Could not load food data. Please check the data path.")
     
     # Initialize MCP server after food data is loaded
-    # global mcp_server
     # mcp_server = MCPServer(food_service)
     # print("✅ MCP Server initialized")
     
@@ -118,13 +134,7 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
-# Initialize services
-bedrock_service = BedrockService()
-food_service = FoodService()
-session_service = SessionService()
-database_service = DatabaseService()  # AWS RDS PostgreSQL
-response_formatter = ResponseFormatter()
-mcp_server = None  # Will be initialized after food data is loaded
+# Services are initialized in the lifespan handler to avoid duplicate initialization with Uvicorn reloader
 
 
 def _is_followup_question(query: str, conversation_history: List[Dict]) -> bool:
