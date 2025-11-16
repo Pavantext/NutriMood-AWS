@@ -420,7 +420,7 @@ class PineconeService:
             try:
                 # Get cloud and region from main index if available
                 cloud = "aws"  # Default to AWS
-                region = "us-east-1"  # Default region
+                region = os.getenv("PINECONE_ENVIRONMENT")  # Default region from env or us-east-1
                 
                 # Try to get cloud and region from main index
                 if self.index:

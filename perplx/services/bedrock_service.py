@@ -15,15 +15,16 @@ class BedrockService:
         """Initialize AWS Bedrock client"""
         self.client = boto3.client(
             service_name='bedrock-runtime',
-            region_name='us-east-1'  # Change to your region
+            region_name= os.getenv("AWS_DEFAULT_REGION")  # Change to your region
         )
         
         # Model configuration
-        self.model_id = "anthropic.claude-3-sonnet-20240229-v1:0"  # or use Claude 3.5 Sonnet
+        
+        self.model_id = os.getenv("BEDROCK_INFERENCE_PROFILE_ID")
         self.model_config = {
-            "max_tokens": 1000,
-            "temperature": 0.7,
-            "top_p": 0.9,
+            "max_tokens": int(os.getenv("BEDROCK_MAX_TOKENS")),
+            "temperature": float(os.getenv("BEDROCK_TEMPERATURE")),
+            "top_p": float(os.getenv("BEDROCK_TOP_P")),
             "stop_sequences": []
         }
     

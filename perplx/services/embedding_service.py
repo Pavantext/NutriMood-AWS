@@ -22,7 +22,7 @@ class EmbeddingService:
             # Initialize Bedrock client
             self.client = boto3.client(
                 service_name='bedrock-runtime',
-                region_name=os.getenv('AWS_DEFAULT_REGION', 'ap-south-1')
+                region_name=os.getenv('AWS_DEFAULT_REGION')
             )
             
             # Model configuration
