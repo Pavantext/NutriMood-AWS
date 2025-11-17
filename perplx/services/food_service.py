@@ -468,18 +468,23 @@ class FoodService:
             dietary_info = self._parse_json_field(food.get('dietary', '[]'))
             dietary_str = ', '.join(dietary_info) if dietary_info else 'N/A'
             
+            # Parse ingredients
+            ingredients_info = self._parse_json_field(food.get('ingredients', '[]'))
+            ingredients_str = ', '.join(ingredients_info) if ingredients_info else 'N/A'
+            
             # Format macronutrients
             macros = self._format_macronutrients(food.get('macronutrients', ''))
             
             # Food information WITHOUT ID in the main text
             food_context = f"""
 {idx}. {name}
-   - Category: {category}
-   - Description: {description}
+   - Ingredients: {ingredients_str}
+   - Nutrition: {macros}
    - Calories: {calories} cal
    - Price: ₹{price}
+   - Category: {category}
+   - Description: {description}
    - Dietary: {dietary_str}
-   - Nutrition: {macros}
 """.strip()
             
             context_parts.append(food_context)

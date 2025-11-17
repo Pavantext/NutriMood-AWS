@@ -1,10 +1,6 @@
-"""
-Pinecone Service - Handles vector search for food recommendations
-"""
-
 import os
 from typing import List, Dict, Tuple, Optional
-from pinecone import Pinecone
+from pinecone import Pinecone, ServerlessSpec
 
 
 class PineconeService:
@@ -12,30 +8,51 @@ class PineconeService:
         """Initialize Pinecone client"""
         self.api_key = os.getenv("PINECONE_API_KEY")
         self.index_name = os.getenv("PINECONE_INDEX_NAME", "niloufer-test")
+        self.bom_index_name = os.getenv("PINECONE_BOM_INDEX_NAME", "niloufer-bom")  # Separate index for user-uploaded BOM items
+        self.embedding_dimension = int(os.getenv("TITAN_EMBEDDING_DIMENSIONS", "1024"))  # Default to 1024 for Titan V2
         
         if not self.api_key:
             print("⚠️  Warning: PINECONE_API_KEY not found in environment")
             self.client = None
             self.index = None
+            self.bom_index = None
             return
         
         try:
             # Initialize Pinecone
             self.client = Pinecone(api_key=self.api_key)
             
-            # Connect to index
+            # Connect to main index (for original food items)
             self.index = self.client.Index(self.index_name)
             
-            # Get index stats
+            # Get index stats and dimension
             stats = self.index.describe_index_stats()
             total_vectors = stats.get('total_vector_count', 0)
+            index_dimension = stats.get('dimension', self.embedding_dimension)
+            
+            # Update embedding dimension if index has a different dimension
+            if index_dimension != self.embedding_dimension:
+                self.embedding_dimension = index_dimension
+                print(f"ℹ️  Using index dimension: {index_dimension}")
             
             print(f"✅ Connected to Pinecone index '{self.index_name}' with {total_vectors} vectors")
+            
+            # Try to connect to BOM index (for user-uploaded items)
+            try:
+                self.bom_index = self.client.Index(self.bom_index_name)
+                bom_stats = self.bom_index.describe_index_stats()
+                bom_vectors = bom_stats.get('total_vector_count', 0)
+                print(f"✅ Connected to BOM Pinecone index '{self.bom_index_name}' with {bom_vectors} vectors")
+            except Exception as e:
+                print(f"⚠️  Warning: Could not connect to BOM index '{self.bom_index_name}': {e}")
+                print(f"💡 BOM index will be created automatically on first upsert if it doesn't exist")
+                self.bom_index = None
             
         except Exception as e:
             print(f"❌ Error connecting to Pinecone: {e}")
             self.client = None
             self.index = None
+            self.bom_index = None
     
     def search_foods(
         self,
@@ -174,21 +191,28 @@ class PineconeService:
         import json
         return json.dumps(macros)
     
-    def get_index_stats(self) -> Dict:
+    def get_index_stats(self, use_bom_index: bool = False) -> Dict:
         """Get Pinecone index statistics"""
-        if not self.index:
-            return {"error": "Pinecone not initialized"}
+        target_index = self.bom_index if use_bom_index else self.index
+        index_name = self.bom_index_name if use_bom_index else self.index_name
+        
+        if not target_index:
+            return {"error": f"Pinecone index '{index_name}' not initialized"}
         
         try:
-            stats = self.index.describe_index_stats()
+            stats = target_index.describe_index_stats()
             return {
-                "index_name": self.index_name,
+                "index_name": index_name,
                 "total_vectors": stats.get('total_vector_count', 0),
                 "dimension": stats.get('dimension', 0),
                 "namespaces": stats.get('namespaces', {})
             }
         except Exception as e:
             return {"error": str(e)}
+    
+    def get_bom_index_stats(self) -> Dict:
+        """Get BOM index statistics"""
+        return self.get_index_stats(use_bom_index=True)
     
     def get_food_by_id(self, food_id: str) -> Optional[Dict]:
         """
@@ -219,4 +243,239 @@ class PineconeService:
         except Exception as e:
             print(f"❌ Error fetching food by ID: {e}")
             return None
+    
+    def upsert_food_item(
+        self,
+        food_id: str,
+        embedding: List[float],
+        food_data: Dict,
+        use_bom_index: bool = False
+    ) -> bool:
+        """
+        Upsert (insert or update) a food item in Pinecone
+        
+        Args:
+            food_id: Unique identifier for the food item
+            embedding: Vector embedding for the food item
+            food_data: Dictionary containing food item metadata
+            use_bom_index: If True, use BOM index (for user-uploaded items), otherwise use main index
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        # Select the appropriate index
+        target_index = self.bom_index if use_bom_index else self.index
+        
+        if not target_index:
+            if use_bom_index:
+                # Try to create/connect to BOM index if it doesn't exist
+                if self.client:
+                    if not self._ensure_bom_index_exists():
+                        return False
+                    target_index = self.bom_index
+                else:
+                    print("⚠️  Pinecone client not initialized, cannot upsert food item")
+                    return False
+            else:
+                print("⚠️  Pinecone not initialized, cannot upsert food item")
+                return False
+        
+        try:
+            # Build metadata from food_data
+            metadata = self._build_pinecone_metadata(food_data)
+            
+            # Upsert to Pinecone
+            target_index.upsert(
+                vectors=[{
+                    "id": food_id,
+                    "values": embedding,
+                    "metadata": metadata
+                }]
+            )
+            
+            index_type = "BOM" if use_bom_index else "main"
+            print(f"✅ Successfully upserted food item to {index_type} index: {food_data.get('product_name', food_id)}")
+            return True
+            
+        except Exception as e:
+            print(f"❌ Error upserting food item to Pinecone: {e}")
+            return False
+    
+    def _build_pinecone_metadata(self, food_data: Dict) -> Dict:
+        """
+        Build Pinecone metadata dictionary from food data
+        
+        Args:
+            food_data: Food item data dictionary
+        
+        Returns:
+            Pinecone-compatible metadata dictionary
+        """
+        import json
+        
+        # Extract ingredients and dietary info
+        ingredients_list = food_data.get('ingredients', [])
+        if isinstance(ingredients_list, str):
+            try:
+                ingredients_list = json.loads(ingredients_list)
+            except:
+                ingredients_list = []
+        
+        dietary_list = food_data.get('dietary', [])
+        if isinstance(dietary_list, str):
+            try:
+                dietary_list = json.loads(dietary_list)
+            except:
+                dietary_list = []
+        
+        # Extract macronutrients
+        macros = food_data.get('macronutrients', {})
+        if isinstance(macros, str):
+            try:
+                macros = json.loads(macros)
+            except:
+                macros = {}
+        
+        # Build metadata
+        metadata = {
+            'id': food_data.get('id', food_data.get('Id', '')),
+            'product_name': food_data.get('product_name', food_data.get('ProductName', '')),
+            'description': food_data.get('description', food_data.get('Description', '')),
+            'category_name': food_data.get('category_name', food_data.get('KioskCategoryName', '')),
+            'sub_category': food_data.get('sub_category', food_data.get('SubCategoryName', '')),
+            'calories': int(food_data.get('calories', 0)),
+            'price': float(food_data.get('price', food_data.get('Price', 0))),
+            'image_url': food_data.get('image_url', food_data.get('Image', '')),
+            'gst': float(food_data.get('gst', food_data.get('GST', 5))),
+            'is_popular': bool(food_data.get('is_popular', food_data.get('IsPopular', False))),
+            'ingredients_list': json.dumps(ingredients_list) if ingredients_list else '[]',
+            'dietary_list': json.dumps(dietary_list) if dietary_list else '[]',
+        }
+        
+        # Add macronutrients
+        metadata['protein'] = str(macros.get('protein', '0g'))
+        metadata['carbohydrates'] = str(macros.get('carbohydrates', '0g'))
+        metadata['fat'] = str(macros.get('fat', '0g'))
+        metadata['fiber'] = str(macros.get('fiber', '0g'))
+        
+        # Add dietary flags
+        dietary_lower = [d.lower() for d in dietary_list] if isinstance(dietary_list, list) else []
+        metadata['is_vegetarian'] = 'vegetarian' in dietary_lower or 'veg' in dietary_lower
+        metadata['is_vegan'] = 'vegan' in dietary_lower
+        metadata['is_gluten_free'] = 'gluten-free' in dietary_lower
+        
+        # Check for high protein (safely parse protein value)
+        is_high_protein = 'high-protein' in dietary_lower
+        if not is_high_protein:
+            try:
+                protein_str = str(macros.get('protein', '0g'))
+                protein_value = float(protein_str.replace('g', '').replace('G', '').strip())
+                is_high_protein = protein_value > 20
+            except (ValueError, AttributeError):
+                pass
+        metadata['is_high_protein'] = is_high_protein
+        
+        metadata['is_low_calorie'] = int(metadata.get('calories', 0)) < 300
+        
+        return metadata
+    
+    def _ensure_bom_index_exists(self) -> bool:
+        """
+        Ensure BOM index exists, create it if it doesn't
+        
+        Returns:
+            True if index exists or was created successfully, False otherwise
+        """
+        if not self.client:
+            return False
+        
+        try:
+            # First, try to connect to existing index
+            try:
+                self.bom_index = self.client.Index(self.bom_index_name)
+                bom_stats = self.bom_index.describe_index_stats()
+                bom_vectors = bom_stats.get('total_vector_count', 0)
+                print(f"✅ Connected to existing BOM index '{self.bom_index_name}' with {bom_vectors} vectors")
+                return True
+            except Exception:
+                # Index doesn't exist, try to create it
+                pass
+            
+            # Check if index exists in the list
+            existing_indexes = [index.name for index in self.client.list_indexes()]
+            
+            if self.bom_index_name in existing_indexes:
+                # Index exists but connection failed, try again
+                try:
+                    self.bom_index = self.client.Index(self.bom_index_name)
+                    print(f"✅ Connected to BOM index '{self.bom_index_name}'")
+                    return True
+                except Exception as e:
+                    print(f"❌ Error connecting to existing BOM index: {e}")
+                    return False
+            
+            # Index doesn't exist, create it
+            print(f"📦 Creating BOM index '{self.bom_index_name}' with dimension {self.embedding_dimension}...")
+            
+            try:
+                # Get cloud and region from main index if available
+                cloud = "aws"  # Default to AWS
+                region = os.getenv("PINECONE_ENVIRONMENT")  # Default region from env or us-east-1
+                
+                # Try to get cloud and region from main index
+                if self.index:
+                    try:
+                        index_info = self.client.describe_index(self.index_name)
+                        if hasattr(index_info, 'spec') and hasattr(index_info.spec, 'serverless'):
+                            if hasattr(index_info.spec.serverless, 'cloud'):
+                                cloud = index_info.spec.serverless.cloud
+                            if hasattr(index_info.spec.serverless, 'region'):
+                                region = index_info.spec.serverless.region
+                    except Exception:
+                        pass  # Use defaults
+                
+                # Create the index with ServerlessSpec
+                self.client.create_index(
+                    name=self.bom_index_name,
+                    dimension=self.embedding_dimension,
+                    metric="cosine",
+                    spec=ServerlessSpec(
+                        cloud=cloud,
+                        region=region
+                    )
+                )
+                
+                print(f"✅ Successfully created BOM index '{self.bom_index_name}'")
+                
+                # Wait for index to be ready, then connect (with retries)
+                import time
+                max_retries = 10
+                retry_delay = 2
+                
+                for attempt in range(max_retries):
+                    try:
+                        time.sleep(retry_delay)
+                        # Connect to the newly created index
+                        self.bom_index = self.client.Index(self.bom_index_name)
+                        # Try to get stats to verify it's ready
+                        self.bom_index.describe_index_stats()
+                        print(f"✅ Connected to newly created BOM index '{self.bom_index_name}'")
+                        return True
+                    except Exception as e:
+                        if attempt < max_retries - 1:
+                            print(f"⏳ Waiting for index to be ready... (attempt {attempt + 1}/{max_retries})")
+                            continue
+                        else:
+                            print(f"⚠️  Index created but connection failed: {e}")
+                            print(f"💡 The index should be ready shortly. Please try again in a moment.")
+                            return False
+                
+            except Exception as e:
+                print(f"❌ Error creating BOM index '{self.bom_index_name}': {e}")
+                print(f"💡 Please create the index manually in Pinecone console or check your API permissions")
+                return False
+                
+        except Exception as e:
+            print(f"❌ Error ensuring BOM index exists: {e}")
+            return False
 

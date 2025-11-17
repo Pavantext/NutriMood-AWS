@@ -1,8 +1,3 @@
-"""
-Nutrimood Chatbot - Main Application
-A food recommendation chatbot using AWS Bedrock and MCP
-"""
-
 from fastapi import FastAPI, HTTPException, Request, Form, status
 from fastapi.responses import StreamingResponse, RedirectResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,13 +5,13 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from pydantic import BaseModel
+from interfaces.base_models import ChatRequest, RecommendRequest, TrackSessionRequest, TrackFoodOrderRequest, ChatbotRatingRequest, MenuItemRequest, MenuItemIngestResponse
 from typing import Optional, List, Dict
 from contextlib import asynccontextmanager
 import uvicorn
 import json
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 import os
 from dotenv import load_dotenv
@@ -47,16 +42,33 @@ class StreamingMiddleware(BaseHTTPMiddleware):
 from services.bedrock_service import BedrockService
 from services.food_service import FoodService
 from services.session_service import SessionService
-from services.mcp_server import MCPServer
+# from services.mcp_server import MCPServer
 from services.database_service import DatabaseService
 from utils.response_formatter import ResponseFormatter
+
+# Global service instances (initialized in lifespan)
+bedrock_service = None
+food_service = None
+session_service = None
+database_service = None
+response_formatter = None
+mcp_server = None
 
 # Lifespan event handler
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
-    # Startup
+    global bedrock_service, food_service, session_service, database_service, response_formatter, mcp_server
+    
+    # Startup - Initialize services only once per process
     print("🚀 Starting Nutrimood Chatbot...")
+    
+    # Initialize services (moved from module level to avoid duplicate init with reloader)
+    bedrock_service = BedrockService()
+    food_service = FoodService()
+    session_service = SessionService()
+    database_service = DatabaseService()  # AWS RDS PostgreSQL
+    response_formatter = ResponseFormatter()
     
     # Get food data path from environment or use default
     food_data_path = os.getenv("FOOD_DATA_PATH", "../data/raw/Niloufer_data.json")
@@ -84,9 +96,8 @@ async def lifespan(app: FastAPI):
         print("⚠️  Warning: Could not load food data. Please check the data path.")
     
     # Initialize MCP server after food data is loaded
-    global mcp_server
-    mcp_server = MCPServer(food_service)
-    print("✅ MCP Server initialized")
+    # mcp_server = MCPServer(food_service)
+    # print("✅ MCP Server initialized")
     
     yield
     
@@ -123,31 +134,8 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
-# Initialize services
-bedrock_service = BedrockService()
-food_service = FoodService()
-session_service = SessionService()
-database_service = DatabaseService()  # AWS RDS PostgreSQL
-response_formatter = ResponseFormatter()
-mcp_server = None  # Will be initialized after food data is loaded
+# Services are initialized in the lifespan handler to avoid duplicate initialization with Uvicorn reloader
 
-# Request/Response Models
-class ChatRequest(BaseModel):
-    message: str
-    session_id: Optional[str] = None
-    user_preferences: Optional[Dict] = None
-    user_name: Optional[str] = None  # User's name for personalized responses
-    user_id: Optional[str] = None  # User ID for database tracking
-
-class ChatResponse(BaseModel):
-    message: str
-    session_id: str
-    food_recommendation_id: str
-
-class RecommendRequest(BaseModel):
-    query: str
-    top_k: int = 5
-    filters: Optional[Dict] = None
 
 def _is_followup_question(query: str, conversation_history: List[Dict]) -> bool:
     """
@@ -271,16 +259,9 @@ async def chat(request: ChatRequest):
                 food_matches
             )
 
-            # Fallback if LLM invents something or no IDs extracted
+            # If no food IDs extracted, don't show any food items to frontend
             if not recommended_ids:
-                print("⚠️ No valid food matches found in LLM response, falling back to top matches.")
-                # Extract IDs from top matches, filtering out None/empty values
-                fallback_ids = []
-                for food, score in food_matches[:2]:
-                    food_id = food.get("Id") or food.get("id")  # Try both capital and lowercase
-                    if food_id and str(food_id).strip():  # Ensure it's not None or empty
-                        fallback_ids.append(str(food_id))
-                recommended_ids = fallback_ids
+                print("⚠️ No valid food matches found in LLM response. Not showing any food items.")
             
             # Save assistant response to session
             session_service.add_message(session_id, "assistant", full_response)
@@ -450,6 +431,295 @@ async def list_foods(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error listing foods: {str(e)}")
 
+@app.post("/menu/ingest", response_model=MenuItemIngestResponse)
+async def ingest_menu_item(request: MenuItemRequest):
+    """
+    Ingest a new menu item (Bill of Materials) and store it in Pinecone BOM index
+    
+    This endpoint allows users to upload their menu items which will be:
+    1. Converted to embeddings using AWS Titan
+    2. Stored in a separate Pinecone BOM index (for user-uploaded items)
+    3. Made available for semantic search
+    
+    Note: User-uploaded BOM items are stored in a separate Pinecone index to keep them
+    isolated from the original menu items.
+    
+    **Request Body:**
+    ```json
+    {
+        "Id": "e754af8d-bb53-421a-ace5-c28ab216b4d2",
+        "GST": 5.0,
+        "IsPopular": false,
+        "ProductName": "Jalapeno Cheese Poppers (6.Pcs)",
+        "Description": "Our jalapeños are carefully selected for their perfect balance of heat and flavor, .....",
+        "Image": "https://niloufer.blob.core.windows.net/menu-images/jalapino%20poppers%2001-min-min.jpg",
+        "Price": 380.0,
+        "Calories": 280,
+        "Macronutrients": {
+            "protein": "10g",
+            "carbohydrates": "25g",
+            "fat": "20g",
+            "fiber": "2g"
+        },
+        "Ingredients": ["JALAPINO CHEESE POPPERS SEMI FINISHED 1 NO", "GARLIC MAYO SEMI FINISHED 60 GRAM"],
+        "Dietary": ["High-protein"],
+        "HealthBenefits": "The JALAPINO CHEESE POPPERS contain capsaicin from jalapeños, offering mild antioxidant...",
+        "CuisineType": "Fusion",
+        "MealType": "Snack",
+        "Occasion": "Indulgence",
+        "SpiceLevel": "Hot"
+    }
+    ```
+    
+    **Response:**
+    ```json
+    {
+      "status": "success",
+      "message": "Menu item successfully ingested and stored in Pinecone",
+      "item_id": "menu-item-001"
+    }
+    ```
+    """
+    try:
+        # Check if Pinecone and embedding services are available
+        if not food_service.use_vector_search:
+            raise HTTPException(
+                status_code=503,
+                detail="Vector search not available. Please configure Pinecone and AWS Titan embeddings."
+            )
+        
+        # Build embedding text for the menu item
+        embedding_parts = [
+            f"Food: {request.ProductName}",
+            f"Description: {request.Description}",
+            f"Calories: {request.Calories}",
+            f"Protein: {request.Macronutrients.get('protein', '0g') if request.Macronutrients else '0g'}",
+            f"Macronutrients: {request.Macronutrients}",
+            f"Ingredients: {', '.join(request.Ingredients)}" if request.Ingredients else "",
+            f"Dietary: {', '.join(request.Dietary)}" if request.Dietary else "",
+            f"Health Benefits: {request.HealthBenefits}" if request.HealthBenefits else "",
+            f"Cuisine Type: {request.CuisineType}" if request.CuisineType else "",
+            f"Meal Type: {request.MealType}" if request.MealType else "",
+            f"Occasion: {request.Occasion}" if request.Occasion else "",
+            f"Spice Level: {request.SpiceLevel}" if request.SpiceLevel else ""
+        ]
+        embedding_text = '. '.join(filter(None, embedding_parts))
+        
+        # Generate embedding using AWS Titan
+        embedding = food_service.embedding_service.generate_embedding(embedding_text)
+        
+        if not embedding:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to generate embedding for menu item"
+            )
+        
+        # Prepare food data dictionary
+        food_data = {
+            'id': request.Id,
+            'product_name': request.ProductName,
+            'description': request.Description,
+            'calories': request.Calories,
+            'price': request.Price,
+            'image_url': request.Image,
+            'gst': request.GST,
+            'is_popular': request.IsPopular,
+            'ingredients': request.Ingredients,
+            'dietary': request.Dietary,
+            'macronutrients': request.Macronutrients,
+            'health_benefits': request.HealthBenefits,
+            'cuisine_type': request.CuisineType,
+            'meal_type': request.MealType,
+            'occasion': request.Occasion,
+            'spice_level': request.SpiceLevel
+        }
+        
+        # Upsert to Pinecone BOM index (separate index for user-uploaded items)
+        success = food_service.pinecone_service.upsert_food_item(
+            food_id=request.Id,
+            embedding=embedding,
+            food_data=food_data,
+            use_bom_index=True  # Use BOM index for user-uploaded items
+        )
+        
+        if not success:
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to store menu item in Pinecone BOM index"
+            )
+        
+        return MenuItemIngestResponse(
+            status="success",
+            message="Menu item successfully ingested and stored in Pinecone BOM index",
+            item_id=request.Id
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error ingesting menu item: {str(e)}")
+
+@app.post("/menu/ingest/batch", response_model=MenuItemIngestResponse)
+async def ingest_menu_items_batch(requests: List[MenuItemRequest]):
+    """
+    Ingest multiple menu items (Bill of Materials) in batch and store them in Pinecone BOM index
+    
+    This endpoint allows users to upload multiple menu items at once.
+    All items will be converted to embeddings and stored in the separate Pinecone BOM index.
+    
+    **Request Body:**
+    ```json
+    [
+      {
+        "Id": "menu-item-001",
+        "ProductName": "Chicken Biryani",
+        ...
+      },
+      {
+        "Id": "menu-item-002",
+        "ProductName": "Vegetable Curry",
+        ...
+      }
+    ]
+    ```
+    
+    **Response:**
+    ```json
+    {
+      "status": "success",
+      "message": "Successfully ingested 2 menu items",
+      "total_items": 2
+    }
+    ```
+    """
+    try:
+        # Check if Pinecone and embedding services are available
+        if not food_service.use_vector_search:
+            raise HTTPException(
+                status_code=503,
+                detail="Vector search not available. Please configure Pinecone and AWS Titan embeddings."
+            )
+        
+        success_count = 0
+        failed_items = []
+        
+        for request in requests:
+            try:
+                # Build embedding text for the menu item
+                embedding_parts = [
+                    f"Food: {request.ProductName}",
+                    f"Description: {request.Description}",
+                    f"Calories: {request.Calories}",
+                    f"Protein: {request.Macronutrients.get('protein', '0g') if request.Macronutrients else '0g'}",
+                    f"Macronutrients: {request.Macronutrients}",
+                    f"Ingredients: {', '.join(request.Ingredients)}" if request.Ingredients else "",
+                    f"Dietary: {', '.join(request.Dietary)}" if request.Dietary else "",
+                    f"Health Benefits: {request.HealthBenefits}" if request.HealthBenefits else "",
+                    f"Cuisine Type: {request.CuisineType}" if request.CuisineType else "",
+                    f"Meal Type: {request.MealType}" if request.MealType else "",
+                    f"Occasion: {request.Occasion}" if request.Occasion else "",
+                    f"Spice Level: {request.SpiceLevel}" if request.SpiceLevel else ""
+                ]
+                embedding_text = '. '.join(filter(None, embedding_parts))
+                
+                # Generate embedding using AWS Titan
+                embedding = food_service.embedding_service.generate_embedding(embedding_text)
+                
+                if not embedding:
+                    failed_items.append(request.Id)
+                    continue
+                
+                # Prepare food data dictionary
+                food_data = {
+                    'id': request.Id,
+                    'product_name': request.ProductName,
+                    'description': request.Description,
+                    'calories': request.Calories,
+                    'price': request.Price,
+                    'image_url': request.Image,
+                    'gst': request.GST,
+                    'is_popular': request.IsPopular,
+                    'ingredients': request.Ingredients,
+                    'dietary': request.Dietary,
+                    'macronutrients': request.Macronutrients,
+                    'health_benefits': request.HealthBenefits,
+                    'cuisine_type': request.CuisineType,
+                    'meal_type': request.MealType,
+                    'occasion': request.Occasion,
+                    'spice_level': request.SpiceLevel
+                }
+                
+                # Upsert to Pinecone BOM index (separate index for user-uploaded items)
+                success = food_service.pinecone_service.upsert_food_item(
+                    food_id=request.Id,
+                    embedding=embedding,
+                    food_data=food_data,
+                    use_bom_index=True  # Use BOM index for user-uploaded items
+                )
+                
+                if success:
+                    success_count += 1
+                else:
+                    failed_items.append(request.Id)
+                    
+            except Exception as e:
+                print(f"❌ Error processing menu item {request.Id}: {e}")
+                failed_items.append(request.Id)
+        
+        if success_count == 0:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to ingest all menu items. Failed items: {', '.join(failed_items)}"
+            )
+        
+        message = f"Successfully ingested {success_count} menu item(s) to BOM index"
+        if failed_items:
+            message += f". Failed items: {', '.join(failed_items)}"
+        
+        return MenuItemIngestResponse(
+            status="success" if len(failed_items) == 0 else "partial",
+            message=message,
+            total_items=success_count
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error ingesting menu items: {str(e)}")
+
+@app.get("/menu/bom/stats")
+async def get_bom_index_stats():
+    """
+    Get statistics for the BOM (Bill of Materials) Pinecone index
+    
+    Returns information about the separate index used for user-uploaded menu items.
+    
+    **Response:**
+    ```json
+    {
+      "index_name": "niloufer-bom",
+      "total_vectors": 150,
+      "dimension": 1024,
+      "namespaces": {}
+    }
+    ```
+    """
+    try:
+        stats = food_service.pinecone_service.get_bom_index_stats()
+        
+        if "error" in stats:
+            raise HTTPException(
+                status_code=503,
+                detail=f"BOM index not available: {stats['error']}"
+            )
+        
+        return stats
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error getting BOM index stats: {str(e)}")
+
 # MCP Endpoints
 @app.get("/mcp/info")
 async def mcp_info():
@@ -585,6 +855,306 @@ async def get_feedback_statistics(user_id: Optional[str] = None):
     
     return stats
 
+
+@app.post("/chat/track-session")
+async def track_session(request: TrackSessionRequest):
+    """
+    Track chatbot session time
+    Called when chat window opens (start_time) and closes (end_time)
+    """
+    try:
+        # Parse timestamps - handle ISO 8601 format
+        start_time_str = request.start_time.replace('Z', '+00:00') if request.start_time.endswith('Z') else request.start_time
+        start_time = datetime.fromisoformat(start_time_str)
+        
+        end_time = None
+        if request.end_time:
+            end_time_str = request.end_time.replace('Z', '+00:00') if request.end_time.endswith('Z') else request.end_time
+            end_time = datetime.fromisoformat(end_time_str)
+        
+        # Convert to UTC naive datetime for storage
+        if start_time.tzinfo is not None:
+            start_time = start_time.astimezone(timezone.utc).replace(tzinfo=None)
+        
+        if end_time and end_time.tzinfo is not None:
+            end_time = end_time.astimezone(timezone.utc).replace(tzinfo=None)
+        
+        success = database_service.track_chatbot_session(
+            session_id=request.session_id,
+            start_time=start_time,
+            end_time=end_time,
+            total_time_seconds=request.total_time_seconds,
+            user_name=request.user_name
+        )
+        
+        if success:
+            return {"status": "success", "message": "Session tracked successfully"}
+        else:
+            return {"status": "error", "message": "Failed to track session"}
+            
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid timestamp format: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error tracking session: {str(e)}")
+
+@app.post("/chat/track-food-order")
+async def track_food_order(request: TrackFoodOrderRequest):
+    """
+    Track food orders from chatbot
+    Called when items are added to cart or orders are placed
+    """
+    try:
+        # Validate event_type
+        if request.event_type not in ['added_to_cart', 'order_placed']:
+            raise HTTPException(
+                status_code=400, 
+                detail="event_type must be either 'added_to_cart' or 'order_placed'"
+            )
+        
+        # Parse timestamp - handle ISO 8601 format
+        timestamp_str = request.timestamp.replace('Z', '+00:00') if request.timestamp.endswith('Z') else request.timestamp
+        timestamp = datetime.fromisoformat(timestamp_str)
+        # Convert to UTC naive datetime for storage
+        if timestamp.tzinfo is not None:
+            timestamp = timestamp.astimezone(timezone.utc).replace(tzinfo=None)
+        
+        success = database_service.track_food_order(
+            session_id=request.session_id,
+            product_id=request.product_id,
+            product_name=request.product_name,
+            timestamp=timestamp,
+            event_type=request.event_type,
+            user_name=request.user_name,
+            order_id=request.order_id,
+            quantity=request.quantity
+        )
+        
+        if success:
+            return {"status": "success", "message": "Food order tracked successfully"}
+        else:
+            return {"status": "error", "message": "Failed to track food order"}
+            
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid timestamp format: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error tracking food order: {str(e)}")
+
+@app.post("/chat/rating")
+async def submit_chatbot_rating(request: ChatbotRatingRequest):
+    """
+    Submit chatbot rating/feedback
+    Called when user clicks on a star rating (1-5 stars)
+    Tracks which specific bot message was rated using message_id
+    """
+    try:
+        # Validate rating
+        if request.rating < 1 or request.rating > 5:
+            raise HTTPException(
+                status_code=400,
+                detail="Rating must be between 1 and 5"
+            )
+        
+        # Parse timestamp - handle ISO 8601 format
+        timestamp_str = request.timestamp.replace('Z', '+00:00') if request.timestamp.endswith('Z') else request.timestamp
+        timestamp = datetime.fromisoformat(timestamp_str)
+        # Convert to UTC naive datetime for storage
+        if timestamp.tzinfo is not None:
+            timestamp = timestamp.astimezone(timezone.utc).replace(tzinfo=None)
+        
+        success = database_service.track_chatbot_rating(
+            session_id=request.session_id,
+            rating=request.rating,
+            timestamp=timestamp,
+            message_id=request.message_id,
+            user_name=request.user_name
+        )
+        
+        if success:
+            return {"status": "success", "message": "Rating submitted successfully"}
+        else:
+            raise HTTPException(status_code=500, detail="Failed to submit rating")
+            
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid timestamp format: {str(e)}")
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error submitting rating: {str(e)}")
+
+@app.get("/analytics/chatbot/stats")
+async def get_chatbot_analytics():
+    """
+    Get comprehensive chatbot analytics for admin dashboard
+    """
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    analytics = database_service.get_chatbot_analytics()
+    return analytics
+
+@app.get("/analytics/orders")
+async def get_orders_analytics():
+    """Get orders analytics (added to cart vs placed)"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    analytics = database_service.get_orders_analytics()
+    return analytics
+
+@app.get("/analytics/users")
+async def get_users_analytics(start_date: Optional[str] = None, end_date: Optional[str] = None):
+    """Get users analytics with optional date range filter"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    start_dt = None
+    end_dt = None
+    if start_date:
+        try:
+            start_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+            if start_dt.tzinfo:
+                start_dt = start_dt.astimezone().replace(tzinfo=None)
+        except:
+            pass
+    if end_date:
+        try:
+            end_dt = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+            if end_dt.tzinfo:
+                end_dt = end_dt.astimezone().replace(tzinfo=None)
+        except:
+            pass
+    
+    analytics = database_service.get_users_analytics(start_dt, end_dt)
+    return analytics
+
+@app.get("/analytics/feedback")
+async def get_feedback_analytics(
+    limit: int = 50,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    rating: Optional[str] = None
+):
+    """Get feedback with user queries and responses, with optional date and rating filters"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    print(f"🔍 Received feedback request - start_date: {start_date}, end_date: {end_date}, rating: {rating}")
+    
+    start_dt = None
+    end_dt = None
+    if start_date:
+        try:
+            # Handle YYYY-MM-DD format from HTML date inputs
+            if len(start_date) == 10:  # YYYY-MM-DD format
+                start_dt = datetime.strptime(start_date, '%Y-%m-%d')
+            else:
+                # Handle ISO format with time
+                start_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+                if start_dt.tzinfo:
+                    start_dt = start_dt.astimezone().replace(tzinfo=None)
+        except Exception as e:
+            print(f"Error parsing start_date: {e}")
+            pass
+    if end_date:
+        try:
+            # Handle YYYY-MM-DD format from HTML date inputs
+            if len(end_date) == 10:  # YYYY-MM-DD format
+                # Add time to end of day for inclusive end date filtering
+                end_dt = datetime.strptime(end_date, '%Y-%m-%d')
+                end_dt = end_dt.replace(hour=23, minute=59, second=59)
+            else:
+                # Handle ISO format with time
+                end_dt = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+                if end_dt.tzinfo:
+                    end_dt = end_dt.astimezone().replace(tzinfo=None)
+        except Exception as e:
+            print(f"Error parsing end_date: {e}")
+            pass
+    
+    # Validate and convert rating
+    rating_int = None
+    if rating and rating.strip():
+        try:
+            rating_int = int(rating.strip())
+            if rating_int < 1 or rating_int > 5:
+                rating_int = None
+        except (ValueError, AttributeError):
+            rating_int = None
+    
+    print(f"🔍 Parsed filters - start_dt: {start_dt}, end_dt: {end_dt}, rating_int: {rating_int}")
+    
+    feedback = database_service.get_feedback_with_conversations(limit, start_dt, end_dt, rating_int)
+    return feedback
+
+@app.get("/analytics/session-times")
+async def get_session_times_analytics():
+    """Get session time analytics per user"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    analytics = database_service.get_session_times_analytics()
+    return analytics
+
+@app.get("/analytics/sessions")
+async def get_sessions_analytics(start_date: Optional[str] = None, end_date: Optional[str] = None):
+    """Get user sessions with optional date range filter"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    start_dt = None
+    end_dt = None
+    if start_date:
+        try:
+            start_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+            if start_dt.tzinfo:
+                start_dt = start_dt.astimezone().replace(tzinfo=None)
+        except:
+            pass
+    if end_date:
+        try:
+            end_dt = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+            if end_dt.tzinfo:
+                end_dt = end_dt.astimezone().replace(tzinfo=None)
+        except:
+            pass
+    
+    sessions = database_service.get_all_users_filtered(start_dt, end_dt)
+    return {"sessions": sessions, "count": len(sessions)}
+
+@app.get("/analytics/user-details/{session_id}")
+async def get_user_details_api(session_id: str):
+    """Get detailed session/user information as JSON"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    user_data = database_service.get_user_details(session_id)
+    
+    if not user_data:
+        raise HTTPException(status_code=404, detail=f"Session '{session_id}' not found")
+    
+    # Populate food details for recommendations
+    for conversation in user_data['conversations']:
+        food_details = []
+        for food_id in conversation.get('recommended_food_ids', []):
+            # Handle both string IDs and dict objects
+            if isinstance(food_id, dict):
+                # Already a food object, use it directly
+                food_item = food_id
+            else:
+                # It's an ID string, fetch the food item
+                food_item = food_service.get_food_by_id(food_id)
+            
+            if food_item:
+                food_details.append({
+                    'id': food_item.get('Id') or food_item.get('id'),
+                    'name': food_item.get('Name') or food_item.get('ProductName', 'Unknown'),
+                    'description': food_item.get('Description', ''),
+                    'image_url': food_item.get('Image') or food_item.get('ImageUrl') or food_item.get('image_url') or '/static/default-food.jpg'
+                })
+        conversation['recommended_foods'] = food_details
+    
+    return user_data
+
 # Admin Endpoints
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
@@ -640,14 +1210,17 @@ async def admin_dashboard(request: Request):
         return templates.TemplateResponse("admin_dashboard.html", {
             "request": request,
             "users": {},
+            "chatbot_analytics": {},
             "error": "Database not configured"
         })
     
     users = database_service.get_all_users()
+    chatbot_analytics = database_service.get_chatbot_analytics()
     
     return templates.TemplateResponse("admin_dashboard.html", {
         "request": request,
-        "users": users
+        "users": users,
+        "chatbot_analytics": chatbot_analytics
     })
 
 @app.get("/admin/user/{session_id}", response_class=HTMLResponse)
@@ -695,8 +1268,8 @@ async def admin_user_details(request: Request, session_id: str):
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
-        host="0.0.0.0",
-        port=8000,
+        host=os.getenv("APP_HOST", "0.0.0.0"),
+        port=int(os.getenv("APP_PORT", "8000")),
         reload=True,
-        log_level="info"
+        log_level=os.getenv("LOG_LEVEL", "info")
     )

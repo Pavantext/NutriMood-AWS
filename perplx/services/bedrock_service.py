@@ -4,6 +4,7 @@ Bedrock Service - Handles AWS Bedrock LLM interactions with streaming support
 
 import boto3
 import json
+import os
 from typing import List, Dict, AsyncGenerator
 import asyncio
 from botocore.exceptions import ClientError
@@ -14,15 +15,16 @@ class BedrockService:
         """Initialize AWS Bedrock client"""
         self.client = boto3.client(
             service_name='bedrock-runtime',
-            region_name='us-east-1'  # Change to your region
+            region_name= os.getenv("AWS_DEFAULT_REGION")  # Change to your region
         )
         
         # Model configuration
-        self.model_id = "anthropic.claude-3-sonnet-20240229-v1:0"  # or use Claude 3.5 Sonnet
+        
+        self.model_id = os.getenv("BEDROCK_INFERENCE_PROFILE_ID")
         self.model_config = {
-            "max_tokens": 1000,
-            "temperature": 0.7,
-            "top_p": 0.9,
+            "max_tokens": int(os.getenv("BEDROCK_MAX_TOKENS")),
+            "temperature": float(os.getenv("BEDROCK_TEMPERATURE")),
+            "top_p": float(os.getenv("BEDROCK_TOP_P")),
             "stop_sequences": []
         }
     
@@ -327,11 +329,15 @@ Shorter + Funnier + Helpful = Perfect NutriMood!"""
         user_query: str,
         conversation_history: List[Dict],
         food_context: str,
-        session_preferences: Dict
+        session_preferences: Dict,
+        debug: bool = False
     ) -> AsyncGenerator[str, None]:
         """
         Generate streaming response from AWS Bedrock
         Yields text chunks as they arrive
+        
+        Args:
+            debug: If True, prints the exact data sent to LLM (for debugging)
         """
         try:
             # Build the complete prompt
@@ -343,6 +349,19 @@ Shorter + Funnier + Helpful = Perfect NutriMood!"""
             )
             
             system_prompt = self._build_system_prompt()
+            
+            # Debug: Print what's being sent to LLM
+            if debug or os.getenv("DEBUG_LLM_PROMPTS", "false").lower() == "true":
+                print("\n" + "=" * 80)
+                print("🔍 DEBUG: LLM INPUT DATA")
+                print("=" * 80)
+                print("\n📋 SYSTEM PROMPT (first 500 chars):")
+                print(system_prompt[:500] + "..." if len(system_prompt) > 500 else system_prompt)
+                print("\n📝 USER PROMPT:")
+                print(prompt)
+                print("\n" + "=" * 80)
+                print("END DEBUG OUTPUT")
+                print("=" * 80 + "\n")
             
             # Prepare request body for Claude
             request_body = {
