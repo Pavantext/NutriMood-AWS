@@ -57,18 +57,18 @@ logger = logging.getLogger(__name__)
 class GlobalRateLimiter:
     """Thread-safe global rate limiter for Bedrock API calls"""
     
-    def __init__(self, rpm: int = 50):
+    def __init__(self, rpm: int = None):
         """
         Initialize rate limiter
         
         Args:
-            rpm: Requests per minute (default: 50 for ap-south-1)
+            rpm: Requests per minute (defaults to BEDROCK_RPM_LIMIT env var or 50)
         """
-        self.rpm = rpm
-        self.min_interval = 60.0 / rpm  # Minimum seconds between requests
+        self.rpm = rpm or int(os.getenv("BEDROCK_RPM_LIMIT"))
+        self.min_interval = 60.0 / self.rpm  # Minimum seconds between requests
         self.last_request_time = 0.0
         self.lock = threading.Lock()
-        logger.info(f"🔒 Global Rate Limiter initialized: {rpm} RPM ({self.min_interval:.2f}s between requests)")
+        logger.info(f"🔒 Global Rate Limiter initialized: {self.rpm} RPM ({self.min_interval:.2f}s between requests)")
     
     def wait_if_needed(self):
         """Wait if necessary to respect rate limit"""
@@ -86,7 +86,7 @@ class GlobalRateLimiter:
 
 
 # Global rate limiter instance (shared across all server instances)
-_global_rate_limiter = GlobalRateLimiter(rpm=50)  # 50 RPM for ap-south-1
+_global_rate_limiter = GlobalRateLimiter()  # RPM from BEDROCK_RPM_LIMIT env var or defaults to 50
 
 
 class MCPClaudeServer:
@@ -97,14 +97,15 @@ class MCPClaudeServer:
         # AWS Bedrock configuration
         self.bedrock_client = boto3.client(
             service_name='bedrock-runtime',
-            region_name=os.getenv("AWS_DEFAULT_REGION", "ap-south-1")
+            region_name=os.getenv("AWS_DEFAULT_REGION")
         )
         
-        self.model_id = "anthropic.claude-3-sonnet-20240229-v1:0"
+        # Prefer inference profile if provided, otherwise fall back to direct model ID
+        self.model_id = os.getenv("BEDROCK_INFERENCE_PROFILE_ID")
         self.model_config = {
-            "max_tokens": 2000,
-            "temperature": 0.7,
-            "top_p": 0.9
+            "max_tokens": int(os.getenv("BEDROCK_MAX_TOKENS")),
+            "temperature": float(os.getenv("BEDROCK_TEMPERATURE")),
+            "top_p": float(os.getenv("BEDROCK_TOP_P"))
         }
         
         # MCP Server configuration
@@ -828,8 +829,8 @@ def main():
     
     if len(sys.argv) > 1 and sys.argv[1] == "server":
         # Run as web server
-        port = int(os.getenv("PORT", 8000))
-        host = os.getenv("HOST", "0.0.0.0")
+        port = int(os.getenv("APP_PORT", 8000))
+        host = os.getenv("APP_HOST", "0.0.0.0")
         logger.info(f"🚀 Starting web server on {host}:{port}")
         uvicorn.run(app, host=host, port=port)
     else:

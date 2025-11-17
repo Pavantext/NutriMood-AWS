@@ -359,7 +359,8 @@ pytest tests/ --cov=. --cov-report=html
 | `AWS_ACCESS_KEY_ID` | AWS access key | Required |
 | `AWS_SECRET_ACCESS_KEY` | AWS secret key | Required |
 | `AWS_DEFAULT_REGION` | AWS region | `us-east-1` |
-| `BEDROCK_MODEL_ID` | Bedrock model ID | `anthropic.claude-3-sonnet...` |
+| `BEDROCK_INFERENCE_PROFILE_ID` | Inference profile ID/ARN (required for some regions like ap-south-1) | Optional |
+| `BEDROCK_MODEL_ID` | Bedrock model ID (used if inference profile not set) | `anthropic.claude-3-sonnet...` |
 | `BEDROCK_MAX_TOKENS` | Max tokens per response | `1000` |
 | `BEDROCK_TEMPERATURE` | Model temperature | `0.7` |
 | `FOOD_DATA_PATH` | Path to food data JSON | `../data/raw/Niloufer_data.json` |
@@ -448,6 +449,30 @@ The system expects food data in the following JSON format:
 - Verify JSON file is valid
 
 ### AWS Bedrock errors
+
+#### ValidationException: "Invocation of model ID ... with on-demand throughput isn't supported"
+
+This error occurs when using certain regions (like `ap-south-1`) that require inference profiles instead of direct model IDs.
+
+**Solution:**
+1. Find your inference profile ID:
+   - Option A: Run the helper script:
+     ```bash
+     python scripts/list_inference_profiles.py ap-south-1
+     ```
+   - Option B: Use AWS Console:
+     - Go to AWS Bedrock Console → Cross-Region Inference (or Inference Profiles)
+     - Find the inference profile for your model (e.g., `anthropic.claude-3-5-sonnet-20240620-v1:0`)
+     - Copy the Inference Profile ID or ARN
+
+2. Set the inference profile in your `.env` file:
+   ```bash
+   BEDROCK_INFERENCE_PROFILE_ID=your-inference-profile-id-or-arn
+   ```
+
+3. The code will automatically use the inference profile if `BEDROCK_INFERENCE_PROFILE_ID` is set, otherwise it falls back to `BEDROCK_MODEL_ID`.
+
+#### Other Bedrock errors
 - Verify AWS credentials are configured correctly
 - Check that Bedrock is enabled in your AWS region
 - Ensure you have access to Claude models in Bedrock

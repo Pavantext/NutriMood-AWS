@@ -496,7 +496,7 @@ if __name__ == "__main__":
     
     if transport == "sse":
         # For remote access (e.g., from AWS Bedrock or remote clients)
-        port = int(os.getenv("MCP_PORT", 8000))
+        port = int(os.getenv("MCP_PORT", 8001))
         host = os.getenv("MCP_HOST", "127.0.0.1")
         logger.info(f"📡 Server listening on {host}:{port}")
         mcp.run(transport="sse", host=host, port=port)
