@@ -1,0 +1,2694 @@
+[
+  {
+    "Id": "e754af8d-bb53-421a-ace5-c28ab216b4d2",
+    "ProductName": "Jalapeno Cheese Poppers (6.Pcs)",
+    "Description": "Jalapeno Cheese Poppers feature carefully selected jalapeños with balanced heat and flavor. These cheese-filled poppers are deep-fried until golden and crispy, served with creamy garlic mayo and a fresh garnish salad.",
+    "Tags": [
+      "Vegetarian",
+      "Fried",
+      "Crispy",
+      "Spicy",
+      "Cheesy",
+      "Creamy"
+    ],
+    "Ingredients": [
+      "Jalapeno Cheese Poppers Semi Finished 1 No",
+      "Garlic Mayo Semi Finished 60g",
+      "Oil Frying 50g",
+      "Garnish Salad Semi Finished 30g"
+    ],
+    "Price": 380,
+    "macronutrients": {
+      "cal": 554,
+      "p": 4,
+      "c": 16,
+      "f": 54
+    },
+    "health_benefits": "Jalapenos offer mild antioxidant properties and may boost metabolism. Garlic mayo supports immune health, and garnish salad provides essential nutrients and fiber for digestive wellness. Note that due to deep-frying and cheese, it's high in calories and fat, recommended for occasional consumption.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "9833a592-ddbe-4ad8-9b33-b692cc873c29",
+    "ProductName": "French Fries",
+    "Description": "Premium 6mm potato strips are deep-fried to golden crispiness, served with our signature chipotle sauce. This combination offers a delicious and satisfying snack experience.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Fried",
+      "Crispy",
+      "Savory",
+      "Snack"
+    ],
+    "Ingredients": [
+      "French Fries 6mm 320g",
+      "Frying Oil 60g",
+      "Chipotle Sauce 60g"
+    ],
+    "Price": 228,
+    "macronutrients": {
+      "cal": 720,
+      "p": 8,
+      "c": 72,
+      "f": 36
+    },
+    "health_benefits": "Made from premium potatoes, this dish offers dietary fiber for digestive health and potassium for heart health. Chipotle sauce provides antioxidants, while the meal is naturally gluten-free and vegan-friendly, offering plant-based nutrition.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Continental",
+    "spice_level": "high"
+  },
+  {
+    "Id": "3cdbe580-2b85-4958-8222-ada4d5949fa8",
+    "ProductName": "Strawberry",
+    "Description": "A luscious, smooth milkshake made with fresh strawberry puree, rich vanilla ice cream, creamy milk, and strawberry crush. It's a refreshing and indulgent treat, perfectly balancing fruitiness and creaminess in every sip.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Fruity",
+      "Creamy",
+      "Smooth",
+      "Refreshing",
+      "Sweet"
+    ],
+    "Ingredients": [
+      "Strawberry Puree 30ml",
+      "Vanilla Icecream 2 Scoops",
+      "Milk 150ml",
+      "Vanilla Powder 30g",
+      "Strawberry Crush 20g"
+    ],
+    "Price": 219,
+    "macronutrients": {
+      "cal": 568,
+      "p": 7,
+      "c": 28,
+      "f": 41
+    },
+    "health_benefits": "Provides natural Vitamin C and antioxidants from strawberries for heart health. Contains calcium and protein from milk and ice cream for bone health. Naturally gluten-free, offering natural sweetness without added preservatives.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "727ae44a-3df9-4f4f-93c1-94e8eea2fbf8",
+    "ProductName": "Masala Tea",
+    "Description": "Aromatic black tea simmered with milk, sugar, and a blend of spices like ginger, cardamom, and cinnamon. This comforting brew offers a balanced, energizing cup.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Beverage",
+      "Aromatic",
+      "Spiced",
+      "Creamy",
+      "Medium spice"
+    ],
+    "Ingredients": [
+      "Black Tea Leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black Pepper"
+    ],
+    "Price": 171,
+    "macronutrients": {
+      "cal": 98,
+      "p": 16,
+      "c": 16,
+      "f": 3
+    },
+    "health_benefits": "Rich in antioxidants from black tea, supporting heart health and providing a gentle energy boost. Ginger and cardamom aid digestion, while milk adds calcium for bone strength. Low in calories and naturally gluten-free.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "65de7c13-6159-4e3b-846d-b634d9873546",
+    "ProductName": "Jaggery Tea",
+    "Description": "Premium black tea is brewed with fresh milk, sweetened with sugar and natural jaggery for a rich, caramel-like sweetness. This warming, comforting beverage is enhanced with traditional spices, perfect for any time of day.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Sweet",
+      "Warming",
+      "Indian",
+      "Beverage",
+      "Caramel"
+    ],
+    "Ingredients": [
+      "Black Tea Leaves 10g",
+      "Milk 100ml",
+      "Sugar 20g",
+      "Jaggery 10g"
+    ],
+    "Price": 171,
+    "macronutrients": {
+      "cal": 177,
+      "p": 3,
+      "c": 34,
+      "f": 3
+    },
+    "health_benefits": "Black tea offers antioxidants for heart health, while milk provides calcium and protein. Jaggery is a healthier sweetener with iron and minerals, making this a gluten-free, low-calorie, comforting beverage.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "96d6963f-5276-4137-9ee0-a68b2da0b253",
+    "ProductName": "Pina Colada",
+    "Description": "A refreshing, creamy Pina Colada blends fresh pineapple juice, creamy syrup, fresh cream, and vanilla ice cream. This tropical beverage transports you to a beachside getaway with its sweet and tangy essence.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Creamy",
+      "Tropical",
+      "Sweet",
+      "Refreshing"
+    ],
+    "Ingredients": [
+      "Pineapple Juice 150ml",
+      "Pina Colada Syrup 30ml",
+      "Fresh Cream 30ml",
+      "Vanilla Ice Cream 2 scoops"
+    ],
+    "Price": 209,
+    "macronutrients": {
+      "cal": 810,
+      "p": 0,
+      "c": 146,
+      "f": 27
+    },
+    "health_benefits": "Rich in vitamin C from pineapple for immune support, this beverage also provides calcium and healthy fats from cream. It's naturally gluten-free with moderate calories, aiding digestion and bone health.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Beverage"
+  },
+  {
+    "Id": "1b6bedc8-f674-467a-ac87-ccc7ef489e77",
+    "ProductName": "Banana",
+    "Description": "A thick, satisfying milkshake made with ripe banana puree, fresh banana pieces, creamy vanilla ice cream, rich milk, and vanilla powder. This indulgent drink offers a classic, comforting flavor that's both refreshing and filling.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Sweet",
+      "Creamy",
+      "Refreshing",
+      "Beverage",
+      "Banana"
+    ],
+    "Ingredients": [
+      "Banana Puree 30ml",
+      "Vanilla Ice Cream 2 Scoops",
+      "Milk 150ml",
+      "Vanilla Powder 30g",
+      "Banana 2 Pcs"
+    ],
+    "Price": 219,
+    "macronutrients": {
+      "cal": 480,
+      "p": 8,
+      "c": 68,
+      "f": 16
+    },
+    "health_benefits": "Rich in potassium and fiber from bananas, supporting heart health and digestion. Milk and ice cream contribute calcium for strong bones and protein. Naturally gluten-free, this milkshake offers essential nutrients.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "a7fabb3d-6d16-4c2d-9de4-618364469551",
+    "ProductName": "Onion Samosettes (4 Pcs)",
+    "Description": "Finely chopped onions, seasoned and wrapped in delicate samosa pastry, are deep-fried until golden and crispy. Served with fresh mint chutney, this dish offers a sweet, savory flavor with a cool, refreshing contrast.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Fried",
+      "Crispy",
+      "Savory",
+      "Indian snack",
+      "Spicy"
+    ],
+    "Ingredients": [
+      "Onion Samosa Semi Finished 30g",
+      "Samosa Patti (Switz) 20g",
+      "Oil Frying 60g",
+      "Mint Chutney Semi Finished 60g"
+    ],
+    "Price": 114,
+    "macronutrients": {
+      "cal": 202,
+      "p": 3,
+      "c": 25,
+      "f": 10
+    },
+    "health_benefits": "This dish offers heart-healthy antioxidants from onions and prebiotic fiber for gut health. Carbohydrates provide sustained energy, while mint chutney adds fresh antioxidants and aids digestion, making it a vegan-friendly option with plant-based nutrition.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "7de7c8b4-2291-44d6-96df-ef0956730604",
+    "ProductName": "WaterMelon",
+    "Description": "Fresh watermelon juice, naturally sweet and light, is a hydrating and refreshing beverage. Perfect for quenching thirst, it's served chilled without added preservatives for a healthy treat.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Hydrating",
+      "Refreshing",
+      "Sweet",
+      "Beverage"
+    ],
+    "Ingredients": [
+      "Pure Water Melon Juice 200ml"
+    ],
+    "Price": 171,
+    "macronutrients": {
+      "cal": 78,
+      "p": 1,
+      "c": 18,
+      "f": 0
+    },
+    "health_benefits": "Rich in lycopene, this juice supports heart health and reduces inflammation. It offers natural hydration with electrolytes and citrulline, aiding blood flow and recovery, while being low-calorie, gluten-free, and vegan-friendly.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "825fad9f-fec1-41c9-9722-6f084faac651",
+    "ProductName": "Masala Quinoa",
+    "Description": "Nutritious quinoa is cooked with colorful bell peppers, zucchini, sweet corn, green peas, and carrots, seasoned with aromatic spices like mustard seeds, curry leaves, and turmeric. Finished with virgin olive oil and fresh coriander, it's a healthy, flavorful, and satisfying meal packed with protein and fiber.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "High-Protein",
+      "Nutritious",
+      "Flavorful",
+      "Nutty"
+    ],
+    "Ingredients": [
+      "Virgin Olive Oil 5ltr 30g",
+      "Mustard Seeds Big 2g",
+      "Curry Leaves 3g",
+      "Green Chilli 20g",
+      "Ginger 10g",
+      "Sweet Corn 40g",
+      "Green Peas 30g",
+      "Turmeric Powder 2g",
+      "Tata Salt 10g",
+      "Quinoa Seeds 100g",
+      "Red Capsicum 50g",
+      "Yellow Capsicum 50g",
+      "Green Capsicum 60g",
+      "Yellow Zucchini 50g",
+      "Green Zucchini 50g",
+      "Sauce Maggi Seasoning 1g",
+      "Carrot 40g",
+      "Seasoning Aromatic Powder 2g",
+      "Coriander 20g"
+    ],
+    "Price": 276,
+    "macronutrients": {
+      "cal": 675,
+      "p": 20,
+      "c": 70,
+      "f": 35
+    },
+    "health_benefits": "Rich in quinoa, this dish provides complete protein and fiber for satiety and digestive health. Bell peppers, zucchini, corn, peas, and carrots offer essential vitamins, antioxidants, and hydration. Virgin olive oil, ginger, and turmeric contribute healthy fats, anti-inflammatory properties, and aid digestion. It's naturally gluten-free.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "230a9ccf-8334-4443-bf88-d22e13ba3406",
+    "ProductName": "Tarri Poha",
+    "Description": "Flattened rice (poha) is sautéed with vegetables and peanuts in aromatic ghee, seasoned with various spices. Served with tangy tomato chutney, spicy tarri poha curry, and crispy sev for a complete, satisfying breakfast experience.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Spicy",
+      "Savory",
+      "Breakfast",
+      "Indian"
+    ],
+    "Ingredients": [
+      "Ghee 40g",
+      "Cumin Seeds 2g",
+      "Mustard Seeds Big 1g",
+      "Curry Leaves 2g",
+      "Onion 250g",
+      "Potato 120g",
+      "Green Chilli 20g",
+      "Turmeric Powder 2g",
+      "Peanuts Plain 20g",
+      "Poha 130g",
+      "Tata Salt 10g",
+      "Coriander 20g",
+      "Green Peas 60g",
+      "Tomato Chutney 60g",
+      "Haldirams Bhujiya Sev 30g",
+      "Tari Poha Curry Semi Finished 60g"
+    ],
+    "Price": 209,
+    "macronutrients": {
+      "cal": 980,
+      "p": 13,
+      "c": 108,
+      "f": 48
+    },
+    "health_benefits": "This dish provides easily digestible carbohydrates for sustained energy, with vegetables contributing essential vitamins, minerals, and dietary fiber. Green peas and peanuts add plant-based protein and healthy fats. Spices like turmeric and cumin offer anti-inflammatory and digestive benefits, making it a naturally gluten-free and vegan-friendly option.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "b0fcd408-309b-4484-a9e5-e4822ab59da0",
+    "ProductName": "Ragi Upma",
+    "Description": "Nutritious ragi upma, cooked with onions, green chilies, and aromatic spices in rich ghee, is garnished with cashews and peanuts. It's served with cooling raitha, flavorful sambar, and zesty ginger chutney, making a wholesome and satisfying breakfast.",
+    "Tags": [
+      "Vegetarian",
+      "Aromatic",
+      "Savory",
+      "Hearty",
+      "Breakfast",
+      "High spice"
+    ],
+    "Ingredients": [
+      "Ghee 60g",
+      "Cumin Seeds 3g",
+      "Mustard Seeds Big 2g",
+      "Curry Leaves 3g",
+      "Green Chilli 20g",
+      "Chilli Whole Red 3g",
+      "Urad Dal 10g",
+      "Onion 200g",
+      "Tata Salt 10g",
+      "Ragi Rawa 100g",
+      "Coriander 20g",
+      "Dry Fruit Cashew 10g",
+      "Peanuts Plain 10g",
+      "Raitha Semi Finished 60g",
+      "Sambar Semi Finished 120g",
+      "Ginger Chutney Semi Finished 60g"
+    ],
+    "Price": 247,
+    "macronutrients": {
+      "cal": 870,
+      "p": 18,
+      "c": 72,
+      "f": 48
+    },
+    "health_benefits": "Rich in plant-based protein and fiber from ragi and urad dal, this dish supports muscle and digestive health. It offers essential minerals, healthy fats from nuts and ghee for vital vitamins, and spices aiding digestion, contributing to overall wellness despite being high in fat.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "24a521be-a097-4b84-8343-adf30a1475d9",
+    "ProductName": "Onion Rings",
+    "Description": "Crispy, deep-fried onion rings are seasoned with piri piri masala, offering a tasty and crunchy texture. Served with smoky chipotle sauce and a fresh garnish salad, providing a delightful contrast.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Fried",
+      "Crispy",
+      "Savory",
+      "Snack",
+      "Spicy"
+    ],
+    "Ingredients": [
+      "Onion Rings Semi Finished 150g",
+      "Sauce Chipotle 60g",
+      "Piri Piri Masala Keya 15g",
+      "Tata Salt 5g",
+      "Frying Oil 60g",
+      "Garnish Salad Semi Finished 30g"
+    ],
+    "Price": 257,
+    "macronutrients": {
+      "cal": 690,
+      "p": 6,
+      "c": 86,
+      "f": 32
+    },
+    "health_benefits": "This vegan-friendly dish offers quercetin from onions for heart health and capsaicin from chipotle and piri piri for potential metabolism support. The fresh garnish provides essential vitamins and fiber for digestive health, contributing to overall plant-based nutrition.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "91718566-4ee5-45df-b136-7a6c539b6613",
+    "ProductName": "Corn Samosettes (4 Pcs)",
+    "Description": "Delicate samosa pastry sheets are filled with seasoned sweet corn and deep-fried until golden and crispy. Served with tangy tomato ketchup, these samosettes offer a delightful burst of sweet and savory flavor.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Fried",
+      "Crispy",
+      "Sweet",
+      "Savory",
+      "Snack"
+    ],
+    "Ingredients": [
+      "Corn Samosa Semi Finished 90g",
+      "Samosa Patti (Switz) 60g",
+      "Oil Frying 60g",
+      "Tomato Ketchup 60g"
+    ],
+    "Price": 114,
+    "macronutrients": {
+      "cal": 331,
+      "p": 4,
+      "c": 45,
+      "f": 15
+    },
+    "health_benefits": "Rich in natural fiber, B vitamins, and antioxidants from corn, these samosettes support eye and heart health. They provide sustained energy from carbohydrates and essential fatty acids, offering plant-based nutrition for a vegan-friendly option.",
+    "GST": 5,
+    "IsPopular": true,
+    "cuisine_type": "Indian",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "b202603f-d44e-4b35-ad74-053ea57406da",
+    "ProductName": "Kesar Tea",
+    "Description": "A rich, aromatic Indian beverage featuring premium black tea, fresh milk, and sugar, enhanced with ginger, cardamom, cinnamon, cloves, black pepper, and luxurious saffron (kesar). This comforting and indulgent tea offers a unique floral aroma and golden hue.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Aromatic",
+      "Spiced",
+      "Saffron",
+      "Comforting",
+      "Beverage"
+    ],
+    "Ingredients": [
+      "Black Tea Leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black Pepper"
+    ],
+    "Price": 171,
+    "macronutrients": {
+      "cal": 102,
+      "p": 2,
+      "c": 17,
+      "f": 3
+    },
+    "health_benefits": "Rich in antioxidants from black tea, Kesar Tea supports heart health and provides a gentle energy boost. Ginger and cardamom aid digestion, while milk offers calcium. It's low in calories, naturally gluten-free, and contributes various beneficial spices.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "9655be1a-7a0c-482c-b9b4-122d0c15f17d",
+    "ProductName": "Chole Kulcha (1 Pc)",
+    "Description": "Spiced chickpea curry served with soft, buttery kulcha bread, topped with fresh onions and green chilies. This flavorful North Indian street food offers a rich, aromatic experience.",
+    "Tags": [
+      "Vegetarian",
+      "Spicy",
+      "Savory",
+      "Fluffy",
+      "Buttery",
+      "Indian street food"
+    ],
+    "Ingredients": [
+      "Chole Curry Semi Finished 300g",
+      "Plain Kulcha Semi Finished 1 No",
+      "Butter Salted Amul 10g",
+      "Onion 100g",
+      "Green Chilli 20g"
+    ],
+    "Price": 143,
+    "macronutrients": {
+      "cal": 362048,
+      "p": 17,
+      "c": 78,
+      "f": 18
+    },
+    "health_benefits": "This dish provides plant-based protein and dietary fiber from chickpeas, supporting satiety and digestion. It offers carbohydrates for sustained energy, along with vitamins and antioxidants from vegetables, making it a nutritious and vegan-friendly option.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "eb8de9ed-4039-4256-872a-367cda4a14a8",
+    "ProductName": "Aloo Samosa (1 Pc)",
+    "Description": "This Aloo Samosa features a spiced potato filling with green chilies and spices, wrapped in delicate samosa sheets and deep-fried until golden and crispy. Served with sweet chutney, it offers a savory, comforting taste with a tangy contrast.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Fried",
+      "Crispy",
+      "Spicy",
+      "Potato-Filled",
+      "Savory"
+    ],
+    "Ingredients": [
+      "Aloo Samosa Filling Semi Finished 80g",
+      "Aloo Samosa Sheet Semi Finished 60g",
+      "Frying Oil 50g",
+      "Sweet Chutney Semi Finished 60g",
+      "Green Chilli 5g",
+      "Tata Salt 2g",
+      "Chat Masala 2g",
+      "Black Pepper 2g"
+    ],
+    "Price": 48,
+    "macronutrients": {
+      "cal": 457,
+      "p": 8,
+      "c": 50,
+      "f": 25
+    },
+    "health_benefits": "This vegan-friendly samosa provides protein and fiber for digestive health, alongside carbohydrates for sustained energy. Ingredients like green chili and black pepper offer vitamins and aid metabolism, while sweet chutney adds natural antioxidants, making it a moderately caloric, plant-based option.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "9e4a05e7-42a7-4d38-aa67-b626de1e87e1",
+    "ProductName": "Veg Grill",
+    "Description": "A hearty veg grill sandwich with creamy mayonnaise, butter, and crisp lettuce, grilled until golden. Served with crispy French fries, fresh salad, and smoky chipotle sauce for a complete, indulgent meal.",
+    "Tags": [
+      "Vegetarian",
+      "Grilled",
+      "Savory",
+      "Crispy",
+      "Hearty"
+    ],
+    "Ingredients": [
+      "White Jumbo Bread 2 pc",
+      "Mayonnaise 20g",
+      "Amul Salted Butter 10g",
+      "Iceberg Lettuce 30g",
+      "Veg Grill Sandwich Mixer 120g",
+      "French Fries 6mm 200g",
+      "Garnish Salad 20g",
+      "Chipotle Sauce 40g"
+    ],
+    "Price": 266,
+    "macronutrients": {
+      "cal": 505,
+      "p": 10,
+      "c": 60,
+      "f": 25
+    },
+    "health_benefits": "Rich in plant-based protein and dietary fiber from vegetables and lettuce for satiety and digestive health. Offers sustained energy from carbohydrates and includes healthy fats. Provides vitamins and antioxidants, making it a naturally vegan-friendly option, though high in calories.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Continental",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "0a559acb-1bbd-4eeb-9ac8-197fbefd178e",
+    "ProductName": "Croquettes (6.Pcs)",
+    "Description": "These vegetable croquettes are deep-fried until golden and crispy, offering a tender, flavorful center with a perfect blend of vegetables and spices. They are served with a fresh garnish salad and smoky chipotle sauce.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Deep-Fried",
+      "Crispy",
+      "Flavorful",
+      "Snack"
+    ],
+    "Ingredients": [
+      "Croquettes Semi Finished 1 No",
+      "Garnish Salad Semi Finished 20g",
+      "Sauce Chipotle 60g",
+      "Oil Frying 30g"
+    ],
+    "Price": 304,
+    "macronutrients": {
+      "cal": 440,
+      "p": 6,
+      "c": 38,
+      "f": 24
+    },
+    "health_benefits": "These vegan and gluten-free croquettes offer plant-based protein and fiber from vegetables for digestive health. The accompanying fresh salad provides vitamins, while chipotle sauce adds flavor and antioxidants.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Continental",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "48db080d-d530-4f33-aa8c-a8a6e1c9e02b",
+    "ProductName": "Piri Piri Fries",
+    "Description": "Premium 6mm potato strips are deep-fried until golden and crispy, then tossed with spicy piri piri masala for a fiery, tangy kick. Served with smoky chipotle sauce, this creates a spicy, satisfying snack.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Deep-Fried",
+      "Crispy",
+      "Spicy",
+      "Snack"
+    ],
+    "Ingredients": [
+      "French Fries 6mm 320g",
+      "Piri Piri Masala Keya 20g",
+      "Oil Frying 60g",
+      "Sauce Chipotle 60g"
+    ],
+    "Price": 257,
+    "macronutrients": {
+      "cal": 704,
+      "p": 6,
+      "c": 80,
+      "f": 40
+    },
+    "health_benefits": "Made from premium potatoes, this dish offers protein, potassium for heart health, and dietary fiber for digestion. Piri Piri masala and chipotle sauce provide capsaicin and antioxidants. It is naturally gluten-free and vegan-friendly, though high in fat.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "high"
+  },
+  {
+    "Id": "d29d8a44-7740-469b-9259-1aaaf2cfc9be",
+    "ProductName": "Anar Chatpata",
+    "Description": "A refreshing, spicy-tangy drink made with fresh pomegranate juice, soda water, black salt, mint leaves, and lemon juice. This sweet, tart, and fizzy beverage offers a burst of invigorating flavor, perfect for hot days.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Refreshing",
+      "Tangy",
+      "Fizzy",
+      "Sweet"
+    ],
+    "Ingredients": [
+      "Fresh Fruit Juice",
+      "Soda Water",
+      "Black Salt",
+      "Mint Leaves",
+      "Lemon Juice"
+    ],
+    "Price": 219,
+    "macronutrients": {
+      "cal": 40,
+      "p": 0,
+      "c": 10,
+      "f": 0
+    },
+    "health_benefits": "Pomegranate provides antioxidants for heart health and vitamin C for immunity. Mint aids digestion, lemon offers more vitamin C and iron absorption, while black salt adds trace minerals. This vegan, gluten-free drink supports hydration and overall well-being.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "dfce6662-03f5-444e-a052-8961c2127e20",
+    "ProductName": "Rich Almond Croissant",
+    "Description": "A buttery, flaky croissant pastry, made with all-purpose flour and layered with butter, is filled with rich almond paste and topped with sliced almonds. Baked until golden brown, it offers a perfect balance of crispy exterior and soft, buttery interior.",
+    "Tags": [
+      "Pastry",
+      "Sweet",
+      "Nutty",
+      "Flaky",
+      "Baked",
+      "Continental",
+      "Snack"
+    ],
+    "Ingredients": [
+      "All-Purpose Flour",
+      "Butter",
+      "Milk",
+      "Sugar",
+      "Yeast",
+      "Salt",
+      "Eggs",
+      "Almond Paste",
+      "Sliced Almonds"
+    ],
+    "Price": 114,
+    "macronutrients": {
+      "cal": 460,
+      "p": 10,
+      "c": 60,
+      "f": 20
+    },
+    "health_benefits": "Almonds and milk offer protein for satiety, healthy fats, and essential minerals like calcium and magnesium for bone and muscle health. Eggs contribute protein and B vitamins for brain function, while flour provides sustained energy.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Continental"
+  },
+  {
+    "Id": "e2c39b00-e3e1-4394-9431-f7dc5ae3a4b5",
+    "ProductName": "Mumbai Poha",
+    "Description": "Mumbai Poha features flattened rice sautéed with onions, potatoes, green peas, and peanuts in aromatic ghee, seasoned with spices. Served with fresh coriander, tangy tomato chutney, and crispy sev, it's a satisfying Mumbai-style breakfast.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Sautéed",
+      "Spiced",
+      "Tangy",
+      "Crispy"
+    ],
+    "Ingredients": [
+      "Ghee 40g",
+      "Cumin Seeds 2g",
+      "Mustard Seeds Big 1g",
+      "Curry Leaves 2g",
+      "Onion 250g",
+      "Potato 120g",
+      "Green Chilli 20g",
+      "Turmeric Powder 2g",
+      "Peanuts Plain 20g",
+      "Poha 130g",
+      "Tata Salt 10g",
+      "Coriander 20g",
+      "Green Peas 60g",
+      "Tomato Chutney 60g",
+      "Haldirams Bhujiya Sev 1kg 30g"
+    ],
+    "Price": 190,
+    "macronutrients": {
+      "cal": 668,
+      "p": 12,
+      "c": 65,
+      "f": 40
+    },
+    "health_benefits": "Poha provides sustained energy, while green peas and peanuts offer plant-based protein and healthy fats. Vegetables and spices like turmeric contribute essential vitamins, fiber, and anti-inflammatory benefits, supporting digestion and heart health. It is naturally gluten-free and vegan.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "1d53faff-7a34-437d-8f03-e2077a21fcd9",
+    "ProductName": "Chilli Guava",
+    "Description": "A unique, refreshing beverage blending spicy chili guava juice with tangy nimbu pani. It offers a perfect balance of sweet, spicy, and tangy flavors, with a zesty lemon kick.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Spicy",
+      "Tangy",
+      "Sweet",
+      "Beverage"
+    ],
+    "Ingredients": [
+      "Chili Guava 200ml",
+      "Nimbu Pani 50ml"
+    ],
+    "Price": 219,
+    "macronutrients": {
+      "cal": 200,
+      "p": 0,
+      "c": 50,
+      "f": 0
+    },
+    "health_benefits": "Rich in Vitamin C and antioxidants for immune and heart health. It also provides fiber for digestion and capsaicin which may boost metabolism, all within a moderate-calorie, gluten-free, and vegan-friendly profile.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "ae23dde7-f650-4688-8e09-ed197ab217f0",
+    "ProductName": "Orange Chatpata",
+    "Description": "A refreshing and invigorating drink made with fresh orange juice, simple syrup, mint leaves, and ice cubes. It offers a naturally sweet, tangy, and zesty citrus flavor with a cool, spicy-tangy twist.",
+    "Tags": [
+      "Beverage",
+      "Refreshing",
+      "Spicy-Tangy",
+      "Citrus",
+      "Vegan",
+      "Gluten-Free"
+    ],
+    "Ingredients": [
+      "Fresh Orange Juice 150ml",
+      "Simple Syrup 15ml",
+      "Mint Leaves 13pcs",
+      "Ice Cubes 2pcs"
+    ],
+    "Price": 219,
+    "macronutrients": {
+      "cal": 52,
+      "p": 1,
+      "c": 12,
+      "f": 0
+    },
+    "health_benefits": "Rich in Vitamin C from orange juice for immune support and heart health. Mint provides antioxidants and aids digestion. This vegan, gluten-free beverage offers natural fiber and hydration with moderate calories.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "0d0d9f81-1569-4e6c-bf85-8d127793f803",
+    "ProductName": "Veg Supreme",
+    "Description": "Pizzalette dough is topped with rich pizza sauce, generous mozzarella cheese, and a flavorful veg supreme vegetable mix. Finished with herb and chili oil, it's baked to golden perfection for a satisfying vegetarian experience.",
+    "Tags": [
+      "Vegetarian",
+      "Pizza",
+      "Cheesy",
+      "Baked",
+      "Savory",
+      "Gluten-Free",
+      "Main course"
+    ],
+    "Ingredients": [
+      "Pizzalette Dough Semi Finished 1 No",
+      "Pizza Sauce Semi Finished 60g",
+      "Cheese Mozzarella 100g",
+      "Pizza Supreme Vegetable Semi Finished 140g",
+      "Herb And Chilli Oil Semi Finished 5g"
+    ],
+    "Price": 247,
+    "macronutrients": {
+      "cal": 380,
+      "p": 12,
+      "c": 40,
+      "f": 14
+    },
+    "health_benefits": "This vegetarian pizza offers protein from mozzarella for muscle health and calcium for strong bones. Vegetables provide essential fiber, vitamins, and antioxidants, while tomato sauce adds lycopene for heart benefits. It offers sustained energy.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Continental",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "f5defc92-e027-4052-a2f9-8f858823ab39",
+    "ProductName": "Khara Bun",
+    "Description": "A soft khara bun, generously spread with butter, is topped with processed and mozzarella cheeses. It's seasoned with Italian herbs and chili flakes, then baked until the cheese is melted and golden, creating a warm, comforting snack.",
+    "Tags": [
+      "Vegetarian",
+      "Cheesy",
+      "Soft",
+      "Savory",
+      "Fusion",
+      "Snack",
+      "Medium spice"
+    ],
+    "Ingredients": [
+      "Amul Salted Butter 15g",
+      "Semi-Finished Khara Bun 1ea",
+      "Amul Processed Cheese 40g",
+      "Mozzarella Cheese 40g",
+      "Keya Italian Seasoning 5g",
+      "Chilli Flakes 5g"
+    ],
+    "Price": 95,
+    "macronutrients": {
+      "cal": 388,
+      "p": 12,
+      "c": 40,
+      "f": 20
+    },
+    "health_benefits": "Provides 12g of protein for muscle support and calcium for bone health from cheeses. The bun offers carbohydrates for energy and fiber, while butter provides fat-soluble vitamins. Italian herbs add flavor with antioxidants, and chili flakes may boost metabolism. Suitable for vegetarians.",
+    "GST": 5,
+    "IsPopular": true,
+    "cuisine_type": "Fusion",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "387277e7-dc72-4d76-9905-b3d09641d945",
+    "ProductName": "Freshly Cut Fruits",
+    "Description": "A colorful medley of freshly cut fruits like watermelon, pineapple, and kiwi, offering a refreshing and healthy treat. Naturally sweet and juicy, it's packed with vitamins and natural sugars for a nutritious delight.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Low-Calorie",
+      "Sweet",
+      "Juicy",
+      "Refreshing"
+    ],
+    "Ingredients": [
+      "Water Melon Fruit 360g",
+      "Pineapple Fruit 180g",
+      "Apple 50g",
+      "Kiwi Fruit 40g",
+      "Papaya Fruit 130g",
+      "Grapes Fruit 60g",
+      "Dragon Fruit 60g",
+      "Pomegranate Fruit 20g",
+      "Musk Melon Fruit 135g"
+    ],
+    "Price": 238,
+    "macronutrients": {
+      "cal": 365,
+      "p": 4,
+      "c": 92,
+      "f": 1
+    },
+    "health_benefits": "This fruit medley offers rich vitamins, antioxidants, and fiber for heart health, digestion, and immune support. It provides natural hydration, essential nutrients, and is a low-calorie, vegan, and gluten-free option for overall wellness.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "2418b1a5-d4a8-4bc4-b948-63397fbf11e2",
+    "ProductName": "Paneer Hyderabadi",
+    "Description": "Fresh jumbo bread is layered with spicy paneer Hyderabadi mix, mint chutney, and tomato mayo, then deep-fried until golden. Served with crispy French fries, garnish salad, and smoky chipotle sauce for an indulgent meal.",
+    "Tags": [
+      "Vegetarian",
+      "High-Protein",
+      "Deep-Fried",
+      "Crispy",
+      "Spicy",
+      "Indulgent",
+      "Savory"
+    ],
+    "Ingredients": [
+      "White Jumbo Bread Semi Finished 2 Piece",
+      "Paneer Hyderabadi Sandwich Mix Semi Finished 150g",
+      "Mint Chutney Semi Finished 20g",
+      "Tomato Mayo Homemade Semi Finished 20g",
+      "Butter Salted Amul 20g",
+      "Frying Oil 80g",
+      "French Fries 6mm 200g",
+      "Sauce Chipotle 40g",
+      "Garnish Salad Semi Finished 20g"
+    ],
+    "Price": 304,
+    "macronutrients": {
+      "cal": 1120,
+      "p": 28,
+      "c": 120,
+      "f": 52
+    },
+    "health_benefits": "This dish provides complete protein for muscle support and satiety, with antioxidants from mint chutney and lycopene for heart health. It offers carbohydrates for energy, vitamins from butter, and fiber from the garnish, but is recommended for occasional consumption due to high calories.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "2988f098-bc18-4c04-99ab-b04b54a2d4c8",
+    "ProductName": "ABC",
+    "Description": "A vibrant, nutrient-rich juice made from fresh apple, beetroot, and carrot. This healthy combination offers essential vitamins and antioxidants in a refreshing, delicious, and energizing drink.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Juice",
+      "Sweet",
+      "Refreshing",
+      "Healthy"
+    ],
+    "Ingredients": [
+      "Apple 1pcs",
+      "Beetroot 150g",
+      "Carrot 2pcs"
+    ],
+    "Price": 219,
+    "macronutrients": {
+      "cal": 155,
+      "p": 2,
+      "c": 36,
+      "f": 0
+    },
+    "health_benefits": "Rich in quercetin from apple for heart and digestive health, nitrates from beetroot for blood pressure, and beta-carotene from carrot for eye health. This blend offers essential vitamins, antioxidants, and fiber, promoting overall wellness.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "3b448e90-1ff9-4347-94a6-4a15020123ea",
+    "ProductName": "Spring Rolls (6.Pcs)",
+    "Description": "Crispy spring rolls, filled with savory vegetables and deep-fried until golden. Served with smoky chipotle sauce and a fresh garnish salad for a balanced and delightful snack.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Fried",
+      "Crispy",
+      "Savory",
+      "Snack",
+      "Continental"
+    ],
+    "Ingredients": [
+      "Spring Roll Sheets 3 pcs",
+      "Spring Rolls Semi Finished 300g",
+      "Sauce Chipotle 60g",
+      "Garnish Salad Semi Finished 30g",
+      "Oil Frying 50g"
+    ],
+    "Price": 304,
+    "macronutrients": {
+      "cal": 690,
+      "p": 10,
+      "c": 72,
+      "f": 32
+    },
+    "health_benefits": "These spring rolls offer plant-based protein and dietary fiber from vegetables, supporting satiety and digestion. They provide carbohydrates for energy, fresh nutrients from salad, and flavor from chipotle sauce. It's naturally gluten-free and vegan-friendly, despite being high in fat due to frying.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Continental",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "efa4a33a-5513-4b29-b591-7ff355d4a7e1",
+    "ProductName": "Corn and Cheese",
+    "Description": "Deep-fried jumbo bread filled with creamy corn and cheese, crisp lettuce, mayonnaise, and butter. Served with crispy French fries, a fresh salad, and smoky chipotle sauce for a satisfying meal.",
+    "Tags": [
+      "Vegetarian",
+      "Fried",
+      "Creamy",
+      "Cheesy",
+      "Savory",
+      "High-Protein",
+      "Crispy"
+    ],
+    "Ingredients": [
+      "White Jumbo Bread Semi Finished 2 Piece",
+      "Corn and Cheese Filling Semi Finished 120g",
+      "Iceberg Lettuce 30g",
+      "Mayonnaise 20g",
+      "Butter Salted Amul 20g",
+      "French Fries 6mm 200g",
+      "Garnish Salad Semi Finished 20g",
+      "Oil Frying 80g",
+      "Sauce Chipotle 40g"
+    ],
+    "Price": 266,
+    "macronutrients": {
+      "cal": 910,
+      "p": 15,
+      "c": 100,
+      "f": 50
+    },
+    "health_benefits": "Provides protein and calcium for muscle and bone health, plus B vitamins and antioxidants from corn for eye and digestive wellness. Contains fiber from lettuce and sustained energy from carbohydrates. Note: High in calories and fat due to preparation, recommended for occasional consumption.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Continental",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "13656e53-6894-48d0-8288-ad14b0647ce4",
+    "ProductName": "Cracked Wheat Upma",
+    "Description": "Cracked wheat rawa is cooked with onions, sweet corn, green peas, carrots, and peanuts in aromatic ghee, seasoned with spices. Garnished with cashews and fresh coriander, this wholesome, protein-rich breakfast is both nutritious and delicious.",
+    "Tags": [
+      "Vegetarian",
+      "Wholesome",
+      "Spiced",
+      "Nutty",
+      "Breakfast",
+      "Ghee-Cooked"
+    ],
+    "Ingredients": [
+      "Ghee 40g",
+      "Mustard Seeds Big 2g",
+      "Curry Leaves 3g",
+      "Green Chilli 20g",
+      "Chilli Whole Red 2g",
+      "Cumin Seeds 3g",
+      "Dal Channa 10g",
+      "Dry Fruit Cashew 20g",
+      "Onion 250g",
+      "Sweet Corn 60g",
+      "Green Peas 40g",
+      "Carrot 40g",
+      "Peanuts Plain 10g",
+      "Turmeric Powder 2g",
+      "Red Chilli Powder 2g",
+      "Tata Salt 12g",
+      "Wheat Rawa 70g",
+      "Coriander 20g"
+    ],
+    "Price": 209,
+    "macronutrients": {
+      "cal": 800,
+      "p": 16,
+      "c": 72,
+      "f": 42
+    },
+    "health_benefits": "This dish provides complex carbohydrates and dietary fiber for sustained energy and digestive health. It offers plant-based protein, vitamins, antioxidants, healthy fats, and anti-inflammatory turmeric for overall wellness, making it a nutritious and satisfying meal.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "8442c179-537a-43b4-85a4-cbd9f4b66053",
+    "ProductName": "Beetroot Nuggets (6.Pcs)",
+    "Description": "Crispy, deep-fried beetroot nuggets, made with fresh beets, offer a sweet, earthy flavor. Served with a fresh garnish salad and smoky chipotle sauce, they are a delicious and nutritious snack.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Deep-Fried",
+      "Crispy",
+      "Sweet",
+      "Earthy"
+    ],
+    "Ingredients": [
+      "Beetroot Nuggets Semi Finished 1 No",
+      "Garnish Salad Semi Finished 30g",
+      "Sauce Chipotle 60g",
+      "Oil Frying 30g"
+    ],
+    "Price": 304,
+    "macronutrients": {
+      "cal": 260,
+      "p": 4,
+      "c": 28,
+      "f": 14
+    },
+    "health_benefits": "Rich in nitrates, beetroot supports blood flow and pressure, while folate and iron aid cell and blood health. The dish offers essential fiber for digestion, contributes fresh nutrients, and is naturally gluten-free and vegan-friendly.",
+    "GST": 5,
+    "IsPopular": true,
+    "cuisine_type": "Fusion",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "2ca2f5a2-f68d-49ef-aaa7-4bbbe9e8b932",
+    "ProductName": "Pista Baklava Croissant",
+    "Description": "A buttery, flaky croissant layered with butter, milk, sugar, yeast, and salt, then filled with a rich pistachio baklava filling. Baked to golden perfection, it offers a crispy exterior and soft, buttery interior.",
+    "Tags": [
+      "Flaky",
+      "Buttery",
+      "Pistachio",
+      "Baklava",
+      "Sweet",
+      "Pastry",
+      "Vegetarian"
+    ],
+    "Ingredients": [
+      "All-purpose Flour",
+      "Butter 5g",
+      "Milk 150ml",
+      "Sugar 15g",
+      "Yeast 5g",
+      "Salt 10g"
+    ],
+    "Price": 114,
+    "macronutrients": {
+      "cal": 280,
+      "p": 6,
+      "c": 50,
+      "f": 10
+    },
+    "health_benefits": "Pistachios offer protein, healthy fats, vitamin B6, and antioxidants, supporting muscle and brain function. Milk provides calcium and protein for bone strength, while flour gives sustained energy. This treat also contains essential vitamins and minerals from butter, yeast, and salt.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Continental"
+  },
+  {
+    "Id": "adafd171-b5ab-47b9-84b3-e0efc76b88ca",
+    "ProductName": "Cranberry Kiss",
+    "Description": "A refreshing and cooling beverage made with muddled fresh mint leaves, simple syrup, and ice cubes. It offers an invigorating, soothing, and sweet flavor, perfect for quenching thirst.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Refreshing",
+      "Sweet",
+      "Fusion",
+      "Beverage"
+    ],
+    "Ingredients": [
+      "Mint Leaves",
+      "Simple Syrup",
+      "Ice Cubes"
+    ],
+    "Price": 209,
+    "macronutrients": {
+      "cal": 140,
+      "p": 0,
+      "c": 27,
+      "f": 0
+    },
+    "health_benefits": "Mint leaves offer antioxidants, aid digestion with menthol, and provide a cooling effect. This moderate-calorie, naturally gluten-free, and vegan-friendly beverage also offers quick energy and hydration.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "132c7775-46bf-4684-b3b5-24a6483535b9",
+    "ProductName": "Paneer Poppers",
+    "Description": "Crispy paneer poppers, deep-fried to golden perfection, offer a tender, flavorful center. Served with zesty charmoula mayo and a fresh garnish salad, they combine savory taste with cool, tangy accompaniments for a delightful snack.",
+    "Tags": [
+      "Vegetarian",
+      "Fried",
+      "Crispy",
+      "Savory",
+      "High-Protein",
+      "Snack",
+      "Indian"
+    ],
+    "Ingredients": [
+      "Paneer Poppers Semi Finished 220g",
+      "Charmoula Mayo Semi Finished 50g",
+      "Frying Oil 65g",
+      "Garnish Salad Semi Finished 30g"
+    ],
+    "Price": 304,
+    "macronutrients": {
+      "cal": 280,
+      "p": 14,
+      "c": 30,
+      "f": 12
+    },
+    "health_benefits": "Rich in 14g of complete protein from paneer for muscle support and satiety, this dish also provides calcium for bone health. The accompanying salad adds fresh nutrients, vitamins, and fiber for digestive wellness.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "552ff6b0-8812-4dd7-90bd-5ecbba9b8895",
+    "ProductName": "Carrot",
+    "Description": "Fresh carrots are juiced with ginger and black salt to create a vibrant, nutrient-rich juice. This refreshing, delicious drink delivers essential vitamins and antioxidants, offering a nutritious and energizing boost.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Refreshing",
+      "Sweet",
+      "Zesty",
+      "Juice"
+    ],
+    "Ingredients": [
+      "Fresh Carrots 3 Pcs",
+      "Ginger 10g",
+      "Black Salt 5g"
+    ],
+    "Price": 190,
+    "macronutrients": {
+      "cal": 90,
+      "p": 1,
+      "c": 10,
+      "f": 0
+    },
+    "health_benefits": "This juice provides beta-carotene from carrots for eye health and vitamin A. Ginger offers anti-inflammatory properties and aids digestion, while black salt contributes trace minerals, making it a low-calorie, naturally gluten-free, and vegan-friendly drink.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "678975c9-9b6f-4159-ade9-1c93441fd14d",
+    "ProductName": "Classic Cold Coffee",
+    "Description": "A smooth, creamy cold coffee blending rich espresso with fresh milk, coffee ice cream, and vanilla. This refreshing and indulgent beverage offers a robust, aromatic coffee flavor, perfect for any time of day.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Cold coffee",
+      "Creamy",
+      "Sweet",
+      "Refreshing",
+      "Espresso"
+    ],
+    "Ingredients": [
+      "Milk 200ml",
+      "Coffee Ice Cream 2 Scoops",
+      "Espresso 0.06ml"
+    ],
+    "Price": 266,
+    "macronutrients": {
+      "cal": 372,
+      "p": 8,
+      "c": 40,
+      "f": 20
+    },
+    "health_benefits": "This beverage offers 8g of protein for satiety and muscle support, alongside calcium for bone health from milk and ice cream. Espresso contributes antioxidants and a gentle energy boost, making it a naturally gluten-free and moderately caloric choice.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Continental"
+  },
+  {
+    "Id": "bb180278-0c05-42fa-bd82-9dc4a2ee3f19",
+    "ProductName": "Cheese Garlic Bread",
+    "Description": "Fresh white jumbo bread is topped with spicy mayo, processed cheese, fried garlic, and chilies, then baked until golden and crispy. This creates a warm, savory snack that's both indulgent and satisfying.",
+    "Tags": [
+      "Vegetarian",
+      "Baked",
+      "Cheesy",
+      "Spicy",
+      "Savory",
+      "Snack"
+    ],
+    "Ingredients": [
+      "White Jumbo Bread 2 Piece",
+      "Spicy Homemade Mayo 30g",
+      "Processed Cheese 50g",
+      "Fried Garlic 20g",
+      "Fried Chili 20g"
+    ],
+    "Price": 152,
+    "macronutrients": {
+      "cal": 583,
+      "p": 12,
+      "c": 55,
+      "f": 35
+    },
+    "health_benefits": "This dish provides complete protein from cheese for muscle support and satiety, alongside calcium for bone health. Garlic offers immune-boosting allicin, while chilies provide vitamin C and capsaicin. Bread contributes carbohydrates for energy, though it is high in fat.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "8644ed5d-adb1-4b1c-b22a-5f1c7414dae6",
+    "ProductName": "Niloufer Special Tea",
+    "Description": "Niloufer's signature special tea is brewed with premium tea powder, fresh milk, and sugar. This balanced, aromatic cup offers a rich, creamy texture and a comforting, energizing flavor.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Tea",
+      "Creamy",
+      "Aromatic",
+      "Comforting",
+      "Beverage"
+    ],
+    "Ingredients": [
+      "Milk 150ml",
+      "Sugar 20g",
+      "Tea Powder 10g"
+    ],
+    "Price": 171,
+    "macronutrients": {
+      "cal": 90,
+      "p": 5,
+      "c": 12,
+      "f": 5
+    },
+    "health_benefits": "This tea provides protein for satiety and muscle support from milk, plus bone-strengthening calcium. Tea powder offers heart-healthy antioxidants and a gentle energy boost, while sugar provides quick energy. It's low-calorie and naturally gluten-free.",
+    "GST": 5,
+    "IsPopular": true,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "b4d09783-a7a3-432a-92e1-5058ee8c9864",
+    "ProductName": "Lemon Tea With Honey",
+    "Description": "A soothing, aromatic beverage made with black tea, milk, sugar, and spices, then finished with fresh lemon and natural honey. It offers a refreshing and comforting experience with natural sweetness and a zesty complement.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Beverage",
+      "Aromatic",
+      "Sweet",
+      "Spiced",
+      "Comforting"
+    ],
+    "Ingredients": [
+      "Black Tea Leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black Pepper"
+    ],
+    "Price": 162,
+    "macronutrients": {
+      "cal": 90,
+      "p": 2,
+      "c": 16,
+      "f": 4
+    },
+    "health_benefits": "Rich in antioxidants from black tea and honey, this beverage supports heart health and provides a gentle energy boost. Lemon adds Vitamin C for immunity, while ginger and cardamom aid digestion. It's low in calories and naturally gluten-free.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "beab663e-41cf-44f9-925b-8ea0ea031083",
+    "ProductName": "Pineapple",
+    "Description": "A tropical, creamy beverage made with fresh pineapple juice, creamy pina colada syrup, rich fresh cream, and two scoops of vanilla ice cream. This refreshing and indulgent drink offers a naturally sweet and tangy flavor, perfect for any time of day.",
+    "Tags": [
+      "Vegetarian",
+      "Tropical",
+      "Creamy",
+      "Sweet",
+      "Tangy",
+      "Drink",
+      "Refreshing"
+    ],
+    "Ingredients": [
+      "Pineapple Juice 150ml",
+      "Pina Colada Syrup 30ml",
+      "Fresh Cream 30ml",
+      "Vanilla Scoops 2 Scoops"
+    ],
+    "Price": 171,
+    "macronutrients": {
+      "cal": 520,
+      "p": 3,
+      "c": 64,
+      "f": 22
+    },
+    "health_benefits": "Pineapple juice offers immune support, digestive benefits, and antioxidants from Vitamin C and bromelain. Fresh cream adds calcium and healthy fats, while vanilla scoops provide protein. This gluten-free, vegetarian beverage (contains dairy) is suitable for light consumption.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "9d232dc1-8859-4047-9b79-b684cacad201",
+    "ProductName": "Virgin Mojito",
+    "Description": "A refreshing, fizzy mocktail made with muddled fresh lemon, mojito syrup, mint, soda, sprite, and brown sugar. It offers a bright, zesty flavor perfectly balanced with sweet syrup and cool mint, ideal for hot days.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Refreshing",
+      "Fizzy",
+      "Citrus",
+      "Beverage"
+    ],
+    "Ingredients": [
+      "Lemon 1pc",
+      "Mojito Syrup 30ml",
+      "Mint 0.01g",
+      "Soda 100ml",
+      "Sprite 50ml",
+      "Brown Sugar Sachet 3g"
+    ],
+    "Price": 219,
+    "macronutrients": {
+      "cal": 68,
+      "p": 0,
+      "c": 17,
+      "f": 0
+    },
+    "health_benefits": "Rich in Vitamin C from lemon for immune support, and mint provides antioxidants and digestive benefits. This vegan, gluten-free mocktail offers refreshing hydration with moderate calories, making it a healthy and invigorating choice.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Beverage"
+  },
+  {
+    "Id": "47044c00-f214-4254-b0a8-731c194b88e5",
+    "ProductName": "Vada Pav",
+    "Description": "A spiced vada pav mixer is deep-fried until crispy, served in a soft pav bun with chutneys and fresh green chilies. This authentic Mumbai street food offers a tasty, satisfying snack.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Fried",
+      "Crispy",
+      "Savory",
+      "Snack"
+    ],
+    "Ingredients": [
+      "Pav Semi Finished 0.04 No",
+      "Butter Salted Amul 10g",
+      "Semi Finished Mint Chutney 15g",
+      "Seasoning Vada Pav Chutneys 6g",
+      "Semi Finished Vada Pav Mixer 50g",
+      "Vada Pav Batter Semi Finished 20g",
+      "Green Chilli 22g",
+      "Frying Oil 40g"
+    ],
+    "Price": 95,
+    "macronutrients": {
+      "cal": 330,
+      "p": 6,
+      "c": 44,
+      "f": 12
+    },
+    "health_benefits": "Rich in plant-based protein and fiber from potatoes and spices, it aids digestion and provides sustained energy. This vegan and gluten-free snack offers antioxidants, vitamin C, and essential fatty acids for overall wellness.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "high"
+  },
+  {
+    "Id": "eb4a8ea1-e269-4d9f-85aa-a385d0594195",
+    "ProductName": "Mango Chatpata",
+    "Description": "A refreshing, spicy-tangy drink made with fresh mango juice, soda water, black salt, mint leaves, and lemon juice. It offers a unique burst of sweet, tropical flavor combined with fizzy soda and tangy spices, perfect for hot days.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Refreshing",
+      "Sweet",
+      "Tangy",
+      "Fizzy"
+    ],
+    "Ingredients": [
+      "Fresh Fruit Juice",
+      "Soda Water",
+      "Black Salt",
+      "Mint Leaves",
+      "Lemon Juice"
+    ],
+    "Price": 219,
+    "macronutrients": {
+      "cal": 40,
+      "p": 0,
+      "c": 10,
+      "f": 0
+    },
+    "health_benefits": "Rich in Vitamin A and C for immune and eye health, with mint and lemon offering antioxidants and digestive benefits. Black salt provides trace minerals. It's naturally gluten-free, vegan, and a moderately caloric beverage for hydration.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "e37a689f-7490-4ebe-b908-0956c66c5232",
+    "ProductName": "Vegetable Puff (1 Pc)",
+    "Description": "Flaky puff pastry sheets filled with a flavorful vegetable mixture and fresh coriander, baked until golden brown. This crispy and savory snack is perfect for any time of day.",
+    "Tags": [
+      "Vegetarian",
+      "Baked",
+      "Flaky",
+      "Crispy",
+      "Savory",
+      "Snack"
+    ],
+    "Ingredients": [
+      "Mini Veg Puff Sheets Semifinished 1 No",
+      "Coriander 12.5g"
+    ],
+    "Price": 43,
+    "macronutrients": {
+      "cal": 185,
+      "p": 3,
+      "c": 22,
+      "f": 10
+    },
+    "health_benefits": "This snack offers vitamins, minerals, and plant-based protein from the vegetable mixture and coriander, which also provides antioxidants and aids digestion. It's a vegan-friendly option with moderate calorie content, providing carbohydrates for energy.",
+    "GST": 5,
+    "IsPopular": true,
+    "cuisine_type": "Indian",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "d6a054d2-e0ea-4570-9a8a-bf7894191c49",
+    "ProductName": "Paneer Roll",
+    "Description": "A soft paneer roll, filled with creamy paneer mixer, butter, and mayonnaise, is tightly rolled and served with fresh onions. It's a satisfying, protein-rich snack with a rich, creamy texture and mild flavor.",
+    "Tags": [
+      "Vegetarian",
+      "Creamy",
+      "Rolled",
+      "Snack",
+      "Mild"
+    ],
+    "Ingredients": [
+      "Paneer Roll Semi Finished 1g",
+      "Butter Salted Amul 20g",
+      "Mayonnaise 20g",
+      "Semi Finished Panner Roll Mixer 130g",
+      "Onion 30g"
+    ],
+    "Price": 190,
+    "macronutrients": {
+      "cal": 488,
+      "p": 14,
+      "c": 45,
+      "f": 28
+    },
+    "health_benefits": "Rich in protein (14g) from paneer for muscle support and satiety, this roll also provides carbohydrates for energy. Onions contribute heart-healthy quercetin and fiber. It's naturally gluten-free, offering fat-soluble vitamins for overall well-being.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "011bca22-cd37-4cfb-809d-bea44db2c5dd",
+    "ProductName": "Ginger Tea",
+    "Description": "A soothing and aromatic beverage, premium black tea is brewed with fresh milk, sugar, and a blend of spices like ginger, cardamom, cinnamon, and cloves. It offers a warm, zesty kick, perfect for comforting and energizing any time.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Beverage",
+      "Spiced",
+      "Warm",
+      "Aromatic",
+      "Ginger flavor"
+    ],
+    "Ingredients": [
+      "Black Tea Leaves 10g",
+      "Milk 100ml",
+      "Sugar 20g",
+      "Ginger 5g",
+      "Cardamom 1pc",
+      "Cinnamon 0.5g",
+      "Cloves 1pc"
+    ],
+    "Price": 171,
+    "macronutrients": {
+      "cal": 95,
+      "p": 2,
+      "c": 16,
+      "f": 2
+    },
+    "health_benefits": "Rich in antioxidants from black tea, this beverage offers a gentle energy boost and supports heart health. Ginger aids digestion and has anti-inflammatory properties, while milk provides calcium and protein. Spices like cardamom, cinnamon, and cloves add further digestive and antimicrobial benefits.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "c6dec080-c1dc-4ddc-9cba-1c3b88d9e1b1",
+    "ProductName": "Paneer Puff (1 Pc)",
+    "Description": "Flaky puff pastry sheets embrace a creamy paneer filling, baked until golden for a crispy exterior and savory interior. This tasty snack offers a rich, mild flavor, perfect for any time of day.",
+    "Tags": [
+      "Vegetarian",
+      "Flaky",
+      "Crispy",
+      "Savory",
+      "Baked",
+      "Indian"
+    ],
+    "Ingredients": [
+      "Mini Puff Roll Sheet Semifinished 1 No",
+      "Paneer Puff Filling Semifinished 30g"
+    ],
+    "Price": 48,
+    "macronutrients": {
+      "cal": 208,
+      "p": 5,
+      "c": 20,
+      "f": 12
+    },
+    "health_benefits": "This snack offers a good source of protein from paneer for satiety and muscle support, alongside calcium for bone health. Carbohydrates provide sustained energy, and it has a moderate calorie content.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "9da3efb4-8d0b-408d-b6ff-fda72effb98f",
+    "ProductName": "Oreo",
+    "Description": "This rich, creamy milkshake blends fresh milk, vanilla ice cream, dark chocolate, and crushed Oreo biscuits. It offers a classic chocolate cookie flavor and satisfying crunch, making it an irresistible, indulgent beverage.",
+    "Tags": [
+      "Vegetarian",
+      "Sweet",
+      "Creamy",
+      "Chocolate",
+      "Milkshake",
+      "Cookie"
+    ],
+    "Ingredients": [
+      "Milk 150ml",
+      "Vanilla Ice Cream 2 Scoops",
+      "Ice Cubes 0.1kg",
+      "Dark Chocolate 20g",
+      "Chocolate Mix 20g",
+      "Oreo Biscuit 6 Piece"
+    ],
+    "Price": 247,
+    "macronutrients": {
+      "cal": 208,
+      "p": 5,
+      "c": 20,
+      "f": 12
+    },
+    "health_benefits": "This milkshake provides protein and calcium for muscle and bone health from milk and ice cream. Dark chocolate and chocolate mix offer antioxidants. It's suitable for vegetarians and naturally gluten-free.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "44feac6d-6e4e-41ce-8a31-6c113fb69053",
+    "ProductName": "Crispy Corn Kernels",
+    "Description": "Sweet corn kernels are coated with a spiced batter and deep-fried until golden and crispy. This snack offers a delightful burst of naturally sweet and juicy corn flavor combined with savory spices.",
+    "Tags": [
+      "Vegetarian",
+      "Fried",
+      "Crispy",
+      "Sweet-Savory",
+      "Snack"
+    ],
+    "Ingredients": [
+      "Sweet Corn 300g",
+      "Maida 60g",
+      "Raja Corn Flour 60g",
+      "Red Chilli Powder 10g",
+      "Seasoning Keya Onion Powder 5g",
+      "Spices Garlic Powder 5g",
+      "Tata Salt 5g",
+      "White Pepper Powder 5g",
+      "Kashmiri Chilli Powder 10g",
+      "Oil Frying 60g",
+      "Baking Powder 2g"
+    ],
+    "Price": 304,
+    "macronutrients": {
+      "cal": 780,
+      "p": 12,
+      "c": 120,
+      "f": 28
+    },
+    "health_benefits": "Sweet corn provides plant-based protein, B vitamins, and antioxidants for eye and digestive health, offering carbohydrates for energy. This naturally gluten-free and vegan dish also features capsaicin from chili, potentially boosting metabolism.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "39216ed8-489e-4f81-96c6-8ec4178a2aa9",
+    "ProductName": "Sabudana Kichidi",
+    "Description": "Sabudana, potatoes, peanut powder, and cumin seeds are cooked in rich ghee, seasoned with pink salt, green chilies, and fresh coriander. Served with creamy peanut chutney, it's a satisfying, protein-rich, fasting-friendly meal.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Indian",
+      "Savory",
+      "Spicy",
+      "Comfort food"
+    ],
+    "Ingredients": [
+      "Ghee 40g",
+      "Cumin Seeds 3g",
+      "Peanut Powder 80g",
+      "Potato 120g",
+      "Standy Rollup 3x6 100g",
+      "Pink Salt 10g",
+      "Coriander 20g",
+      "Green Chilli 20g",
+      "Peanut Chutney 60g"
+    ],
+    "Price": 238,
+    "macronutrients": {
+      "cal": 847,
+      "p": 18,
+      "c": 80,
+      "f": 50
+    },
+    "health_benefits": "Rich in plant-based protein (18g) and healthy fats, it provides easily digestible carbs for energy, potassium, and Vitamin C. This naturally gluten-free and vegan dish also offers good dietary fiber and aids digestion.",
+    "GST": 5,
+    "IsPopular": true,
+    "cuisine_type": "Indian",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "3eb1e2d7-bcf2-4422-8f69-b957a8a7e1c0",
+    "ProductName": "Niloufer Special Coffee",
+    "Description": "Niloufer's signature special coffee is brewed with freshly ground beans, fresh milk, and sugar. It offers a robust, aromatic flavor, perfectly balanced with creamy milk for a smooth, energizing, and satisfying cup.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Aromatic",
+      "Creamy",
+      "Smooth",
+      "Beverage",
+      "Energizing"
+    ],
+    "Ingredients": [
+      "Coffee Beans 15g",
+      "Milk 150ml",
+      "Sugar 15g",
+      "Water 10ml"
+    ],
+    "Price": 190,
+    "macronutrients": {
+      "cal": 156,
+      "p": 6,
+      "c": 15,
+      "f": 8
+    },
+    "health_benefits": "Coffee beans offer antioxidants and caffeine for an energy boost. Fresh milk provides protein and calcium for bone health and satiety. This low-calorie, gluten-free beverage is ideal for light consumption and supports overall wellness.",
+    "GST": 5,
+    "IsPopular": true,
+    "cuisine_type": "Beverage"
+  },
+  {
+    "Id": "f02a3b4e-a309-4d78-8c90-8676790d187a",
+    "ProductName": "Spicy Paneer",
+    "Description": "A hearty sandwich featuring fresh jumbo bread layered with spicy homemade mayo, spicy paneer mix, and fresh onions. The protein-rich paneer is marinated in flavorful seasonings, creating a satisfying and delicious meal.",
+    "Tags": [
+      "Vegetarian", 
+      "Spicy",
+      "Sandwich",
+      "Indian",
+      "Tangy"
+    ],
+    "Ingredients": [
+      "White Jumbo Bread 2 Piece",
+      "Spicy Mayo Homemade 20g",
+      "Spicy Paneer Sandwich 100g",
+      "Onion 60g"
+    ],
+    "Price": 190,
+    "macronutrients": {
+      "cal": 453,
+      "p": 12,
+      "c": 45,
+      "f": 25
+    },
+    "health_benefits": "Rich in 12g of protein from paneer, supporting satiety and muscle health, this dish also provides calcium for strong bones. Fresh onions offer heart-healthy quercetin, while the bread supplies carbohydrates for energy. Naturally gluten-free, it's a flavorful option.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "high"
+  },
+  {
+    "Id": "f66310eb-2b3c-4247-a5e6-ab6f5dd29a9f",
+    "ProductName": "Apple",
+    "Description": "Fresh apples are juiced with lemon for a vibrant, refreshing beverage. Naturally sweet and crisp, this juice balances sweetness and tartness, delivering essential vitamins and antioxidants.",
+    "Tags": [
+      "Vegetarian",
+      "Vegan",
+      "Gluten-Free",
+      "Beverage",
+      "Fruity",
+      "Sweet",
+      "Refreshing"
+    ],
+    "Ingredients": [
+      "Fresh Apples",
+      "Lemon Juice"
+    ],
+    "Price": 190,
+    "macronutrients": {
+      "cal": 275,
+      "p": 10,
+      "c": 25,
+      "f": 15
+    },
+    "health_benefits": "Rich in vitamin C and antioxidants from fresh apples and lemon, this juice supports heart and digestive health. It's low-calorie, naturally gluten-free, and vegan-friendly, offering plant-based nutrition.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "100c7092-0503-4795-a315-3fa0a9654f6d",
+    "ProductName": "Club Sandwich",
+    "Description": "Three slices of fresh white jumbo bread are layered with marinated club paneer, cheese, and fresh vegetables, served with crispy French fries. This classic, satisfying club sandwich features perfectly spiced paneer and creamy mayo.",
+    "Tags": [
+      "Vegetarian",
+      "Sandwich",
+      "Paneer",
+      "Crispy",
+      "Spiced",
+      "Savory",
+      "Fried"
+    ],
+    "Ingredients": [
+      "White Jumbo Bread Semi Finished 3 pc",
+      "Butter Salted 30g",
+      "Mayonnaise 30g",
+      "Cucumber 80g",
+      "Tomato Bangalore 80g",
+      "Onion 100g",
+      "Club Paneer Marinatiom Semi Finished 150g",
+      "Tata Salt 1g",
+      "Cheese Slice Amul 30g",
+      "Pepper Black Whole 1g",
+      "Veg Grill Sandwich Mixer Semi Finished 80g",
+      "French Fries 6mm 200g"
+    ],
+    "Price": 304,
+    "macronutrients": {
+      "cal": 564,
+      "p": 18,
+      "c": 60,
+      "f": 28
+    },
+    "health_benefits": "Rich in 18g protein from paneer and cheese, this sandwich supports muscle health and satiety. It offers hydration from cucumber, heart-healthy lycopene from tomatoes, and dietary fiber for digestion. High in calories, best enjoyed occasionally.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "36070e40-fb12-41fa-93f0-cb10861270ac",
+    "ProductName": "Green Lemon Tea With Honey",
+    "Description": "A refreshing beverage made with premium Taj Mahal tea, lemon tea powder, syrup, and natural honey. It offers natural sweetness, a floral aroma, and zesty lemon notes, providing a soothing and energizing experience perfect for any time of day.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Green tea",
+      "Lemon",
+      "Honey",
+      "Refreshing",
+      "Beverage"
+    ],
+    "Ingredients": [
+      "Lemon Tea Powder 30g",
+      "Tea Bag (Taj Mahal) 1pc",
+      "Lemon Tea Syrup 40ml"
+    ],
+    "Price": 162,
+    "macronutrients": {
+      "cal": 35,
+      "p": 1,
+      "c": 20,
+      "f": 0
+    },
+    "health_benefits": "Rich in antioxidants from green tea and honey, this low-calorie beverage provides vitamin C and may offer a gentle energy boost. Honey helps soothe, and it's naturally gluten-free, supporting metabolism and light consumption.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Beverage"
+  },
+  {
+    "Id": "740e1430-2a13-4c87-a253-d7186511a26e",
+    "ProductName": "Peach Iced Tea",
+    "Description": "A refreshing iced tea made with premium Taj Mahal tea and sweet peach puree. This fruity beverage combines aromatic tea with a burst of tropical flavor, perfect for hot days.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Refreshing",
+      "Fruity",
+      "Sweet tea",
+      "Beverage"
+    ],
+    "Ingredients": [
+      "Peach Puree 45ml",
+      "Tea Bag (Tajmahal) 2 Ns"
+    ],
+    "Price": 219,
+    "macronutrients": {
+      "cal": 25,
+      "p": 0,
+      "c": 6,
+      "f": 0
+    },
+    "health_benefits": "Provides antioxidants and a gentle energy boost from tea, with vitamin C and beta-carotene from peach puree. This moderately caloric and naturally gluten-free beverage is suitable for various diets.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Beverage"
+  },
+  {
+    "Id": "1d1e37f2-afc7-4647-979f-82babd9b859a",
+    "ProductName": "Sauteed Vegetables",
+    "Description": "A colorful medley of vegetables like capsicums, beetroot, and broccoli are sautéed in virgin olive oil and butter with garlic and seasoned with herbs. Finished with oglio olio sauce, this healthy and flavorful vegetable medley is visually appealing and delicious.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Colorful",
+      "Sautéed",
+      "Healthy",
+      "Flavorful"
+    ],
+    "Ingredients": [
+      "Virgin Olive Oil 20g",
+      "Butter Salted Amul 10g",
+      "Red Capsicum 60g",
+      "Yellow Capsicum 60g",
+      "Green Capsicum 80g",
+      "Beetroot 100g",
+      "Beans 60g",
+      "Broccoli 100g",
+      "Carrot 60g",
+      "Sweet Corn 60g",
+      "Fresh Mushrooms 60g",
+      "Yellow Zucchini 60g",
+      "Green Zucchini 60g",
+      "Tata Salt 10g",
+      "Pepper Black Whole 2g",
+      "Chilly Flakes 2g",
+      "Basil Fresh 15g",
+      "Baby Corn Peeled 60g",
+      "Garlic Peeled 10g",
+      "Oglio Olio Semi Finished 20g",
+      "Seasoning Aromatic Powder 10g"
+    ],
+    "Price": 247,
+    "macronutrients": {
+      "cal": 608,
+      "p": 8,
+      "c": 72,
+      "f": 32
+    },
+    "health_benefits": "Rich in vitamins (C, K, B), antioxidants, and fiber from a medley of vegetables like capsicums, broccoli, and carrots, supporting overall health and digestion. Virgin olive oil adds healthy fats. This dish is naturally gluten-free and vegan-friendly.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "5e6f26ab-dd32-4a71-8fc3-6390fba04c61",
+    "ProductName": "Green Tea",
+    "Description": "This light, aromatic beverage features delicate green tea leaves, fresh milk, and sugar, infused with warming spices like ginger, cardamom, and cinnamon. It's a refreshing, soothing, and energizing drink, perfect for any time of day.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Low-Calorie",
+      "Aromatic",
+      "Spiced",
+      "Refreshing",
+      "Indian"
+    ],
+    "Ingredients": [
+      "Green Tea Leaves 10g",
+      "Milk 100ml",
+      "Sugar 20g",
+      "Ginger 5g",
+      "Cardamom 1pcs",
+      "Cinnamon 0.5g",
+      "Cloves 1pcs"
+    ],
+    "Price": 162,
+    "macronutrients": {
+      "cal": 108,
+      "p": 2,
+      "c": 16,
+      "f": 4
+    },
+    "health_benefits": "Rich in polyphenols and antioxidants from green tea leaves, this beverage supports heart health and provides a gentle energy boost. Milk adds calcium and protein, while ginger, cardamom, and cinnamon offer anti-inflammatory properties and aid digestion.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "d68aac85-e6ec-4d2d-9dbf-9160e040bda0",
+    "ProductName": "Passion Fruit Iced Tea",
+    "Description": "This refreshing iced tea combines premium black tea with fresh milk, sugar, and a blend of aromatic spices like ginger and cardamom. Infused with fresh, tangy passion fruit, it offers a unique tropical flavor perfect for hot days.",
+    "Tags": [
+      "Tropical",
+      "Fruity",
+      "Refreshing",
+      "Spiced",
+      "Sweet-Tangy",
+      "Vegetarian",
+      "Gluten-Free"
+    ],
+    "Ingredients": [
+      "Black Tea Leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black Pepper"
+    ],
+    "Price": 219,
+    "macronutrients": {
+      "cal": 120,
+      "p": 2,
+      "c": 16,
+      "f": 4
+    },
+    "health_benefits": "Black tea provides antioxidants for heart health and energy, while milk offers calcium and protein. Passion fruit adds vitamin C for immunity and fiber. Spices like ginger and cardamom aid digestion, and cinnamon may help regulate blood sugar.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "7382ba9b-1964-43ac-a01d-b50bdf3e4fcb",
+    "ProductName": "Niloufer Tea",
+    "Description": "Niloufer Tea is a signature blend, brewed with premium tea powder, fresh milk, and sugar. It offers a rich, creamy texture and a balanced, aromatic flavor, providing a comforting and energizing cup.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Sweet",
+      "Creamy",
+      "Beverage",
+      "Hot drink",
+      "Refreshing"
+    ],
+    "Ingredients": [
+      "Milk 150ml",
+      "Sugar 20g",
+      "Tea Powder 10g"
+    ],
+    "Price": 143,
+    "macronutrients": {
+      "cal": 194,
+      "p": 5,
+      "c": 33,
+      "f": 5
+    },
+    "health_benefits": "This tea provides essential proteins and calcium from milk, supporting muscle and bone health. Tea powder offers antioxidants for heart health and a gentle energy boost, while being naturally gluten-free and low in calories.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "a4b8b90d-c650-4144-a65d-6a307d10d760",
+    "ProductName": "Kahwa Tea",
+    "Description": "A rich, aromatic beverage made from black tea, milk, and traditional Kahwa spices like ginger, cardamom, cinnamon, and cloves. It's both soothing and energizing, perfect for any time of day.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Indian",
+      "Beverage",
+      "Aromatic",
+      "Spiced",
+      "Energizing"
+    ],
+    "Ingredients": [
+      "Black Tea Leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black Pepper"
+    ],
+    "Price": 162,
+    "macronutrients": {
+      "cal": 90,
+      "p": 2,
+      "c": 16,
+      "f": 4
+    },
+    "health_benefits": "Kahwa Tea offers antioxidants from black tea for heart health and an energy boost. Spices like cardamom, ginger, and cinnamon aid digestion and provide anti-inflammatory benefits, while milk adds calcium. It is low in calories and naturally gluten-free.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "8d5f07b9-e9ea-46f2-9ed3-ca75db2bafdf",
+    "ProductName": "Green Tea With Honey",
+    "Description": "A refreshing blend of green tea and natural honey, infused with aromatic spices like ginger, cardamom, cinnamon, and cloves. This soothing and energizing beverage is perfect for any time of day.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Low-Calorie",
+      "Beverage",
+      "Refreshing",
+      "Aromatic",
+      "Medium-Spice"
+    ],
+    "Ingredients": [
+      "Black Tea Leaves 10g",
+      "Milk 100ml",
+      "Sugar 20g",
+      "Ginger 5g",
+      "Cardamom 1pc",
+      "Cinnamon 0.5g",
+      "Cloves 1pc"
+    ],
+    "Price": 171,
+    "macronutrients": {
+      "cal": 108,
+      "p": 2,
+      "c": 16,
+      "f": 4
+    },
+    "health_benefits": "Rich in antioxidants from green tea and honey, this beverage supports heart health and provides a gentle energy boost. Spices like ginger and cardamom aid digestion, while cinnamon may help regulate blood sugar, contributing to overall wellness.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "21e7c247-90bd-40a4-a053-73993611f3bc",
+    "ProductName": "Maska Bun",
+    "Description": "A soft maska bun generously spread with butter and sprinkled with castor sugar. This classic, comforting snack is simple yet delicious and perfect for any time of day.",
+    "Tags": [
+      "Vegetarian",
+      "Sweet",
+      "Buttery",
+      "Soft",
+      "Snack",
+      "Comfort food",
+      "Baked"
+    ],
+    "Ingredients": [
+      "Maska Bun Semi Finished 1 no",
+      "Butter Salted Amul 25g",
+      "Sugar Castor 6g"
+    ],
+    "Price": 95,
+    "macronutrients": {
+      "cal": 190,
+      "p": 4,
+      "c": 20,
+      "f": 10
+    },
+    "health_benefits": "Provides carbohydrates for sustained energy and B vitamins. Contains healthy fats and fat-soluble vitamins A, D, E, and K from butter, with sugar adding quick energy. It has moderate calorie content.",
+    "GST": 5,
+    "IsPopular": true,
+    "cuisine_type": "Fusion",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "9289a66b-7ae2-40cb-baf8-0e7f0f40e472",
+    "ProductName": "Fresh Lime Soda",
+    "Description": "Fresh lemons are squeezed and mixed with soda water and sweet sugar syrup to create a refreshing, fizzy drink. It offers a bright, zesty flavor, perfectly balanced for a thirst-quenching beverage.",
+    "Tags": [
+      "Refreshing",
+      "Fizzy",
+      "Zesty",
+      "Sweet",
+      "Vegan",
+      "Gluten-Free",
+      "Drink"
+    ],
+    "Ingredients": [
+      "Soda 50ml",
+      "Lemon 2pcs",
+      "Sugar Syrup 30ml"
+    ],
+    "Price": 143,
+    "macronutrients": {
+      "cal": 40,
+      "p": 0,
+      "c": 10,
+      "f": 0
+    },
+    "health_benefits": "Lemon provides Vitamin C for immune support and aids iron absorption. Sugar syrup offers quick energy, and soda aids hydration. This drink is naturally gluten-free and vegan-friendly.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Beverage"
+  },
+  {
+    "Id": "9a30cad5-8576-48b1-8f25-d6eb1e0a6b1d",
+    "ProductName": "Belgian Chocolate Croissant",
+    "Description": "A buttery, flaky croissant, made with waffe bateer and layered with butter, is filled with chocolate chips and drizzled with rich Hershey's chocolate syrup. Baked golden, it offers a crispy exterior and soft, chocolate-filled interior with indulgent Belgian chocolate flavor.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Buttery",
+      "Flaky",
+      "Sweet",
+      "Baked",
+      "Chocolate"
+    ],
+    "Ingredients": [
+      "Waffe Bateer Semi Finished 200g",
+      "Butter Salted Amul 10g",
+      "Choco Chips 30g",
+      "Chocolate Syrup-Hersheys 80g"
+    ],
+    "Price": 114,
+    "macronutrients": {
+      "cal": 466,
+      "p": 6,
+      "c": 70,
+      "f": 18
+    },
+    "health_benefits": "Provides carbohydrates for energy, fiber for digestion, and antioxidants from cocoa. While high in calories, it is naturally gluten-free and suitable for those with sensitivities, making it an indulgent treat.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Continental"
+  },
+  {
+    "Id": "5b02a157-2708-4dfd-8a32-f5778ab0759b",
+    "ProductName": "Malai Paneer Roll (6.Pcs)",
+    "Description": "A soft paneer roll bread is filled with creamy malai paneer, butter, and mayonnaise, served with fresh onions. This rich, protein-rich roll offers a satisfying and indulgent experience with its mild flavor and creamy texture.",
+    "Tags": [
+      "Vegetarian",
+      "Paneer",
+      "Creamy",
+      "Mild",
+      "High-Protein",
+      "Gluten-Free",
+      "Indulgent"
+    ],
+    "Ingredients": [
+      "Paneer Roll Semi Finished 1g",
+      "Butter Salted Amul 20g",
+      "Mayonnaise 20g",
+      "Semi Finished Paneer Roll Mixer 130g",
+      "Onion 30g"
+    ],
+    "Price": 304,
+    "macronutrients": {
+      "cal": 615,
+      "p": 15,
+      "c": 60,
+      "f": 35
+    },
+    "health_benefits": "Provides 15g of protein from paneer for satiety and muscle support, alongside calcium for bone strength and carbohydrates for sustained energy. It also offers healthy fats, fat-soluble vitamins, and prebiotic fiber from onions for digestive and heart health. Naturally gluten-free and high in protein.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "3f53bacd-8899-440c-b3e1-829cebb89ad4",
+    "ProductName": "Corn & Cheese Ball (6 Pcs)",
+    "Description": "Sweet corn kernels are mixed with maida, corn flour, and spices, shaped into balls with cheese, and deep-fried until golden and crispy. This delightful snack offers a perfect blend of sweet corn and savory melted cheese.",
+    "Tags": [
+      "Vegetarian",
+      "Fried",
+      "Crispy",
+      "Cheesy",
+      "Savory",
+      "Snack"
+    ],
+    "Ingredients": [
+      "Sweet Corn 300g",
+      "Maida 60g",
+      "Raja Corn Flour 60g",
+      "Red Chilli Powder 10g",
+      "Seasoning Keya Onion Powder 5g",
+      "Spices Garlic Powder 5g",
+      "Tata Salt 5g",
+      "White Pepper Powder 5g",
+      "Kashmiri Chilli Powder 10g",
+      "Frying Oil 60g",
+      "Baking Powder 2g"
+    ],
+    "Price": 304,
+    "macronutrients": {
+      "cal": 1280,
+      "p": 20,
+      "c": 130,
+      "f": 60
+    },
+    "health_benefits": "Rich in plant-based protein for muscle support and fiber for digestion. Contains antioxidants from corn and spices for overall well-being, along with carbohydrates for sustained energy.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "49d54b3c-0bd0-4901-83f2-9e1a200c4450",
+    "ProductName": "Spinach & Corn Puff (1 Pc)",
+    "Description": "Flaky puff pastry filled with a flavorful spinach and corn mixture, baked until golden brown. This perfect snack offers a crispy exterior and savory interior, ideal for any time of day.",
+    "Tags": [
+      "Vegetarian",
+      "Baked",
+      "Flaky",
+      "Crispy",
+      "Savory",
+      "Snack"
+    ],
+    "Ingredients": [
+      "Mini Puff Roll Sheet Semifinished 1 Pc",
+      "Spinach Corn Puff Mixer Semi Finished 30g"
+    ],
+    "Price": 48,
+    "macronutrients": {
+      "cal": 248,
+      "p": 5,
+      "c": 30,
+      "f": 12
+    },
+    "health_benefits": "Rich in plant-based protein from spinach and corn, this puff supports blood health with iron and aids digestion with natural fiber. It also provides essential vitamins, antioxidants for eye health, and carbohydrates for sustained energy, making it a gluten-free and moderate-calorie option.",
+    "GST": 5,
+    "IsPopular": true,
+    "cuisine_type": "Continental",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "4a7736d9-f423-4955-8087-5c8ef8c6444f",
+    "ProductName": "Masala Oats",
+    "Description": "Oats cooked with carrots, green peas, and beans in butter, seasoned with chili, turmeric, and fresh coriander. This healthy, flavorful breakfast offers a wholesome, nutty base complemented by fresh vegetables and aromatic spices.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Oats",
+      "Savory",
+      "Wholesome",
+      "Spicy",
+      "Healthy"
+    ],
+    "Ingredients": [
+      "Butter Salted Amul 10g",
+      "Innoshfresh Aerosol Dispenser 100g",
+      "Carrot 60g",
+      "Green Peas 60g",
+      "Curry Leaves 2g",
+      "Beans 60g",
+      "Red Chilli Powder 2g",
+      "Turmeric Powder 2g",
+      "Coriander 20g"
+    ],
+    "Price": 190,
+    "macronutrients": {
+      "cal": 264,
+      "p": 7,
+      "c": 38,
+      "f": 11
+    },
+    "health_benefits": "Rich in plant-based protein and beta-glucan fiber from oats, promoting satiety, heart, and digestive health. Contains beta-carotene from carrots for eye health, plus beneficial curcumin from turmeric and capsaicin from chili for anti-inflammatory support and metabolism.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "e01157ba-af18-4d83-b302-e7e760f2fdf6",
+    "ProductName": "Lemon Tea",
+    "Description": "A refreshing beverage made from premium black tea, milk, and sugar, infused with aromatic spices like ginger and cardamom, and finished with fresh lemon. It offers a bright, zesty flavor, perfect for any time of day.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Aromatic",
+      "Zesty",
+      "Spiced tea",
+      "Refreshing",
+      "Beverage"
+    ],
+    "Ingredients": [
+      "Black Tea Leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black Pepper"
+    ],
+    "Price": 143,
+    "macronutrients": {
+      "cal": 56,
+      "p": 1,
+      "c": 13,
+      "f": 1
+    },
+    "health_benefits": "Low in calories, this beverage is suitable for light consumption and is gluten-free for those with sensitivities. Additionally, ginger provides anti-inflammatory properties and aids digestion, contributing to overall well-being.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "344f3b86-74b4-4c4e-9ccf-2333284440f1",
+    "ProductName": "Chocolate",
+    "Description": "A smooth, creamy chocolate milkshake made with waffle batter, butter, chocolate chips, and Hershey's chocolate syrup. It offers a rich, indulgent, and satisfying flavor, perfect for chocolate lovers.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Sweet",
+      "Creamy",
+      "Indulgent",
+      "Beverage",
+      "Chocolate"
+    ],
+    "Ingredients": [
+      "Waffle Batter Semi Finished 200g",
+      "Butter Salted Amul 10g",
+      "Choco Chips 30g",
+      "Chocolate Syrup-Hershey's 80g"
+    ],
+    "Price": 219,
+    "macronutrients": {
+      "cal": 542,
+      "p": 5,
+      "c": 90,
+      "f": 18
+    },
+    "health_benefits": "Offers 5g of protein and fiber. It is also gluten-free, making it suitable for individuals with gluten sensitivities.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Beverage",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "4efd13b8-0e0b-4ced-b261-30a6891d7665",
+    "ProductName": "Blue Lagoon",
+    "Description": "A vibrant, refreshing mocktail with a beautiful blue color, made from blue curacao syrup mixed with soda water and sprite. It offers a sweet, citrusy flavor, perfect for hot days.",
+    "Tags": [
+      "Mocktail",
+      "Refreshing",
+      "Sweet",
+      "Citrusy",
+      "Vegan",
+      "Gluten-Free",
+      "Beverage"
+    ],
+    "Ingredients": [
+      "Blue Curacao Syrup 30ml",
+      "Soda 200ml",
+      "Sprite 50ml"
+    ],
+    "Price": 209,
+    "macronutrients": {
+      "cal": 240,
+      "p": 0,
+      "c": 60,
+      "f": 0
+    },
+    "health_benefits": "Provides natural citrus flavors and antioxidants, aiding hydration and digestion. It has moderate calories, is naturally gluten-free, and completely vegan-friendly.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "4e029ee0-5ca8-4f4d-a7e4-3cbe5e2c0606",
+    "ProductName": "Veg Cheese Puff (1 Pc)",
+    "Description": "Flaky puff pastry sheets are filled with a flavorful vegetable and cheese mixture, then baked until golden brown. This crispy and savory puff is a perfect snack with rich, creamy cheese and fresh vegetables.",
+    "Tags": [
+      "Vegetarian",
+      "Puff pastry",
+      "Crispy",
+      "Savory",
+      "Cheesy",
+      "Snack"
+    ],
+    "Ingredients": [
+      "Mini Puff Roll Sheet Semifinished 1 No",
+      "Veg and Cheese Puff Semifinished 30g"
+    ],
+    "Price": 48,
+    "macronutrients": {
+      "cal": 194,
+      "p": 5,
+      "c": 28,
+      "f": 9
+    },
+    "health_benefits": "Provides protein from cheese for satiety and muscle support, plus calcium for bone strength. Vegetables contribute fiber, vitamins, and antioxidants for digestive wellness and overall health, while carbohydrates offer sustained energy.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Continental",
+    "spice_level": "mild"
+  },
+  {
+    "Id": "428b0cbc-0ebb-4e9c-821f-bdff4bcdde46",
+    "ProductName": "Masala Cola",
+    "Description": "A unique, refreshing beverage combining Thums Up cola with tangy nimbu pani. It offers a bold, fizzy cola flavor enhanced by zesty lemon, creating a perfect balance of sweet and tangy.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Refreshing",
+      "Sweet-Tangy",
+      "Fizzy",
+      "Beverage",
+      "Zesty"
+    ],
+    "Ingredients": [
+      "Thums Up 150ml",
+      "Nimbu Pani 50g"
+    ],
+    "Price": 171,
+    "macronutrients": {
+      "cal": 120,
+      "p": 0,
+      "c": 20,
+      "f": 0
+    },
+    "health_benefits": "Offers a gentle energy boost from caffeine and hydration. Nimbu pani provides Vitamin C for immune support and aids iron absorption, with moderate calories and naturally gluten-free.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  },
+  {
+    "Id": "4c44d150-f314-48ed-8132-41255e84b292",
+    "ProductName": "Nutella",
+    "Description": "A smooth, creamy milkshake made with fresh milk, vanilla ice cream, milk chocolate, and rich Nutella. This indulgent beverage offers the classic hazelnut-chocolate flavor, creating an irresistible treat.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Beverage",
+      "Creamy",
+      "Sweet",
+      "Chocolate-Hazelnut"
+    ],
+    "Ingredients": [
+      "Milk 150ml",
+      "Vanilla Icecream 2 Scoops",
+      "Milk Chocolate 20g",
+      "Chocolate Syrup 20ml",
+      "Nutella 20g"
+    ],
+    "Price": 247,
+    "macronutrients": {
+      "cal": 348,
+      "p": 10,
+      "c": 50,
+      "f": 12
+    },
+    "health_benefits": "This beverage provides protein and calcium for bone strength and muscle support. Hazelnuts from Nutella offer vitamin E and healthy fats, while cocoa contributes antioxidants, making it a naturally gluten-free option.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion"
+  },
+  {
+    "Id": "3bbbaa3c-7880-436f-8d8d-436da7cb780b",
+    "ProductName": "Strawberry Iced Tea",
+    "Description": "A refreshing iced tea brewed with hot water, sweet strawberry puree, and fresh lemon. It offers a naturally sweet and fruity burst of flavor, perfect for hot days.",
+    "Tags": [
+      "Strawberry",
+      "Iced tea",
+      "Refreshing",
+      "Fruity",
+      "Sweet",
+      "Vegetarian",
+      "Gluten-Free"
+    ],
+    "Ingredients": [
+      "Hot Water 150ml",
+      "Strawberry Puree 45ml",
+      "Lemon 1pcs"
+    ],
+    "Price": 219,
+    "macronutrients": {
+      "cal": 420,
+      "p": 6,
+      "c": 60,
+      "f": 14
+    },
+    "health_benefits": "Rich in natural vitamin C from strawberry and lemon for immune support and iron absorption, offering antioxidant benefits. Aids hydration and is naturally gluten-free.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Beverage"
+  },
+  {
+    "Id": "2e5eb112-1262-48c5-8e14-de3309e10a3b",
+    "ProductName": "Cheese Garlic",
+    "Description": "Fresh white jumbo bread is topped with spicy mayo, processed cheese, fried garlic, and chilies, then baked until golden. This savory snack offers a rich, aromatic flavor, perfectly complementing the creamy cheese and spicy mayo for an indulgent experience.",
+    "Tags": [
+      "Cheese",
+      "Garlic",
+      "Baked",
+      "Crispy",
+      "Savory",
+      "Spicy"
+    ],
+    "Ingredients": [
+      "White Jumbo Bread 2 Piece",
+      "Spicy Mayo Homemade 30g",
+      "Processed Cheese 50g",
+      "Fried Garlic 20g",
+      "Fried Chilli 20g"
+    ],
+    "Price": 143,
+    "macronutrients": {
+      "cal": 608,
+      "p": 14,
+      "c": 48,
+      "f": 40
+    },
+    "health_benefits": "Provides 14g of protein for muscle support and calcium for bone strength, with carbohydrates offering sustained energy. Garlic and chili contribute to immune support and metabolism. This dish is high in calories and fat, best enjoyed occasionally.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Fusion",
+    "spice_level": "medium"
+  },
+  {
+    "Id": "c9a1095d-47cb-44e5-87ef-e0601c84e0c3",
+    "ProductName": "Green Lemon Tea",
+    "Description": "A refreshing blend of premium black tea infused with ginger, cardamom, cinnamon, cloves, and fresh lemon. This aromatic beverage offers a bright, zesty flavor that is both soothing and energizing.",
+    "Tags": [
+      "Vegetarian",
+      "Gluten-Free",
+      "Aromatic",
+      "Refreshing",
+      "Beverage",
+      "Lemon tea"
+    ],
+    "Ingredients": [
+      "Black Tea Leaves",
+      "Milk",
+      "Sugar",
+      "Ginger",
+      "Cardamom",
+      "Cinnamon",
+      "Cloves",
+      "Black Pepper"
+    ],
+    "Price": 162,
+    "macronutrients": {
+      "cal": 108,
+      "p": 2,
+      "c": 16,
+      "f": 4
+    },
+    "health_benefits": "Rich in antioxidants from black tea, this beverage supports heart health and provides a gentle energy boost. Lemon offers immune-boosting Vitamin C, while ginger and cardamom aid digestion. Cinnamon may help regulate blood sugar.",
+    "GST": 5,
+    "IsPopular": false,
+    "cuisine_type": "Indian"
+  }
+]
