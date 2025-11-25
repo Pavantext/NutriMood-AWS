@@ -1,5 +1,5 @@
 {
-  "vector_store_id": "vs_6921922f4eb881918392bba181ebec32",
+  "vector_store_id": "vs_692571a9ed7c8191948e0382444419cd",
   "name": "NutriMood_Menu_Store",
   "status": "completed",
   "file_counts": {
@@ -9,7 +9,7 @@
     "cancelled": 0
   },
   "upload_result": {
-    "file_batch_id": "vs_6921922f4eb881918392bba181ebec32",
+    "file_batch_id": "vs_692571a9ed7c8191948e0382444419cd",
     "status": "completed",
     "file_counts": {
       "in_progress": 0,

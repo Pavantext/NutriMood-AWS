@@ -121,22 +121,31 @@ class NutriMood:
             # 4. Call Responses API with File Search
             # Prompt Caching: Automatically caches 'instructions' and 'tools'
             # if they remain constant across requests (>1024 tokens)
+
+            # Dynamic search configuration based on query complexity
+            query_words = request.message.split()
+            max_results = min(10, len(query_words) + 2)  # More results for complex queries
+
             response = self.client.responses.create(
                 model="gpt-4o-mini",  # Cost-effective with full feature support
-                
+
                 # System instructions (CACHED after first call)
                 instructions=instructions,
-                
+
                 # User input (can be string or list of message objects)
                 input=conversation_input,
-                
-                # File Search Tool with Vector Store
+
+                # File Search Tool with Vector Store - Optimized configuration
                 tools=[{
                     "type": "file_search",
                     "vector_store_ids": [self.vector_store_id],
-                    "max_num_results": 5  # Optimize for token usage
+                    "max_num_results": max_results,
+                    "ranking_options": {
+                        "ranker": "auto",  # Let OpenAI choose best ranking
+                        "score_threshold": 0.1  # Filter low-relevance results
+                    }
                 }],
-                
+
                 # Model Parameters
                 temperature=0.3,  # Low for consistent retrieval
                 max_output_tokens=500,  # Allow enough tokens for response
@@ -295,20 +304,29 @@ def setup_knowledge_base(api_key: str, food_data_json: list) -> str:
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(food_data_json, f, indent=2)
     
-    # 2. Create Vector Store
+    # 2. Create Vector Store with optimized settings
     vector_store = client.vector_stores.create(
         name="NutriMood_Menu_Store",
+        file_ids=[],  # Upload files separately with better chunking
         expires_after={
             "anchor": "last_active_at",
             "days": 7  # Auto-delete after 7 days of inactivity
         }
     )
-    
-    # 3. Upload file to Vector Store
+
+    # 3. Upload file to Vector Store with custom chunking strategy
     with open(filename, "rb") as file_stream:
+        # Use chunking_overlap and chunking_strategy for better retrieval
         file_batch = client.vector_stores.file_batches.upload_and_poll(
             vector_store_id=vector_store.id,
-            files=[file_stream]
+            files=[file_stream],
+            chunking_strategy={
+                "type": "static",
+                "static": {
+                    "max_chunk_size_tokens": 800,  # Smaller chunks for food items
+                    "chunk_overlap_tokens": 100     # Overlap for context
+                }
+            }
         )
     
     print(f"✅ Vector Store Ready: {vector_store.id}")
