@@ -287,57 +287,6 @@ class NutriMood:
         return self.session_messages.get(session_id, [])
 
 
-# ==========================================
-# Setup Helper (Run Once)
-# ==========================================
-
-def setup_knowledge_base(api_key: str, food_data_json: list) -> str:
-    """
-    Upload food data to OpenAI Vector Store (one-time setup).
-    
-    Args:
-        api_key: OpenAI API key
-        food_data_json: List of food items as dictionaries
-        
-    Returns:
-        vector_store_id: ID of the created vector store
-    """
-    client = OpenAI(api_key=api_key)
-    
-    # 1. Create temporary JSON file
-    filename = "nutrimood_menu.json"
-    with open(filename, "w", encoding="utf-8") as f:
-        json.dump(food_data_json, f, indent=2)
-    
-    # 2. Create Vector Store with optimized settings
-    vector_store = client.vector_stores.create(
-        name="NutriMood_Menu_Store",
-        file_ids=[],  # Upload files separately with better chunking
-        expires_after={
-            "anchor": "last_active_at",
-            "days": 7  # Auto-delete after 7 days of inactivity
-        }
-    )
-
-    # 3. Upload file to Vector Store with custom chunking strategy
-    with open(filename, "rb") as file_stream:
-        # Use chunking_overlap and chunking_strategy for better retrieval
-        file_batch = client.vector_stores.file_batches.upload_and_poll(
-            vector_store_id=vector_store.id,
-            files=[file_stream],
-            chunking_strategy={
-                "type": "static",
-                "static": {
-                    "max_chunk_size_tokens": 800,  # Smaller chunks for food items
-                    "chunk_overlap_tokens": 100     # Overlap for context
-                }
-            }
-        )
-    
-    print(f"✅ Vector Store Ready: {vector_store.id}")
-    print(f"   Files processed: {file_batch.file_counts.completed}/{file_batch.file_counts.total}")
-    
-    return vector_store.id
 
 
 # ==========================================
