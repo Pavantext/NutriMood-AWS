@@ -351,17 +351,7 @@ Shorter + Funnier + Helpful = Perfect NutriMood!"""
             system_prompt = self._build_system_prompt()
             
             # Debug: Print what's being sent to LLM
-            if debug or os.getenv("DEBUG_LLM_PROMPTS", "false").lower() == "true":
-                print("\n" + "=" * 80)
-                print("🔍 DEBUG: LLM INPUT DATA")
-                print("=" * 80)
-                print("\n📋 SYSTEM PROMPT (first 500 chars):")
-                print(system_prompt[:500] + "..." if len(system_prompt) > 500 else system_prompt)
-                print("\n📝 USER PROMPT:")
-                print(prompt)
-                print("\n" + "=" * 80)
-                print("END DEBUG OUTPUT")
-                print("=" * 80 + "\n")
+           
             
             # Prepare request body for Claude
             request_body = {

@@ -39,7 +39,7 @@ class StreamingMiddleware(BaseHTTPMiddleware):
         return response
 
 # Import custom modules
-from services.bedrock_service import BedrockService
+from services.opeai_services import NutriMood
 from services.food_service import FoodService
 from services.session_service import SessionService
 # from services.mcp_server import MCPServer
@@ -47,7 +47,7 @@ from services.database_service import DatabaseService
 from utils.response_formatter import ResponseFormatter
 
 # Global service instances (initialized in lifespan)
-bedrock_service = None
+openai_service = None
 food_service = None
 session_service = None
 database_service = None
@@ -58,13 +58,13 @@ mcp_server = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
-    global bedrock_service, food_service, session_service, database_service, response_formatter, mcp_server
+    global openai_service, food_service, session_service, database_service, response_formatter, mcp_server
     
     # Startup - Initialize services only once per process
     print("🚀 Starting Nutrimood Chatbot...")
-    
+
     # Initialize services (moved from module level to avoid duplicate init with reloader)
-    bedrock_service = BedrockService()
+    openai_service = NutriMood()
     food_service = FoodService()
     session_service = SessionService()
     database_service = DatabaseService()  # AWS RDS PostgreSQL
@@ -203,10 +203,10 @@ async def chat(request: ChatRequest):
         async def generate_stream():
             full_response = ""
             recommended_ids = []
-            
+
             # Check if this is a follow-up question about previous recommendations
             is_followup = _is_followup_question(request.message, conversation_history)
-            
+
             if is_followup:
                 # For follow-ups, get the last recommended food IDs from session
                 last_recommendations = session.get("recommendations", [])
@@ -214,10 +214,10 @@ async def chat(request: ChatRequest):
                     # Get the most recent recommendation
                     last_rec = last_recommendations[-1]
                     previous_food_ids = last_rec.get("food_ids", [])
-                    
+
                     # Filter out invalid IDs
                     valid_previous_ids = [fid for fid in previous_food_ids if fid and str(fid).strip()]
-                    
+
                     # Fetch these specific foods
                     food_matches = []
                     for food_id in valid_previous_ids[:5]:
@@ -236,28 +236,24 @@ async def chat(request: ChatRequest):
                     request.message,
                     conversation_history
                 )
-            
-            # Build context for LLM
-            food_context = food_service.build_food_context(food_matches)
-            
-            # Stream response from Bedrock with explicit flushing
-            async for chunk in bedrock_service.generate_streaming_response(
-                user_query=request.message,
-                conversation_history=conversation_history,
-                food_context=food_context,
-                session_preferences=session.get("preferences", {})
-            ):
-                full_response += chunk
-                # Yield each character individually to force streaming
-                for char in chunk:
-                    yield char
-                    await asyncio.sleep(0.01)  # Small delay to force transmission
-            
-            # Extract recommended food IDs from the response
-            recommended_ids = food_service.extract_food_ids_from_response(
-                full_response,
-                food_matches
+
+            # Get response from OpenAI service
+            openai_request = ChatRequest(
+                message=request.message,
+                session_id=session_id,
+                user_name=request.user_name,
+                user_id=request.user_id,
+                user_preferences=request.user_preferences
             )
+
+            openai_response = openai_service.chat(openai_request)
+            full_response = openai_response.message
+            recommended_ids = openai_response.food_recommendation_id.split(',') if openai_response.food_recommendation_id else []
+
+            # Stream the response character by character
+            for char in full_response:
+                yield char
+                await asyncio.sleep(0.01)  # Small delay to force transmission
 
             # If no food IDs extracted, don't show any food items to frontend
             if not recommended_ids:
