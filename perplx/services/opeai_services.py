@@ -62,9 +62,10 @@ class NutriMood:
             )
         
         self.client = OpenAI(api_key=self.api_key)
-        
+
         # In-memory session storage (use Redis/DB in production)
         self.session_messages: Dict[str, list] = {}
+        self.session_response_ids: Dict[str, str] = {}  # Track response IDs for conversation continuity
 
     def chat(self, request: ChatRequest) -> ChatResponse:
         """
@@ -82,20 +83,30 @@ class NutriMood:
         # Initialize or retrieve conversation history
         if current_session_id not in self.session_messages:
             self.session_messages[current_session_id] = []
-        
-        # 2. Prepare User Message with Context
-        user_context = ""
-        if request.user_name:
-            user_context = f"User: {request.user_name}\n"
-        if request.user_id:
-            user_context += f"User ID: {request.user_id}\n"
-        
-        full_message = f"{user_context}{request.message}".strip()
-        
-        # Add to conversation history
+
+            # ✅ ADD CONTEXT ONCE at session start using 'developer' role
+            context = {}
+            if request.user_name:
+                context["user_name"] = request.user_name
+            if request.user_id:
+                context["user_id"] = request.user_id
+            if request.user_preferences:
+                context["preferences"] = request.user_preferences
+
+            if context:
+                context_msg = {
+                    "role": "developer",  # New role for system-level context
+                    "content": json.dumps({
+                        **context,
+                        "session_start": time.time()
+                    })
+                }
+                self.session_messages[current_session_id].append(context_msg)
+
+        # ✅ Just add user message - no context duplication
         self.session_messages[current_session_id].append({
             "role": "user",
-            "content": full_message
+            "content": request.message
         })
         
         # 3. Build Input for Responses API
@@ -121,6 +132,12 @@ class NutriMood:
                 # User input (can be string or list of message objects)
                 input=conversation_input,
 
+                # ✅ CRITICAL: Store conversation state server-side
+                store=True,
+
+                # ✅ Reference previous response for context continuity
+                previous_response_id=self.session_response_ids.get(current_session_id),
+
                 # File Search Tool with Vector Store - Optimized configuration
                 tools=[{
                     "type": "file_search",
@@ -136,6 +153,9 @@ class NutriMood:
                 temperature=0.3,  # Low for consistent retrieval
                 max_output_tokens=500,  # Allow enough tokens for response
             )
+
+            # ✅ Store response ID for next request
+            self.session_response_ids[current_session_id] = response.id
             
             # 5. Extract Output Text
             # The response.output contains a list of output items
@@ -184,20 +204,17 @@ class NutriMood:
 
     def _format_conversation_input(self, session_id: str):
         """
+        ✅ RECOMMENDED: Use proper message format for Responses API
         Format conversation history for Responses API.
-        
-        The Responses API 'input' parameter accepts:
-        - A string (for single turn)
-        - A list of message objects (for multi-turn conversations)
+
+        The Responses API accepts list of message objects directly.
+        No need to format as string.
         """
         messages = self.session_messages.get(session_id, [])
-        
-        if not messages:
-            return ""
-        
-        # Return the list of message objects
-        # Format: [{"role": "user", "content": "..."}, ...]
-        return messages
+
+        # Responses API accepts list of message objects directly
+        # No need to format as string
+        return messages if messages else []
 
     def _extract_output_text(self, response) -> str:
         """
@@ -259,9 +276,11 @@ class NutriMood:
         )
 
     def clear_session(self, session_id: str):
-        """Clear conversation history for a session."""
+        """Clear conversation history and response IDs for a session."""
         if session_id in self.session_messages:
             del self.session_messages[session_id]
+        if session_id in self.session_response_ids:
+            del self.session_response_ids[session_id]
 
     def get_session_history(self, session_id: str) -> list:
         """Retrieve conversation history for debugging/logging."""
