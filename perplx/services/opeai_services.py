@@ -22,21 +22,7 @@ from interfaces.base_models import ChatRequest, ChatResponse
 from utils.openai_system_prompt import instructions
 
 # Load environment variables
-# Try loading from multiple locations
-project_root = perplx_dir.parent
-
-env_files = [
-    perplx_dir / ".env",
-    project_root / ".env",
-    Path.cwd() / ".env"
-]
-
-for env_file in env_files:
-    if env_file.exists():
-        load_dotenv(env_file)
-        break
-else:
-    load_dotenv()
+load_dotenv(perplx_dir / ".env")
 
 # ==========================================
 # NutriMood Bot Class (Responses API)
