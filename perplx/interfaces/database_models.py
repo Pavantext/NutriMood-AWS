@@ -30,6 +30,10 @@ class ConversationRecord(BaseModel):
     query_intent: Optional[str] = None
     response_time_ms: Optional[int] = None
     user_rating: Optional[int] = None
+    input_tokens: Optional[int] = None  # Input tokens used
+    output_tokens: Optional[int] = None  # Output tokens used
+    total_tokens: Optional[int] = None  # Total tokens (input + output)
+    total_cost: Optional[float] = None  # Total cost in USD
     created_at: Optional[datetime] = None
 
 

@@ -45,6 +45,7 @@ from services.session_service import SessionService
 # from services.mcp_server import MCPServer
 from services.database_service import DatabaseService
 from utils.response_formatter import ResponseFormatter
+from utils.openai_cost_calculator import OpenAICostCalculator
 
 # Global service instances (initialized in lifespan)
 openai_service = None
@@ -53,12 +54,13 @@ session_service = None
 database_service = None
 response_formatter = None
 mcp_server = None
+cost_calculator = None
 
 # Lifespan event handler
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
-    global openai_service, food_service, session_service, database_service, response_formatter, mcp_server
+    global openai_service, food_service, session_service, database_service, response_formatter, mcp_server, cost_calculator
     
     # Startup - Initialize services only once per process
     print("🚀 Starting Nutrimood Chatbot...")
@@ -69,6 +71,7 @@ async def lifespan(app: FastAPI):
     session_service = SessionService()
     database_service = DatabaseService()  # AWS RDS PostgreSQL
     response_formatter = ResponseFormatter()
+    cost_calculator = OpenAICostCalculator()  # OpenAI cost calculator for gpt-4o-mini
     
     # Get food data path from environment or use default
     food_data_path = os.getenv("FOOD_DATA_PATH", "../data/raw/Niloufer_data.json")
@@ -266,6 +269,18 @@ async def chat(request: ChatRequest):
             # Save to database if enabled
             if database_service.enabled:
                 user_id = session.get("preferences", {}).get("user_id")
+                
+                # Calculate cost from token usage
+                input_tokens = openai_response.input_tokens or 0
+                output_tokens = openai_response.output_tokens or 0
+                total_tokens = openai_response.total_tokens or (input_tokens + output_tokens)
+                total_cost = None
+                
+                if input_tokens > 0 or output_tokens > 0:
+                    cost_data = cost_calculator.calculate_cost(input_tokens, output_tokens)
+                    total_cost = cost_data["total_cost"]
+                    print(f"💰 Token Usage - Input: {input_tokens:,}, Output: {output_tokens:,}, Total: {total_tokens:,}, Cost: ${total_cost:.8f}")
+                
                 database_service.save_conversation(
                     session_id=session_id,
                     user_id=user_id,
@@ -273,7 +288,11 @@ async def chat(request: ChatRequest):
                     bot_response=full_response,
                     recommendations=recommended_ids,
                     query_intent=None,  # Can add intent detection later
-                    response_time_ms=None  # Can add timing later
+                    response_time_ms=None,  # Can add timing later
+                    input_tokens=input_tokens,
+                    output_tokens=output_tokens,
+                    total_tokens=total_tokens,
+                    total_cost=total_cost
                 )
                 
                 # Update session analytics

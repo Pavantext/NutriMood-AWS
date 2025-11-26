@@ -212,8 +212,43 @@ class DatabaseService:
                     recommendations TEXT,
                     query_intent VARCHAR(255),
                     response_time_ms INTEGER,
+                    input_tokens INTEGER,
+                    output_tokens INTEGER,
+                    total_tokens INTEGER,
+                    total_cost NUMERIC(12, 8),
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 );
+            """)
+            
+            # Add token columns if they don't exist (for existing tables)
+            cursor.execute("""
+                DO $$ 
+                BEGIN
+                    IF NOT EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name='conversations' AND column_name='input_tokens'
+                    ) THEN
+                        ALTER TABLE conversations ADD COLUMN input_tokens INTEGER;
+                    END IF;
+                    IF NOT EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name='conversations' AND column_name='output_tokens'
+                    ) THEN
+                        ALTER TABLE conversations ADD COLUMN output_tokens INTEGER;
+                    END IF;
+                    IF NOT EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name='conversations' AND column_name='total_tokens'
+                    ) THEN
+                        ALTER TABLE conversations ADD COLUMN total_tokens INTEGER;
+                    END IF;
+                    IF NOT EXISTS (
+                        SELECT 1 FROM information_schema.columns 
+                        WHERE table_name='conversations' AND column_name='total_cost'
+                    ) THEN
+                        ALTER TABLE conversations ADD COLUMN total_cost NUMERIC(12, 8);
+                    END IF;
+                END $$;
             """)
             
             # Create indexes for conversations
@@ -330,7 +365,11 @@ class DatabaseService:
         bot_response: str,
         recommendations: Optional[List[str]] = None,
         query_intent: Optional[str] = None,
-        response_time_ms: Optional[int] = None
+        response_time_ms: Optional[int] = None,
+        input_tokens: Optional[int] = None,
+        output_tokens: Optional[int] = None,
+        total_tokens: Optional[int] = None,
+        total_cost: Optional[float] = None
     ) -> bool:
         """
         Save conversation record to database
@@ -343,6 +382,10 @@ class DatabaseService:
             recommendations: List of recommended food IDs
             query_intent: Detected intent of query
             response_time_ms: Response time in milliseconds
+            input_tokens: Number of input tokens used
+            output_tokens: Number of output tokens used
+            total_tokens: Total tokens used (input + output)
+            total_cost: Total cost in USD
         
         Returns:
             True if successful, False otherwise
@@ -359,8 +402,9 @@ class DatabaseService:
             
             insert_sql = """
                 INSERT INTO conversations (session_id, user_id, user_message, bot_response, 
-                                        recommendations, query_intent, response_time_ms, created_at)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                                        recommendations, query_intent, response_time_ms,
+                                        input_tokens, output_tokens, total_tokens, total_cost, created_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 RETURNING id;
             """
             
@@ -372,6 +416,10 @@ class DatabaseService:
                 json.dumps(recommendations) if recommendations else None,
                 query_intent,
                 response_time_ms,
+                input_tokens,
+                output_tokens,
+                total_tokens,
+                total_cost,
                 datetime.utcnow()
             ))
             
