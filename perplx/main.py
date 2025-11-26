@@ -1110,6 +1110,38 @@ async def get_session_times_analytics():
     analytics = database_service.get_session_times_analytics()
     return analytics
 
+@app.get("/analytics/token-usage")
+async def get_token_usage_analytics(start_date: Optional[str] = None, end_date: Optional[str] = None):
+    """Get token usage analytics with optional date range filter"""
+    if not database_service.enabled:
+        raise HTTPException(status_code=503, detail="Database not configured")
+    
+    start_dt = None
+    end_dt = None
+    if start_date:
+        try:
+            if len(start_date) == 10:  # YYYY-MM-DD format
+                start_dt = datetime.strptime(start_date, '%Y-%m-%d')
+            else:
+                start_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00'))
+                if start_dt.tzinfo:
+                    start_dt = start_dt.astimezone().replace(tzinfo=None)
+        except Exception as e:
+            print(f"Error parsing start_date: {e}")
+    if end_date:
+        try:
+            if len(end_date) == 10:  # YYYY-MM-DD format
+                end_dt = datetime.strptime(end_date, '%Y-%m-%d')
+            else:
+                end_dt = datetime.fromisoformat(end_date.replace('Z', '+00:00'))
+                if end_dt.tzinfo:
+                    end_dt = end_dt.astimezone().replace(tzinfo=None)
+        except Exception as e:
+            print(f"Error parsing end_date: {e}")
+    
+    analytics = database_service.get_token_usage_analytics(start_dt, end_dt)
+    return analytics
+
 @app.get("/analytics/sessions")
 async def get_sessions_analytics(start_date: Optional[str] = None, end_date: Optional[str] = None):
     """Get user sessions with optional date range filter"""

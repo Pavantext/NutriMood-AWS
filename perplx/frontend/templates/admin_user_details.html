@@ -204,6 +204,46 @@
             word-break: break-word;
         }
 
+        .token-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            opacity: 0.85;
+        }
+
+        .token-info.input {
+            color: #271910;
+        }
+
+        .token-info.output {
+            color: #2e7d32;
+        }
+
+        .token-info i {
+            font-size: 0.7rem;
+        }
+
+        .token-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(0, 0, 0, 0.06);
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+
+        .message.user .token-info {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .message.user .token-count {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
         /* Custom scrollbar styles */
         .admin-container::-webkit-scrollbar {
             width: 8px;
@@ -222,20 +262,60 @@
             background: var(--secondary-color);
         }
 
+        /* Tablet */
+        @media (max-width: 1024px) {
+            .admin-container {
+                margin: 1.5rem auto;
+                padding: 0 0.75rem;
+            }
+
+            .food-recommendations {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Mobile */
         @media (max-width: 768px) {
             .admin-header {
                 flex-direction: column;
                 gap: 1rem;
                 text-align: center;
-                padding: 1rem;
+                padding: 1rem 0.5rem;
+                position: relative;
+                top: auto;
             }
 
             .admin-title {
-                font-size: 1.5rem;
+                font-size: 1.25rem;
+                line-height: 1.3;
+            }
+
+            .admin-actions {
+                width: 100%;
+            }
+
+            .admin-button {
+                width: 100%;
+                justify-content: center;
+                padding: 0.875rem 1rem;
+                min-height: 48px;
             }
 
             .info-grid {
                 grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .info-item {
+                padding: 0.875rem;
+            }
+
+            .info-label {
+                font-size: 0.8rem;
+            }
+
+            .info-value {
+                font-size: 0.95rem;
             }
 
             .food-recommendations {
@@ -245,19 +325,103 @@
             .conversation-header {
                 flex-direction: column;
                 align-items: flex-start;
+                font-size: 0.8rem;
             }
 
             .admin-container {
-                margin: 1rem auto;
-                padding: 0 0.5rem;
+                margin: 0;
+                padding: 0.75rem;
+                min-height: 100vh;
             }
 
-            .user-info, .conversations {
+            .user-info {
                 padding: 1rem;
+                border-radius: 10px;
+                margin-bottom: 1.5rem;
+            }
+
+            .user-info h2 {
+                font-size: 1.25rem;
+            }
+
+            .conversations {
+                border-radius: 10px;
             }
 
             .conversation-item {
                 padding: 1rem;
+            }
+
+            .message {
+                padding: 0.875rem;
+                font-size: 0.9rem;
+            }
+
+            .message.user {
+                max-width: 100%;
+            }
+
+            .food-card {
+                padding: 0.875rem;
+            }
+
+            .food-card img {
+                height: 120px;
+            }
+
+            .food-card h4 {
+                font-size: 0.95rem;
+            }
+
+            .food-card p {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Small phones */
+        @media (max-width: 480px) {
+            .admin-container {
+                padding: 0.5rem;
+            }
+
+            .admin-header {
+                padding: 0.75rem 0;
+            }
+
+            .admin-title {
+                font-size: 1.1rem;
+            }
+
+            .admin-button {
+                font-size: 0.9rem;
+                padding: 0.75rem;
+            }
+
+            .user-info, .conversations {
+                box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            }
+
+            .conversation-item {
+                padding: 0.75rem;
+            }
+
+            .message {
+                padding: 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            .food-card img {
+                height: 100px;
+            }
+        }
+
+        /* iOS safe area support */
+        @supports (padding: env(safe-area-inset-top)) {
+            .admin-container {
+                padding-top: calc(0.75rem + env(safe-area-inset-top));
+                padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+                padding-left: calc(0.75rem + env(safe-area-inset-left));
+                padding-right: calc(0.75rem + env(safe-area-inset-right));
             }
         }
     </style>
@@ -297,6 +461,26 @@
                         {{ total_recommendations }}
                     </div>
                 </div>
+                <div class="info-item">
+                    <div class="info-label">Total Tokens Used</div>
+                    <div class="info-value">
+                        {% set total_tokens = namespace(value=0) %}
+                        {% for conversation in user_data.conversations %}
+                            {% set total_tokens.value = total_tokens.value + (conversation.total_tokens|default(0)) %}
+                        {% endfor %}
+                        <span style="color: #667eea; font-weight: 700;">{{ "{:,}".format(total_tokens.value) }}</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Total Cost</div>
+                    <div class="info-value">
+                        {% set total_cost = namespace(value=0) %}
+                        {% for conversation in user_data.conversations %}
+                            {% set total_cost.value = total_cost.value + (conversation.total_cost|default(0)) %}
+                        {% endfor %}
+                        <span style="color: #11998e; font-weight: 700;">${{ "%.6f"|format(total_cost.value) }}</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -310,9 +494,21 @@
                 <div class="conversation-content">
                     <div class="message user">
                         {{ conversation.user_input }}
+                        {% if conversation.input_tokens %}
+                        <div class="token-info input">
+                            <i class="fas fa-arrow-right"></i>
+                            <span class="token-count">{{ "{:,}".format(conversation.input_tokens) }} input tokens</span>
+                        </div>
+                        {% endif %}
                     </div>
                     <div class="message">
                         {{ conversation.ai_response }}
+                        {% if conversation.output_tokens %}
+                        <div class="token-info output">
+                            <i class="fas fa-arrow-left"></i>
+                            <span class="token-count">{{ "{:,}".format(conversation.output_tokens) }} output tokens</span>
+                        </div>
+                        {% endif %}
                     </div>
                     {% if conversation.recommended_foods %}
                     <div class="food-recommendations">

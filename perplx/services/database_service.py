@@ -813,7 +813,11 @@ class DatabaseService:
                         MIN(c.created_at) as first_message_at,
                         MAX(c.created_at) as last_message_at,
                         -- Get all recommendations as an array for processing
-                        ARRAY_AGG(c.recommendations) FILTER (WHERE c.recommendations IS NOT NULL) as all_recommendations
+                        ARRAY_AGG(c.recommendations) FILTER (WHERE c.recommendations IS NOT NULL) as all_recommendations,
+                        COALESCE(SUM(c.input_tokens), 0) as total_input_tokens,
+                        COALESCE(SUM(c.output_tokens), 0) as total_output_tokens,
+                        COALESCE(SUM(c.total_tokens), 0) as session_total_tokens,
+                        COALESCE(SUM(c.total_cost), 0) as session_total_cost
                     FROM conversations c
                     GROUP BY c.session_id
                 )
@@ -824,6 +828,10 @@ class DatabaseService:
                     ss.first_message_at,
                     ss.last_message_at,
                     ss.all_recommendations,
+                    ss.total_input_tokens,
+                    ss.total_output_tokens,
+                    ss.session_total_tokens,
+                    ss.session_total_cost,
                     up.name as user_name,
                     up.email as user_email,
                     sa.total_messages,
@@ -888,7 +896,9 @@ class DatabaseService:
                     'display_name': display_name,
                     'login_time': first_login,
                     'conversation_count': row.get('conversation_count', 0),
-                    'total_recommendations': total_recs
+                    'total_recommendations': total_recs,
+                    'total_tokens': row.get('session_total_tokens', 0),
+                    'total_cost': float(row.get('session_total_cost', 0) or 0)
                 }
             
             conn.close()
@@ -990,7 +1000,11 @@ class DatabaseService:
                     'ai_response': conv.get('bot_response', ''),
                     'recommended_food_ids': rec_ids if isinstance(rec_ids, list) else [],
                     'recommended_foods': [],  # Will be populated by caller with food details
-                    'is_followup': False  # Can enhance this later
+                    'is_followup': False,  # Can enhance this later
+                    'input_tokens': conv.get('input_tokens', 0) or 0,
+                    'output_tokens': conv.get('output_tokens', 0) or 0,
+                    'total_tokens': conv.get('total_tokens', 0) or 0,
+                    'total_cost': float(conv.get('total_cost', 0) or 0)
                 }
                 formatted_conversations.append(formatted_conv)
             
@@ -1881,7 +1895,11 @@ class DatabaseService:
                         COUNT(*) as conversation_count,
                         MIN(c.created_at) as first_message_at,
                         MAX(c.created_at) as last_message_at,
-                        ARRAY_AGG(c.recommendations) FILTER (WHERE c.recommendations IS NOT NULL) as all_recommendations
+                        ARRAY_AGG(c.recommendations) FILTER (WHERE c.recommendations IS NOT NULL) as all_recommendations,
+                        COALESCE(SUM(c.input_tokens), 0) as total_input_tokens,
+                        COALESCE(SUM(c.output_tokens), 0) as total_output_tokens,
+                        COALESCE(SUM(c.total_tokens), 0) as session_total_tokens,
+                        COALESCE(SUM(c.total_cost), 0) as session_total_cost
                     FROM conversations c
                     {date_filter}
                     GROUP BY c.session_id
@@ -1893,6 +1911,10 @@ class DatabaseService:
                     ss.first_message_at,
                     ss.last_message_at,
                     ss.all_recommendations,
+                    ss.total_input_tokens,
+                    ss.total_output_tokens,
+                    ss.session_total_tokens,
+                    ss.session_total_cost,
                     up.name as user_name,
                     up.email as user_email,
                     sa.total_messages,
@@ -1952,7 +1974,9 @@ class DatabaseService:
                     'display_name': display_name,
                     'login_time': first_login,
                     'conversation_count': row.get('conversation_count', 0),
-                    'total_recommendations': total_recs
+                    'total_recommendations': total_recs,
+                    'total_tokens': row.get('session_total_tokens', 0),
+                    'total_cost': float(row.get('session_total_cost', 0) or 0)
                 }
             
             conn.close()
@@ -1967,4 +1991,161 @@ class DatabaseService:
                 except:
                     pass
             return {}
+    
+    def get_token_usage_analytics(self, start_date: Optional[datetime] = None, end_date: Optional[datetime] = None) -> Dict:
+        """
+        Get token usage analytics from conversations table
+        
+        Args:
+            start_date: Optional start date filter
+            end_date: Optional end date filter
+            
+        Returns:
+            Dictionary with token usage statistics
+        """
+        if not self.enabled:
+            return {
+                "total_input_tokens": 0,
+                "total_output_tokens": 0,
+                "total_tokens": 0,
+                "total_cost": 0,
+                "avg_input_tokens": 0,
+                "avg_output_tokens": 0,
+                "avg_cost_per_conversation": 0,
+                "conversation_count": 0,
+                "tokens_by_date": [],
+                "top_sessions_by_tokens": []
+            }
+        
+        conn = self._get_connection()
+        if not conn:
+            return {
+                "total_input_tokens": 0,
+                "total_output_tokens": 0,
+                "total_tokens": 0,
+                "total_cost": 0,
+                "avg_input_tokens": 0,
+                "avg_output_tokens": 0,
+                "avg_cost_per_conversation": 0,
+                "conversation_count": 0,
+                "tokens_by_date": [],
+                "top_sessions_by_tokens": []
+            }
+        
+        try:
+            cursor = conn.cursor(cursor_factory=RealDictCursor)
+            
+            # Build date filter
+            date_filter = ""
+            params = []
+            if start_date or end_date:
+                conditions = []
+                if start_date:
+                    conditions.append("DATE(created_at) >= %s")
+                    params.append(start_date.date())
+                if end_date:
+                    conditions.append("DATE(created_at) <= %s")
+                    params.append(end_date.date())
+                if conditions:
+                    date_filter = "WHERE " + " AND ".join(conditions)
+            
+            # Get overall token statistics
+            cursor.execute(f"""
+                SELECT 
+                    COALESCE(SUM(input_tokens), 0) as total_input_tokens,
+                    COALESCE(SUM(output_tokens), 0) as total_output_tokens,
+                    COALESCE(SUM(total_tokens), 0) as total_tokens,
+                    COALESCE(SUM(total_cost), 0) as total_cost,
+                    COALESCE(AVG(input_tokens), 0) as avg_input_tokens,
+                    COALESCE(AVG(output_tokens), 0) as avg_output_tokens,
+                    COALESCE(AVG(total_cost), 0) as avg_cost_per_conversation,
+                    COUNT(*) as conversation_count,
+                    COUNT(CASE WHEN input_tokens IS NOT NULL AND input_tokens > 0 THEN 1 END) as conversations_with_tokens
+                FROM conversations
+                {date_filter}
+            """, params if params else [])
+            stats = cursor.fetchone()
+            
+            # Get tokens by date
+            cursor.execute(f"""
+                SELECT 
+                    DATE(created_at) as date,
+                    COALESCE(SUM(input_tokens), 0) as input_tokens,
+                    COALESCE(SUM(output_tokens), 0) as output_tokens,
+                    COALESCE(SUM(total_tokens), 0) as total_tokens,
+                    COALESCE(SUM(total_cost), 0) as total_cost,
+                    COUNT(*) as conversation_count
+                FROM conversations
+                {date_filter}
+                GROUP BY DATE(created_at)
+                ORDER BY date DESC
+                LIMIT 30
+            """, params if params else [])
+            tokens_by_date = cursor.fetchall()
+            
+            # Get top sessions by token usage
+            cursor.execute(f"""
+                SELECT 
+                    session_id,
+                    COALESCE(SUM(input_tokens), 0) as total_input_tokens,
+                    COALESCE(SUM(output_tokens), 0) as total_output_tokens,
+                    COALESCE(SUM(total_tokens), 0) as total_tokens,
+                    COALESCE(SUM(total_cost), 0) as total_cost,
+                    COUNT(*) as conversation_count
+                FROM conversations
+                {date_filter}
+                GROUP BY session_id
+                HAVING SUM(total_tokens) > 0
+                ORDER BY total_tokens DESC
+                LIMIT 10
+            """, params if params else [])
+            top_sessions = cursor.fetchall()
+            
+            cursor.close()
+            conn.close()
+            
+            return {
+                "total_input_tokens": int(stats['total_input_tokens'] or 0),
+                "total_output_tokens": int(stats['total_output_tokens'] or 0),
+                "total_tokens": int(stats['total_tokens'] or 0),
+                "total_cost": float(stats['total_cost'] or 0),
+                "avg_input_tokens": round(float(stats['avg_input_tokens'] or 0), 2),
+                "avg_output_tokens": round(float(stats['avg_output_tokens'] or 0), 2),
+                "avg_cost_per_conversation": round(float(stats['avg_cost_per_conversation'] or 0), 8),
+                "conversation_count": int(stats['conversation_count'] or 0),
+                "conversations_with_tokens": int(stats['conversations_with_tokens'] or 0),
+                "tokens_by_date": [{
+                    "date": str(row['date']),
+                    "input_tokens": int(row['input_tokens'] or 0),
+                    "output_tokens": int(row['output_tokens'] or 0),
+                    "total_tokens": int(row['total_tokens'] or 0),
+                    "total_cost": float(row['total_cost'] or 0),
+                    "conversation_count": int(row['conversation_count'] or 0)
+                } for row in tokens_by_date],
+                "top_sessions_by_tokens": [{
+                    "session_id": row['session_id'],
+                    "total_input_tokens": int(row['total_input_tokens'] or 0),
+                    "total_output_tokens": int(row['total_output_tokens'] or 0),
+                    "total_tokens": int(row['total_tokens'] or 0),
+                    "total_cost": float(row['total_cost'] or 0),
+                    "conversation_count": int(row['conversation_count'] or 0)
+                } for row in top_sessions]
+            }
+            
+        except Exception as e:
+            print(f"❌ Error getting token usage analytics: {e}")
+            if conn:
+                conn.close()
+            return {
+                "total_input_tokens": 0,
+                "total_output_tokens": 0,
+                "total_tokens": 0,
+                "total_cost": 0,
+                "avg_input_tokens": 0,
+                "avg_output_tokens": 0,
+                "avg_cost_per_conversation": 0,
+                "conversation_count": 0,
+                "tokens_by_date": [],
+                "top_sessions_by_tokens": []
+            }
 
