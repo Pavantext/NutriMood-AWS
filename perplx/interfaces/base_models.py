@@ -13,6 +13,9 @@ class ChatResponse(BaseModel):
     message: str
     session_id: str
     food_recommendation_id: str
+    input_tokens: Optional[int] = None  # Total input tokens used
+    output_tokens: Optional[int] = None  # Total output tokens used
+    total_tokens: Optional[int] = None  # Total tokens (input + output)
 
 class RecommendRequest(BaseModel):
     query: str

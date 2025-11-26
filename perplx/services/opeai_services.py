@@ -12,6 +12,15 @@ from pathlib import Path
 from dotenv import load_dotenv
 from openai import OpenAI
 
+# Import tiktoken for accurate token counting
+try:
+    import tiktoken
+    HAS_TIKTOKEN = True
+except ImportError:
+    HAS_TIKTOKEN = False
+    print("⚠️  tiktoken not installed. Token counting will be less accurate.")
+    print("   Install with: pip install tiktoken")
+
 # Add perplx directory to path for imports (works when run directly or as module)
 script_dir = Path(__file__).parent
 perplx_dir = script_dir.parent
@@ -20,6 +29,30 @@ if str(perplx_dir) not in sys.path:
 
 from interfaces.base_models import ChatRequest, ChatResponse
 from utils.openai_system_prompt import instructions
+
+
+def count_tokens(text: str, model: str = "gpt-4o-mini") -> int:
+    """
+    Count tokens accurately using tiktoken, or estimate if not available.
+
+    Args:
+        text: Text to count tokens for
+        model: Model name for tokenization
+
+    Returns:
+        Number of tokens
+    """
+    if HAS_TIKTOKEN:
+        try:
+            encoding = tiktoken.encoding_for_model(model)
+            return len(encoding.encode(text))
+        except Exception as e:
+            print(f"⚠️  Token counting failed: {e}, using estimation")
+            # Fallback to estimation
+            return len(text) // 4  # Rough estimation: 1 token ≈ 4 characters
+    else:
+        # Rough estimation when tiktoken is not available
+        return len(text) // 4
 
 # Load environment variables
 load_dotenv(perplx_dir / ".env")
@@ -156,11 +189,31 @@ class NutriMood:
 
             # ✅ Store response ID for next request
             self.session_response_ids[current_session_id] = response.id
-            
+
+            # 4.5. Calculate Token Usage (Accurate counting using tiktoken)
+            # The OpenAI Responses API doesn't provide usage info in response,
+            # so we count tokens manually using tiktoken for accuracy
+
+            # Count input tokens (system instructions + conversation history)
+            input_text = instructions + json.dumps(conversation_input)
+            input_tokens = count_tokens(input_text, "gpt-4o-mini")
+
+            # Count output tokens (will be calculated after extracting output text)
+            output_text = ""  # Will be set below
+            output_tokens = 0  # Will be calculated after extracting output
+            total_tokens = input_tokens  # Will add output_tokens later
+
             # 5. Extract Output Text
             # The response.output contains a list of output items
             output_text = self._extract_output_text(response)
-            
+
+            # 5.5. Calculate output tokens now that we have the output text
+            output_tokens = count_tokens(output_text, "gpt-4o-mini")
+            total_tokens = input_tokens + output_tokens
+
+            # Print accurate token usage
+            print(f"🔢 Token Usage - Input: {input_tokens:,}, Output: {output_tokens:,}, Total: {total_tokens:,}")
+
             # 6. Parse JSON from response (Responses API returns text, we extract JSON)
             # Try to extract JSON from the response text
             parsed_data = self._parse_response_json(output_text, current_session_id)
@@ -175,7 +228,10 @@ class NutriMood:
             return ChatResponse(
                 message=parsed_data.get('message', output_text),
                 session_id=current_session_id,
-                food_recommendation_id=parsed_data.get('food_recommendation_id', '')
+                food_recommendation_id=parsed_data.get('food_recommendation_id', ''),
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+                total_tokens=total_tokens
             )
             
         except json.JSONDecodeError as e:
@@ -296,19 +352,22 @@ class NutriMood:
 if __name__ == "__main__":
     # Example usage - Loads from .env automatically
     # Make sure you have OPENAI_API_KEY and OPENAI_VECTOR_STORE_ID in your .env file
-    
+
     # Initialize bot (loads from .env automatically)
     bot = NutriMood()
-    
+
     # Example: Make a food recommendation request
     request = ChatRequest(
         message="anything more spicy?",
         session_id="test_session_001",
         user_name="John"
     )
-    
+
     # Get recommendation
     response = bot.chat(request)
     print(f"Response: {response.message}")
     print(f"Food IDs: {response.food_recommendation_id}")
     print(f"Session ID: {response.session_id}")
+    print(f"Input Tokens: {response.input_tokens}")
+    print(f"Output Tokens: {response.output_tokens}")
+    print(f"Total Tokens: {response.total_tokens}")
